@@ -3,12 +3,10 @@
 
 <!--
 Changes
-- added Birds Eye view div
-- moved styles to separate doc
-- copy paste header formatting from CoSpect web app
+- removed jsUpdate()
 
 Questions/More Feedback
-- Getting error "jsUpdate is not defined"
+
 -->
 
 <head>
@@ -16,7 +14,7 @@ Questions/More Feedback
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body onLoad="jsUpdate()">
+<body>
     <header>
         <div class="container2">
             <div id="branding">
@@ -34,7 +32,7 @@ Questions/More Feedback
     <div style="height: 160px; width: 100%; box-sizing:border-box; display:table;">
         <div class="introwrapper" style="float:left;margin-right:30px; margin-left:30px; height:auto; width:auto; display:table-cell; box-sizing: border-box;">
             <h1>Live Cam</h1>
-            <iframe name="iframe_a" width="800" height="550" title='Live Cam:' src="https://www.myearthcam.com/bioshop?embed" frameborder="0" scrolling="no" allowfullscreen name="iframe_a"></iframe>
+            <iframe name="iframe_a" width="800" height="550" title='Live Cam:' src="https://www.myearthcam.com/bioshop?embed" frameborder="0" scrolling="no" allowfullscreen id="iframe_a"></iframe>
         </div>
         <div class="introwrapper" style="float:left;height:auto; width:auto;display:table-cell; box-sizing: border-box;">
             <h1>Birds Eye View</h1>
@@ -43,41 +41,26 @@ Questions/More Feedback
 
     </div>
     <div class="dropdown" style="margin-left: 30px;">
-        <button onclick="myFunction()" class="dropbtn">Change Location</button>
-        <div id="myDropdown" class="dropdown-content">
-            <a target='iframe_a' href="https://www.myearthcam.com/edwardsco?embed">Location 1</a>
-            <a target='iframe_a' href="https://www.myearthcam.com/manila?embed">Location 2</a>
-            <a target='iframe_a' href="https://www.myearthcam.com/tietpep?embed">Location 3</a>
-        </div>
+		<select id="location-dropdown" onchange=changeLocation()>
+			<option selected value="https://www.myearthcam.com/bioshop?embed">Location1</option>
+            <option value="https://www.myearthcam.com/edwardsco?embed">Location2</option>
+            <option value="https://www.myearthcam.com/manila?embed">Location3</option>
+            <option value="https://www.myearthcam.com/tietpep?embed">Location4</option>
+		</select>
     </div>
 </body>
 
 <script src="drawPoints.js"></script>
 <script>
-    coordinatesObj.coordinates = [
-        [100, 100]
-    ];
+	setInterval(refreshPoints, 1000);
 
-    /* When the user clicks on the button, toggle between hiding and showing the dropdown content */
+	function changeLocation() {
+		var dropdown = document.getElementById("location-dropdown");
+		camLink = dropdown.options[dropdown.selectedIndex].value;
+		camName = dropdown.options[dropdown.selectedIndex].innerHTML;
 
-    //TODO: Maybe consider replacing this with HTML select tag: https://www.w3schools.com/tags/tag_select.asp
-    function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
-
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function(event) {
-        if (!event.target.matches(' .dropbtn ')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show ')) {
-                    openDropdown.classList.remove('show ');
-                }
-            }
-        }
-    }
+		var iframe = document.getElementById("iframe_a").src = camLink;
+	}
 </script>
 
 </html>
