@@ -1,6 +1,32 @@
 {
-"Location1": [[100,100],[75,75]],
-"Location2": [[50,100],[50,50]],
-"Location3": [[100,50],[50,50]],
-"Location4": [[100,100],[50,100]]
+	"Location1": [
+		{
+			"image_url": "models/randomPeople.jpg",
+			"height": 10,
+			"cameraDirection": [
+				0.8,
+				1.0,
+				0.5
+			],
+			"calibPixelCoordinates": [
+				100,
+				100
+			],
+			"calibAerialCoordinates": [
+				150,
+				150,
+				0
+			],
+			"coordinates": [
+				[
+					-12.893070225900686,
+					-13.518443385733713
+				],
+				[
+					-12.177145796683856,
+					-12.776466094385949
+				]
+			]
+		}
+	]
 }

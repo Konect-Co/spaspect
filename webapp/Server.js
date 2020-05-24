@@ -13,7 +13,6 @@ Useful Links
 
 */
 
-
 app.get('/', function (req, res){
     res.sendFile(__dirname + '/SpaSpect.html');
 });

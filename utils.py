@@ -1,9 +1,11 @@
+import math
+
 #finds the dot product between two vectors
 def dotProduct(vector1, vector2):
 	assert len(vector1) == len(vector2)
 	
 	dotProd = 0
-	for i in len(vector1):
+	for i in range(len(vector1)):
 		dotProd += vector1[i]*vector2[i]
 	
 	return dotProd
@@ -14,14 +16,14 @@ def add(vector1, vector2):
 
 	assert len(vector1) == len(vector2)
 
-	for i in len(vector1):
+	for i in range(len(vector1)):
 		addedVector += [vector1[i] + vector2[i]]
 	
 	return addedVector
 
 #scales the vector by a particular factor
 def scale(vector, factor):
-	for i in len(vector):
+	for i in range(len(vector)):
 		vector[i] = vector[i]*factor
 	
 	return vector
@@ -29,7 +31,7 @@ def scale(vector, factor):
 #gets the length of a vector
 def length(vector):
 	length = 0
-	for i in len(vector):
+	for i in range(len(vector)):
 		length += vector[i]**2
 	length = math.sqrt(length)
 
@@ -42,7 +44,7 @@ def normalize(vector):
 
 #finds the angle between two vectors
 def findAngle(vector1, vector2):
-	cosVal = dotProd(vector1, vector2)/(length(vector1)*length(vector2))
+	cosVal = dotProduct(vector1, vector2)/(length(vector1)*length(vector2))
 	angle = math.acos(cosVal)
 	return cosVal
 
@@ -56,10 +58,10 @@ def findIntersection(height, LineDirection):
 	PlanePoint = [0, 0, 0]
 	PlaneDirection = [0, 0, 1]
 
-	assert dotProduct(planeDirection, normalize(LineDirection)) != 0
+	assert dotProduct(PlaneDirection, normalize(LineDirection)) != 0
 
 	#Source: https://stackoverflow.com/questions/5666222/3d-line-plane-intersection
-	t = (dotProd(PlaneDirection, PlanePoint) - dotProd(PlaneDirection, LinePoint)) / dotProduct(PlaneDirection, normalize(LineDirection))
+	t = (dotProduct(PlaneDirection, PlanePoint) - dotProduct(PlaneDirection, LinePoint)) / dotProduct(PlaneDirection, normalize(LineDirection))
 	intersection = add(LinePoint, scale(normalize(LineDirection), t))
 
 	return intersection

@@ -55,28 +55,29 @@ def run_inference_for_single_image(model, image):
 	output_dict['detection_classes'] = output_dict['detection_classes'].astype(np.int64)
 
 	return output_dict
- 
-image_path = "models/randomPeople.jpg"
-image_np = np.array(Image.open(image_path))
-output_dict = run_inference_for_single_image(detection_model, image_np)
 
-peoplePixelCoordinates = []
+def makePeopleCoordinates(image_path):
+	image_np = np.array(Image.open(image_path))
+	output_dict = run_inference_for_single_image(detection_model, image_np)
 
-for i in range(output_dict["num_detections"]):
-	#want to only use detection outputs that are likely
-	if (output_dict["detection_scores"][i] < 0.7):
-		break
-	#we only care about detection outputs that include people
+	peoplePixelCoordinates = []
 
-	relevantClasses = [1]
-	if(output_dict["detection_classes"][i] in relevantClasses):
-		box = output_dict["detection_boxes"][i]
-		ymin, xmin, ymax, xmax = box
+	for i in range(output_dict["num_detections"]):
+		#want to only use detection outputs that are likely
+		if (output_dict["detection_scores"][i] < 0.7):
+			break
+		#we only care about detection outputs that include people
 
-		width = image_np.shape[1]
-		height = image_np.shape[0]
+		relevantClasses = [1]
+		if(output_dict["detection_classes"][i] in relevantClasses):
+			box = output_dict["detection_boxes"][i]
+			ymin, xmin, ymax, xmax = box
 
-		personCoordinate = [(xmax*width+xmin*width)*0.5,ymax*height]
-		peoplePixelCoordinates.append(personCoordinate)
+			width = image_np.shape[1]
+			height = image_np.shape[0]
 
-print(peoplePixelCoordinates)
+			personCoordinate = [(xmax*width+xmin*width)*0.5,ymax*height]
+			peoplePixelCoordinates.append(personCoordinate)
+
+	#TODO: Center at 0
+	return peoplePixelCoordinates
