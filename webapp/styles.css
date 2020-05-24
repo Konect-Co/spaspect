@@ -12,6 +12,7 @@ body {
     width: 80%;
     margin: auto;
     overflow: hidden;
+     padding-bottom: 10px;
 }
 
 ul {
