@@ -13,12 +13,13 @@ Useful Links
 
 */
 
+
 app.get('/', function (req, res){
     res.sendFile(__dirname + '/SpaSpect.html');
 });
 
-app.get('/styles.css', function (req, res){
-	fs.readFile("./styles.css", function (err, content) {
+app.get('/style.css', function (req, res){
+	fs.readFile("./style.css", function (err, content) {
 		if (err) { res.end(); return; }
 		res.writeHeader(200, {"Content-Type": "text/css"});
 		res.write(content);
