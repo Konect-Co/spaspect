@@ -48,6 +48,14 @@ def direction2angle(directionVector):
 
 	return horizontalAngle, verticalAngle
 
+#calculating k: the fixed ratio defined as tan(angle)/length, where angle is the angle from the and length is the distance from the pixel coordinates to the center of the screen which aligns with camera direction
+def calcK(height, cameraDirection, calibPixelCoordinates, calibAerialCoordinates):
+	#finding angle between camera direction vector and vector (calibAerialCoordinates-cameraPosition)
+	angle = findAngle(cameraDirection, add(calibAerialCoordinates, [0, 0, -height]))
+	pixelLength = length(calibPixelCoordinates)
+	k = math.tan(angle)/pixelLength
+	return k
+
 #pixelCoordinates to aerialCoordinates given calibration information
 def pixel2aerial (pixelCoordinates, height, cameraDirection, k):
 	centerCoordinate = [0, 0]
@@ -74,13 +82,7 @@ def pixel2aerial (pixelCoordinates, height, cameraDirection, k):
 		coordinates.append(findIntersection(height, lineDirection)[:2])
 	return coordinates
 
-#calculating k: the fixed ratio defined as tan(angle)/length, where angle is the angle from the and length is the distance from the pixel coordinates to the center of the screen which aligns with camera direction
-def calcK(height, cameraDirection, calibPixelCoordinates, calibAerialCoordinates):
-	#finding angle between camera direction vector and vector (calibAerialCoordinates-cameraPosition)
-	angle = findAngle(cameraDirection, add(calibAerialCoordinates, [0, 0, -height]))
-	pixelLength = length(calibPixelCoordinates)
-	k = math.tan(angle)/pixelLength
-	return k
+
 
 def makeCoordinates(image_url, height, cameraDirection, calibPixelCoordinates, calibAerialCoordinates):
 	pixelCoordinates = makePeopleCoordinates(image_url)
@@ -92,16 +94,16 @@ def makeCoordinates(image_url, height, cameraDirection, calibPixelCoordinates, c
 	coordinates = pixel2aerial(pixelCoordinates, height, cameraDirection, k)
 	return coordinates
 
-while True:
-	print("Refreshing coordinates")
+#while True:
+print("Refreshing coordinates")
 
-	start_time = time.time()
-	end_time = start_time + 5
+start_time = time.time()
+end_time = start_time + 5
 
-	with open('webapp/points.json', 'r') as json_file:
-		data = json.load(json_file)
+with open('webapp/points.json', 'r') as json_file:
+	data = json.load(json_file)
 
-		for location in data.keys():
+	for location in data.keys():
 			data_current = data[location][0]
 			
 			image_url = data_current["image_url"]
@@ -111,14 +113,15 @@ while True:
 			calibAerialCoordinates = data_current["calibAerialCoordinates"]
 
 			coordinates = makeCoordinates(image_url, height, cameraDirection, calibPixelCoordinates, calibAerialCoordinates)
+			
 
 			data[location][0]["coordinates"] = coordinates
+			print(coordinates)
 
-	with open('webapp/points.json', 'w') as json_file:
-		json.dump(data, json_file, indent="\t")
+	#with open('webapp/points.json', 'w') as json_file:
+		#json.dump(data, json_file, indent="\t")
 	
 	#Takes ~50 ms to run one iteration of inference and file read/write on AMD GPU
 
-	remaining_time = end_time-time.time()
-	if (remaining_time > 0):
-		time.sleep(remaining_time)
+	#if (remaining_time > 0):
+		#time.sleep(remaining_time)

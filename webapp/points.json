@@ -1,6 +1,130 @@
+import Math
+
 {
-"Location1": [[100,100],[75,75]],
-"Location2": [[50,100],[50,50]],
-"Location3": [[100,50],[50,50]],
-"Location4": [[100,100],[50,100]]
+	"Location1": [
+		{
+			"image_url": "models/randomPeople.jpg",
+			"height": 16,
+			"cameraDirection": [
+				0,
+				1.0,
+				Math.sin(40)
+			],
+			"calibPixelCoordinates": [
+				0.44,
+				0.94
+			],
+			"calibAerialCoordinates": [
+				0,
+				16,
+				0
+			],
+			"coordinates": [
+				[
+					-12.893070225900686,
+					-13.518443385733713
+				],
+				[
+					-12.177145796683856,
+					-12.776466094385949
+				]
+			]
+		}
+	]
+	
+	
+	"Location2": [
+		{
+			"image_url": "models/randomPeople.jpg",
+			"height": 10,
+			"cameraDirection": [
+				0,
+				1.0,
+				Math.sin(35)
+			],
+			"calibPixelCoordinates": [
+				0.52,
+				0.76
+			],
+			"calibAerialCoordinates": [
+				0,
+				10,
+				0
+			],
+			"coordinates": [
+				[
+					-12.893070225900686,
+					-13.518443385733713
+				],
+				[
+					-12.177145796683856,
+					-12.776466094385949
+				]
+			]
+		}
+	]
+	
+	
+	"Location3": [
+		{
+			"image_url": "models/randomPeople.jpg",
+			"height": 8,
+			"cameraDirection": [
+				0,
+				1.0,
+				Math.sin(45)
+			],
+			"calibPixelCoordinates": [
+				0.58,
+				0.43
+			],
+			"calibAerialCoordinates": [
+				0,
+				8,
+				0
+			],
+			"coordinates": [
+				[
+					-12.893070225900686,
+					-13.518443385733713
+				],
+				[
+					-12.177145796683856,
+					-12.776466094385949
+				]
+			]
+		}
+	]
+	
+	
+	"Location4": [
+		{
+			"image_url": "models/randomPeople.jpg",
+			"height": 10,
+			"cameraDirection": [
+				0,
+				1.0,
+				Math.sin(65)
+			],
+			"calibPixelCoordinates": [
+				0.35,
+				0.95
+			],
+			"calibAerialCoordinates": [
+				0,
+				10,
+				0
+			],
+			"coordinates": [
+				[
+					-12.893070225900686,
+					-13.518443385733713
+				],
+				[
+					-12.177145796683856,
+					-12.776466094385949
+				]
+			]
+		}
+	]
 }
