@@ -46,7 +46,7 @@ def normalize(vector):
 def findAngle(vector1, vector2):
 	cosVal = dotProduct(vector1, vector2)/(length(vector1)*length(vector2))
 	angle = math.acos(cosVal)
-	return cosVal
+	return angle
 
 #finds the intersection between a line and plane
 def findIntersection(height, LineDirection):

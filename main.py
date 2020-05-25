@@ -59,7 +59,7 @@ def pixel2aerial (pixelCoordinates, height, cameraDirection, k):
 	coordinates = []
 	for pixelCoordinate in pixelCoordinates:
 		pixelCoordinate = add(pixelCoordinate, negCenter)
-		pixelLength = length(pixelCoordinate)
+		#pixelLength = length(pixelCoordinate)
 
 		cameraVerticalAngle, cameraHorizontalAngle = direction2angle(cameraDirection)
 
