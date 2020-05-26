@@ -76,7 +76,9 @@ def makePeopleCoordinates(image_path):
 			width = image_np.shape[1]
 			height = image_np.shape[0]
 
-			personCoordinate = [(xmax*width+xmin*width)*0.5-width/2,ymax*height-height/2]
+			personCoordinate = [(xmax+xmin)*0.5-1/2,(ymax*height-height/2)/width]
+			#coordinates are scaled down by factor of width and origin is placed at center of image
+			#so, width max is 0.5 and height max is height/2*width
 			peoplePixelCoordinates.append(personCoordinate)
 
 	#TODO: Center at 0

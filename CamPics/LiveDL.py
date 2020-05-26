@@ -3,8 +3,7 @@ import cv2
 import time
 #import json
 
-camLinks = {
-	"Location1":"https://www.myearthcam.com/bioshop?embed",
+camLinks = { #"Location1":"https://www.myearthcam.com/bioshop?embed",
 	"Location2":"https://www.earthcam.com/world/ireland/dublin/?cam=templebar",
     "Location3":"https://www.earthcam.com/usa/newyork/timessquare/?cam=tsstreet",
     "Location4":"https://www.earthcam.com/usa/florida/keywest/?cam=irishkevins"
@@ -12,7 +11,9 @@ camLinks = {
 
 streamLinks = {}
 for location in camLinks.keys():
-	streamLinks[location] = streamlink.streams(camLinks[location])['720p'].url #assuming there is a 720p option
+	streamLinks[location] = streamlink.streams(camLinks[location])
+	quality = list(streamLinks[location].keys())[0]
+	streamLinks[location] = streamLinks[location][quality].url #assuming there is a 720p option
 
 streams = streamlink.streams("https://www.earthcam.com/usa/newyork/timessquare/?cam=tsstreet")
 

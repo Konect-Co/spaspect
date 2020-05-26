@@ -1,82 +1,39 @@
-import Math
-
 {
-	"Location1": [
-		{
-			"image_url": "models/randomPeople.jpg",
-			"height": 16,
-			"cameraDirection": [
-				0,
-				1.0,
-				Math.sin(40)
-			],
-			"calibPixelCoordinates": [
-				0.44,
-				0.94
-			],
-			"calibAerialCoordinates": [
-				0,
-				16,
-				0
-			],
-			"coordinates": [
-				[
-					-12.893070225900686,
-					-13.518443385733713
-				],
-				[
-					-12.177145796683856,
-					-12.776466094385949
-				]
-			]
-		}
-	]
-	
-	
 	"Location2": [
 		{
-			"image_url": "models/randomPeople.jpg",
+			"image_url": "./CamPics/Location2.jpg",
 			"height": 10,
+			"drawingScale": 50,
 			"cameraDirection": [
-				0,
+				0.0,
 				1.0,
-				Math.sin(35)
+				-0.57
 			],
 			"calibPixelCoordinates": [
-				0.52,
-				0.76
+				0.04,
+				0.52
 			],
 			"calibAerialCoordinates": [
 				0,
 				10,
 				0
 			],
-			"coordinates": [
-				[
-					-12.893070225900686,
-					-13.518443385733713
-				],
-				[
-					-12.177145796683856,
-					-12.776466094385949
-				]
-			]
+			"coordinates": []
 		}
-	]
-	
-	
+	],
 	"Location3": [
 		{
-			"image_url": "models/randomPeople.jpg",
+			"image_url": "./CamPics/Location3.jpg",
 			"height": 8,
+			"drawingScale": 50,
 			"cameraDirection": [
-				0,
+				0.0,
 				1.0,
-				Math.sin(45)
+				-0.71
 			],
 			"calibPixelCoordinates": [
-				0.58,
-				0.43
+				0.16,
+				-0.14
 			],
 			"calibAerialCoordinates": [
 				0,
@@ -85,46 +42,36 @@ import Math
 			],
 			"coordinates": [
 				[
-					-12.893070225900686,
-					-13.518443385733713
+					1.0387479850227148,
+					10.310185127811458
 				],
 				[
-					-12.177145796683856,
-					-12.776466094385949
+					0.2053224867489887,
+					10.240791611557716
 				]
 			]
 		}
-	]
-	
-	
+	],
 	"Location4": [
 		{
-			"image_url": "models/randomPeople.jpg",
+			"image_url": "./CamPics/Location4.jpg",
 			"height": 10,
+			"drawingScale": 50,
 			"cameraDirection": [
-				0,
+				0.0,
 				1.0,
-				Math.sin(65)
+				-0.91
 			],
 			"calibPixelCoordinates": [
-				0.35,
-				0.95
+				-0.3,
+				0.9
 			],
 			"calibAerialCoordinates": [
 				0,
 				10,
 				0
 			],
-			"coordinates": [
-				[
-					-12.893070225900686,
-					-13.518443385733713
-				],
-				[
-					-12.177145796683856,
-					-12.776466094385949
-				]
-			]
+			"coordinates": []
 		}
 	]
 }

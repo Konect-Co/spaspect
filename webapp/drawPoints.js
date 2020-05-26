@@ -20,8 +20,10 @@ var context = canvas.getContext('2d');
 function drawPoint(x, y) {
 	var radius = 5; //size of the point
 
+	console.log("VALUES", x, y);
+
 	context.beginPath();
-	context.arc(x, y, radius, 0, 2 * Math.PI, false);
+	context.arc(25+x, 25+y, radius, 0, 2 * Math.PI, false);
 	context.fillStyle = 'green';
 	context.fill();
 	context.lineWidth = 0;
@@ -30,6 +32,7 @@ function drawPoint(x, y) {
 }
 
 function drawPoints() {
+	console.log("drawPoints called with coordinates", coordinatesObj.coordinates);
 	var coordinates = coordinatesObj.coordinates;
 	for (i = 0; i < coordinates.length; i++) {
 		drawPoint(coordinates[i][0], coordinates[i][1]);
@@ -56,7 +59,19 @@ function refreshPoints() {
 		//get coordinates from correct location
 		coordinates_all = JSON.parse(xhr.response);
 		console.log(camName);
-		coordinatesObj.coordinates = coordinates_all[camName]
+
+		var dropdown = document.getElementById("location-dropdown");
+		console.log(dropdown.options[dropdown.selectedIndex].innerHTML);
+		console.log(coordinates_all);
+		coordinatesObj.coordinates = coordinates_all[camName][0]["coordinates"];
+
+		var drawingScale = (coordinates_all[camName][0]["drawingScale"]);
+		console.log(coordinatesObj.coordinates);
+		for (let i = 0; i < coordinatesObj.coordinates.length; i++) {
+			for (let j = 0; j < coordinatesObj.coordinates[i].length; j++) {			
+				coordinatesObj.coordinates[i][j] *= drawingScale;
+			}
+		}
 		console.log(coordinatesObj.coordinates);
 	};
 }

@@ -22,29 +22,31 @@ from utils import *
 #converts horizontalAngle and verticalAngle to a normalized direction vector
 def angle2direction(horizontalAngle, verticalAngle):
 	y = 1
-	x = math.sin(horizontalAngle)
-	z = math.sin(verticalAngle)
+	x = math.tan(horizontalAngle) #UPDATE: Earlier this was sine. That was incorrect
+	z = math.tan(verticalAngle)
 
-	directionVector = [x, y, z]
+	directionVector = [x, y, -z] #UPDATE: Earlier this was [x,y,z]. That was incorrect
 	directionVector = normalize(directionVector)
 
 	return directionVector
 
 #converts a direction vector to horizontalAngle and verticalAngle
 def direction2angle(directionVector):
-	x = directionVector[0]
 	y = directionVector[1]
-	z = directionVector[2]
 
 	#TODO: Instead of printing "ERROR", throw an error
 	if (y == 0):
 		print("ERROR: y cannot be 0 in the direction vector")
-	
+
 	factor = 1/y #we want y to be 1
 	directionVector = scale(directionVector, factor)
 
-	horizontalAngle = math.asin(x)
-	verticalAngle = math.asin(z)
+	x = directionVector[0] #UPDATE: Earlier, this was being done before the scaling. That was incorrect
+	y = directionVector[1]
+	z = directionVector[2]
+
+	horizontalAngle = math.atan(x) #UPDATE: Earlier this was asin. That was incorrect
+	verticalAngle = math.atan(-z)
 
 	return horizontalAngle, verticalAngle
 
@@ -58,26 +60,37 @@ def calcK(height, cameraDirection, calibPixelCoordinates, calibAerialCoordinates
 
 #pixelCoordinates to aerialCoordinates given calibration information
 def pixel2aerial (pixelCoordinates, height, cameraDirection, k):
-	centerCoordinate = [0, 0]
+	print("input pixel coordinates:", pixelCoordinates)
+	print("camera height:", height)
+	print("camera direction:", cameraDirection)
+	print("calibration constant:", k)
 
-	negCenter = []
-	for c in centerCoordinate:
-		negCenter.append(-c)
+	centerCoordinate = [0, 0]
+	negCenter = scale(centerCoordinate, -1)
+
+	cameraHorizontalAngle, cameraVerticalAngle = direction2angle(cameraDirection) #UPDATE: Earlier, the variables were being stored in the reverse order. That was wrong.
+	print("camera vertical angle:", cameraVerticalAngle)
+	print("camera horizontal angle:", cameraHorizontalAngle)
 
 	coordinates = []
 	for pixelCoordinate in pixelCoordinates:
 		pixelCoordinate = add(pixelCoordinate, negCenter)
 		#pixelLength = length(pixelCoordinate)
 
-		cameraVerticalAngle, cameraHorizontalAngle = direction2angle(cameraDirection)
-
-		verticalDelta = math.atan(k*pixelCoordinate[0])
-		horizontalDelta = math.atan(k*pixelCoordinate[1])
+		verticalDelta = math.atan(k*pixelCoordinate[1])
+		horizontalDelta = math.atan(k*pixelCoordinate[0])
 
 		lineVerticalAngle = cameraVerticalAngle + verticalDelta
 		lineHorizontalAngle = cameraHorizontalAngle + horizontalDelta
 
+		print("vertical delta:", verticalDelta)
+		print("horizontal delta:", horizontalDelta)
+		print("line vertical angle:", lineVerticalAngle)
+		print("line horizontal angle:", lineHorizontalAngle)
+
 		lineDirection = angle2direction(lineHorizontalAngle, lineVerticalAngle)
+
+		print("line direction:", lineDirection)
 		
 		coordinates.append(findIntersection(height, lineDirection)[:2])
 	return coordinates
@@ -94,34 +107,79 @@ def makeCoordinates(image_url, height, cameraDirection, calibPixelCoordinates, c
 	coordinates = pixel2aerial(pixelCoordinates, height, cameraDirection, k)
 	return coordinates
 
-#while True:
-print("Refreshing coordinates")
+height = 10
+cameraDirection = [0,1,0]
+calibPixelCoordinates = [0, -20]
+calibAerialCoordinates = [0,10,0]
 
-start_time = time.time()
-end_time = start_time + 5
+k = calcK(height, cameraDirection, calibPixelCoordinates, calibAerialCoordinates)
+#print(pixel2aerial([[1, -5]], height, cameraDirection, k))
 
-with open('webapp/points.json', 'r') as json_file:
-	data = json.load(json_file)
+while True:
+	print("Refreshing coordinates")
 
-	for location in data.keys():
-			data_current = data[location][0]
-			
-			image_url = data_current["image_url"]
-			height = data_current["height"]
-			cameraDirection = data_current["cameraDirection"]
-			calibPixelCoordinates = data_current["calibPixelCoordinates"]
-			calibAerialCoordinates = data_current["calibAerialCoordinates"]
+	start_time = time.time()
+	end_time = start_time + 5
 
-			coordinates = makeCoordinates(image_url, height, cameraDirection, calibPixelCoordinates, calibAerialCoordinates)
-			
+	with open('webapp/points.json', 'r') as json_file:
+		data = json.load(json_file)
 
-			data[location][0]["coordinates"] = coordinates
-			print(coordinates)
+		for location in data.keys():
+				data_current = data[location][0]
+				
+				image_url = data_current["image_url"]
+				height = data_current["height"]
+				cameraDirection = data_current["cameraDirection"]
+				calibPixelCoordinates = data_current["calibPixelCoordinates"]
+				calibAerialCoordinates = data_current["calibAerialCoordinates"]
 
-	#with open('webapp/points.json', 'w') as json_file:
-		#json.dump(data, json_file, indent="\t")
-	
-	#Takes ~50 ms to run one iteration of inference and file read/write on AMD GPU
+				coordinates = makeCoordinates(image_url, height, cameraDirection, calibPixelCoordinates, calibAerialCoordinates)
+				
 
-	#if (remaining_time > 0):
-		#time.sleep(remaining_time)
+				data[location][0]["coordinates"] = coordinates
+				print(coordinates)
+
+		with open('webapp/points.json', 'w') as json_file:
+			json.dump(data, json_file, indent="\t")
+		
+		#Takes ~50 ms to run one iteration of inference and file read/write on AMD GPU
+		remaining_time = end_time-time.time()
+		if (remaining_time > 0):
+			time.sleep(remaining_time)
+
+#UPDATE: Camera direction z coordinate was positive. That was wrong
+#TODO: calibPixelCoordinates were normalized and centered at top left. That was wrong. They should have been divided by width and centered in the middle. Now they are centered in the middle but the height needs to be fixed by dividing by aspect ratio (i.e. multiplying by height/width)
+"""
+
+	"Location1": [
+		{
+			"image_url": "./CamPics/Location1.jpg",
+			"height": 16,
+			"cameraDirection": [
+				0.0,
+				1.0,
+				-0.64
+			],
+			"calibPixelCoordinates": [
+				-0.12,
+				0.88
+			],
+			"calibAerialCoordinates": [
+				0,
+				16,
+				0
+			],
+			"coordinates": [
+				[
+					-12.30405079729701,
+					-16.00003767242668
+				],
+				[
+					12.303939394981484,
+					16.00017265596559
+				]
+			]
+		}
+	],
+
+"""
