@@ -33,7 +33,7 @@ function drawPoint(x, y) {
 
 function drawPoints() {
 	console.log("drawPoints called with coordinates", coordinatesObj.coordinates);
-	var coordinates = coordinatesObj.coordinates;
+	var coordinates = coordinatesObj.coordinates[:2]; //TODO: Check if syntax is correct
 	for (i = 0; i < coordinates.length; i++) {
 		drawPoint(coordinates[i][0], coordinates[i][1]);
 	}

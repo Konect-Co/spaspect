@@ -48,6 +48,15 @@ def findAngle(vector1, vector2):
 	angle = math.acos(cosVal)
 	return angle
 
+def findIntersection(LinePoint, LineDirection, PlanePoint, PlaneDirection):
+	assert dotProduct(PlaneDirection, normalize(LineDirection)) != 0
+
+	#Source: https://stackoverflow.com/questions/5666222/3d-line-plane-intersection
+	t = (dotProduct(PlaneDirection, PlanePoint) - dotProduct(PlaneDirection, LinePoint)) / dotProduct(PlaneDirection, normalize(LineDirection))
+	intersection = add(LinePoint, scale(normalize(LineDirection), t))
+
+	return intersection
+
 #finds the intersection between a line and plane
 def findIntersection(height, LineDirection):
 	#Assume LinePoint is [0,0,height] as it is the location of the camera
@@ -58,10 +67,4 @@ def findIntersection(height, LineDirection):
 	PlanePoint = [0, 0, 0]
 	PlaneDirection = [0, 0, 1]
 
-	assert dotProduct(PlaneDirection, normalize(LineDirection)) != 0
-
-	#Source: https://stackoverflow.com/questions/5666222/3d-line-plane-intersection
-	t = (dotProduct(PlaneDirection, PlanePoint) - dotProduct(PlaneDirection, LinePoint)) / dotProduct(PlaneDirection, normalize(LineDirection))
-	intersection = add(LinePoint, scale(normalize(LineDirection), t))
-
-	return intersection
+	return findIntersection(LinePoint, LineDirection, PlanePoint, PlaneDirection)

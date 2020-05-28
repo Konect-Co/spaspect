@@ -3,29 +3,19 @@ import math
 import json
 import time
 
-"""
-TODO:
-- rewrite js drawer to take into account the new format of points.json
-- fix errors in pixel-->aerial: right now it is returning negative y coordinates (which shouldn't even be possible 🤔️)
-
-"""
-
 from GenPixCoordinates import makePeopleCoordinates
 from utils import *
 
 #TODO: Add support for multiple calibration points
 #TODO: Add support for rotated frame
-#TODO: Pay attention to exceptions related to inverse trig functions
-#TODO: Ensure there is no radian/degree mismatch
-#TODO: Finish pixel2aerial function
 
 #converts horizontalAngle and verticalAngle to a normalized direction vector
 def angle2direction(horizontalAngle, verticalAngle):
+	x = math.tan(horizontalAngle)
 	y = 1
-	x = math.tan(horizontalAngle) #UPDATE: Earlier this was sine. That was incorrect
-	z = math.tan(verticalAngle)
+	z = -math.tan(verticalAngle)
 
-	directionVector = [x, y, -z] #UPDATE: Earlier this was [x,y,z]. That was incorrect
+	directionVector = [x, y, z]
 	directionVector = normalize(directionVector)
 
 	return directionVector
@@ -34,18 +24,16 @@ def angle2direction(horizontalAngle, verticalAngle):
 def direction2angle(directionVector):
 	y = directionVector[1]
 
-	#TODO: Instead of printing "ERROR", throw an error
-	if (y == 0):
-		print("ERROR: y cannot be 0 in the direction vector")
+	assert y == 0
 
 	factor = 1/y #we want y to be 1
 	directionVector = scale(directionVector, factor)
 
-	x = directionVector[0] #UPDATE: Earlier, this was being done before the scaling. That was incorrect
+	x = directionVector[0]
 	y = directionVector[1]
 	z = directionVector[2]
 
-	horizontalAngle = math.atan(x) #UPDATE: Earlier this was asin. That was incorrect
+	horizontalAngle = math.atan(x)
 	verticalAngle = math.atan(-z)
 
 	return horizontalAngle, verticalAngle
@@ -68,7 +56,9 @@ def pixel2aerial (pixelCoordinates, height, cameraDirection, k):
 	centerCoordinate = [0, 0]
 	negCenter = scale(centerCoordinate, -1)
 
-	cameraHorizontalAngle, cameraVerticalAngle = direction2angle(cameraDirection) #UPDATE: Earlier, the variables were being stored in the reverse order. That was wrong.
+	#Note: cameraHorizontalAngle is always 0, as cameraDirection x is always 0
+	cameraHorizontalAngle, cameraVerticalAngle = direction2angle(cameraDirection)
+	
 	print("camera vertical angle:", cameraVerticalAngle)
 	print("camera horizontal angle:", cameraHorizontalAngle)
 
@@ -92,10 +82,16 @@ def pixel2aerial (pixelCoordinates, height, cameraDirection, k):
 
 		print("line direction:", lineDirection)
 		
-		coordinates.append(findIntersection(height, lineDirection)[:2])
+		#Assume LinePoint is [0,0,height] as it is the location of the camera
+		LinePoint = [0, 0, height]
+		
+		#Assume PlanePoint is [0,0,0] and PlaneDirection is [0, 0, 1]
+		#PlaneDirection means the vector normal to the plane
+		PlanePoint = [0, 0, 0]
+		PlaneDirection = [0, 0, 1]
+
+		coordinates.append(findIntersection(LinePoint, LineDirection, PlanePoint, PlaneDirection))
 	return coordinates
-
-
 
 def makeCoordinates(image_url, height, cameraDirection, calibPixelCoordinates, calibAerialCoordinates):
 	pixelCoordinates = makePeopleCoordinates(image_url)
@@ -109,7 +105,7 @@ def makeCoordinates(image_url, height, cameraDirection, calibPixelCoordinates, c
 
 height = 10
 cameraDirection = [0,1,0]
-calibPixelCoordinates = [0, -20]
+calibPixelCoordinates = [0,-20]
 calibAerialCoordinates = [0,10,0]
 
 k = calcK(height, cameraDirection, calibPixelCoordinates, calibAerialCoordinates)
@@ -147,8 +143,6 @@ while True:
 		if (remaining_time > 0):
 			time.sleep(remaining_time)
 
-#UPDATE: Camera direction z coordinate was positive. That was wrong
-#TODO: calibPixelCoordinates were normalized and centered at top left. That was wrong. They should have been divided by width and centered in the middle. Now they are centered in the middle but the height needs to be fixed by dividing by aspect ratio (i.e. multiplying by height/width)
 """
 
 	"Location1": [
