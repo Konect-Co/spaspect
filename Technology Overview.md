@@ -23,6 +23,6 @@ Until this point, we have discussed how the calculations are carried for the lin
 There are a few limitations of our technology that are worth discussion now. The first is the assumption that the webcam has a stationary configuration in 3D space (including all 6 degrees of freedom). This assumption is violated for webcams that rotate over time or experience disturbances. Second is the assumption that the calibration constant is the same in all directions, which does not hold true if the image is stretched. Lastly, we assume that the floor is visible from the webcam at all times and that the pixel coordinate corresponding to a person's feet can be inferred. So, this model is not very resistant to occlusion of a person by another person or object. Furthermore, if partial occlusion occurs, such as below an individual's waist, then the model will assume that the individual's feet are in the wrong place, and will thus make an incorrect prediction.
 
 Few improvements we have upcoming in the future include:
-- incorporation with depth estimation prediction methods (ex: )
+- incorporation with depth estimation prediction methods (ex: https://ai.googleblog.com/2019/05/moving-camera-moving-people-deep.html)
 - improve and integration with existing geographic information systems (GIS) data, such as that from Google Maps
 - develop a more complex representation of the floor that accounts for distortions
