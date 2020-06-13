@@ -4,12 +4,12 @@
 - configuration organization
 	- config file
 		- metadata information (location, which cam, earthcam link, image resolution)
-			- calibration information
-		- 3D map
-			- timestamp
-			- for each object
-				category
-				3D coordinate
+		- calibration information
+	- 3D map
+		- timestamp
+		- for each object
+			category
+			3D coordinate
 - processing image data
 	- reading calibration data from config file
 	- making depth map
@@ -24,3 +24,10 @@
 	- visualizing the 2D overhead map
 	- integrating with GIS data
 		- Overlaying predictions with Google Maps data
+
+## TODO Tasks
+- Write .py file that makes the depth map
+- Write .py file that generates the bounding boxes
+- Write file that generates 3D coordinates
+- Come up with 5 testable configurations from EarthCam
+- Make design for 2D and 3D visualization software
