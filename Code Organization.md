@@ -1,6 +1,6 @@
-#Spaspect Modularity
+# Spaspect Modularity
 
-##core technology overview
+## core technology overview
 - configuration organization
 	- config file
 		- metadata information (location, which cam, earthcam link, image resolution)
@@ -16,7 +16,7 @@
 	- making 3D coordinates
 		- inputs: bounding box output, calibration info, depth map (, past 3D coordinates info)
 
-##vizualization/GUI overview
+## vizualization/GUI overview
 - enable constructing new configuration settings
 	- GUI enabling one to build a new config file by specifying required information
 - 3D map: live vizualization of the outputs
