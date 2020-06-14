@@ -1,0 +1,11 @@
+{
+	"location": "Jerusalem, Israel",
+	"link": "https://www.earthcam.com/world/israel/jerusalem/?cam=jerusalem",
+	"resolution": [1080, 1920],
+	"calibration": {
+		"verticalAngle":30,
+		"cameraHeight":50,
+		"calibPixelCoordinates":[-50, -100],
+		"calib3DCoordinates":[50, 150, 0]
+	}
+}
