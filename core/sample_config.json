@@ -5,7 +5,7 @@
 	"calibration": {
 		"verticalAngle":30,
 		"cameraHeight":50,
-		"calibPixelCoordinates":[-50, -100],
-		"calib3DCoordinates":[50, 150, 0]
+		"calibPixelCoordinate":[-50, -100],
+		"calib3DCoordinate":[50, 150, 0]
 	}
 }
