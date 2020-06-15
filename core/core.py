@@ -16,9 +16,13 @@ def readConfigFile(path):
     location = neededVars["location"]
     link = neededVars["link"]
     resolution = neededVars["resolution"]
-    calibration = neededVars["calibration"]
+    #calibration = neededVars["calibration"]
+    verticalAngle = neededVars["calibration"]["verticalAngle"]
+    cameraHeight = neededVars["calibration"]["cameraHeight"]
+    calibPixelCoordinates = neededVars["calibration"]["calibPixelCoordinates"]
+    calib3DCoordinates = neededVars["calibration"]["calib3DCoordinates"]
     
-    return location,link,resolution,calibration
+    return location,link,resolution,verticalAngle,cameraHeight,calibPixelCoordinates,calib3DCoordinates
 
 #print(readConfigFile('sample_config.json'))
     
@@ -43,10 +47,19 @@ def getPixelDepth(pixel_coordinate, depth_map, pixel_radius=10):
 	#	later, we'll incorporate same solution with masks
     return
 
-def calculateCalibrationConstant(calibPixelCoordinate, calib3DCoordinate):
+def calculateCalibrationConstant(calibPixelCoordinate, calib3DCoordinate, path):
 	#Santript, for you
 	#calculating calibration information from the calibration pixel and 3D coordinates
-    return
+    
+    with open(path,"r") as f:
+        neededVars = json.load(f)
+    
+    calibPixelCoordinate = neededVars["calibration"]["calibPixelCoordinates"]
+    calib3DCoordinate = neededVars["calibration"]["calib3DCoordinates"]
+    
+    
+    
+    return 
 
 def calculate3DCoordinates(pixelCoordinate, depthMap, calibrationConstant):
 	#Santript, for you
