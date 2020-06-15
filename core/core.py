@@ -8,9 +8,11 @@ def readConfigFile(path):
 	#Hint: Look into json library
 	#return location, link, resolution, calibration
     
+    #opening up json file
     with open(path,"r") as f:
         neededVars = json.load(f)
-        
+    
+    #all the necessary variables needed   
     location = neededVars["location"]
     link = neededVars["link"]
     resolution = neededVars["resolution"]
