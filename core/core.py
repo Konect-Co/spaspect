@@ -25,13 +25,35 @@ def runCVModel(image_path):
     depth, boxes_output = pred.predict(image_path)
     return depth, boxes_output
 
-def getPixelDepth(pixel_coordinate, depth_map, pixel_radius=10):
+def getPixelDepth(pixel_coordinate_x, pixel_coordinate_y, depth_map, img, pixel_radius=10):
 	#Santript, for you
 	#Goal: Apply the algorithm we were discussing on finding the depth
 	#	take a circle of radius pixel_radius
 	#	find 50% of values of depth distribution centered at the given pixel
 	#	later, we'll incorporate same solution with masks
-    return
+    
+    allDepth = getDepthMap('test_image.jpg')
+    
+    img1 = cv2.imread(img,0)
+    indices = np.where(img1 != [0])
+    coordinates = zip(indices[0], indices[1])
+    
+    neededPixels = []
+    for (pixel_x, pixel_y) in coordinates:
+        if (pixel_x - pixel_coordinate_x)**2 + (pixel_y - pixel_coordinate_y)**2 <= (pixel_radius**2):
+                neededPixels.append(pixel_x,pixel_y)
+    
+    allPixelDepth = []
+    for pixels in neededPixels:
+        allPixelDepth.append(allDepth[pixels])
+    
+    length = len(allPixelDepth)
+    allPixelDepth.sort()
+    neededLength = int(length/2)
+    neededDepth = allPixelDepth[neededLength]
+        
+    
+    return neededDepth
 
 def calculateCalibrationConstant(path):
 	#calculating calibration information from the calibration pixel and 3D coordinates
