@@ -31,7 +31,7 @@ def getBoundingBoxes(image_path):
 	#https://github.com/tensorflow/models/tree/master/research/object_detection
     return
 
-def getPixelDepth(pixel_coordinate_x, pixel_coordinate_y, depth_map, img, pixel_radius=10):
+def getPixelDepth(pixel_coordinate_x, pixel_coordinate_y, img, pixel_radius=10):
 	#Santript, for you
 	#Goal: Apply the algorithm we were discussing on finding the depth
 	#	take a circle of radius pixel_radius
@@ -91,7 +91,30 @@ def calculateCalibrationConstant(path):
 
 	return calib_constant
 
-def calculate3DCoordinates(pixelCoordinate, depthMap, calibrationConstant):
+def calculate3DCoordinates(depthMap, pixelCoordinate):
 	#Santript, for you
 	#calculating 3D coordinates given pixel coordinate and calibration information
+    
+    """top_pixel_depth = getPixelDepth(topPixelCoordinate_x, topPixelCoordinate_y, "test_image.jpg", pixel_radius=10)
+    bottom_pixel_depth = getPixelDepth(bottomPixelCoordinate_x, bottomPixelCoordinate_y, "test_image.jpg", pixel_radius=10)
+    
+    #Θ = acos(A · B) --> dot product
+    vert_theta = math.acos(top_pixel_depth * bottom_pixel_depth)
+    
+    z_coordinate = top_pixel_depth * math.sin(vert_theta)
+    
+    camera_height = neededVars["calibration"]["cameraHeight"]
+    bottom_hypotenuse = math.sqrt(top_pixel_depth**2 - camera_height**2)
+    """
+    
+    with open(json_path,"r") as f:
+		neededVars = json.load(f)
+    
+    center = neededVars["calibration"]["centerpoint"]
+
+	
+    
+    
+    
+    
     return
