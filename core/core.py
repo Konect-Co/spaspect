@@ -1,8 +1,12 @@
 import numpy as np
 import json
 import math
+<<<<<<< HEAD
 import cv2
 from depth_model import pred_depth
+=======
+from cv_model import pred
+>>>>>>> 279476bb3717c72f5d1a422291b8b74f68900f11
 
 from torchvision import transforms, datasets
 
@@ -15,16 +19,18 @@ def readConfigFile(path):
 	calibration = neededVars["calibration"]
 	return calibration
 
-def getDepthMap(image_path):
+def runCVModel(image_path):
 	#Ravit will do
-	#Goal: Take an image and run inference to get depth map
+	#Goal: Take an image and run inference to get depth map and bounding boxes
 	#https://github.com/nianticlabs/monodepth2
+	#Pytorch computer vision model
     
     """Function to predict for a single image or folder of images
     """
-    depth = pred_depth.predict(image_path)
-    return depth
+    depth, boxes_output = pred.predict(image_path)
+    return depth, boxes_output
 
+<<<<<<< HEAD
 def getBoundingBoxes(image_path):
 	#Ravit will do
 	#Goal: Take an image and run inference to get bounding boxes
@@ -32,6 +38,9 @@ def getBoundingBoxes(image_path):
     return
 
 def getPixelDepth(pixel_coordinate_x, pixel_coordinate_y, img, pixel_radius=10):
+=======
+def getPixelDepth(pixel_coordinate_x, pixel_coordinate_y, depth_map, img, pixel_radius=10):
+>>>>>>> 279476bb3717c72f5d1a422291b8b74f68900f11
 	#Santript, for you
 	#Goal: Apply the algorithm we were discussing on finding the depth
 	#	take a circle of radius pixel_radius

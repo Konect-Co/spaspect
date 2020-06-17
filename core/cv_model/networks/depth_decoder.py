@@ -12,7 +12,7 @@ import torch.nn as nn
 
 from collections import OrderedDict
 #if running in same directory: from layers import *
-from depth_model.layers import *
+from cv_model.layers import *
 
 
 class DepthDecoder(nn.Module):
