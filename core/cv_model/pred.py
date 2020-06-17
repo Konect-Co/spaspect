@@ -19,6 +19,9 @@ import cv2
 faster_rcnn = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
 faster_rcnn.eval()
 
+keypoint_rcnn = models.detection.keypointrcnn_resnet50_fpn(pretrained=True)
+keypoint_rcnn.eval()
+
 model_name = "mono+stereo_640x192"
 base_path = sys.path[1]#os.getcwd()
 paths = [os.path.join(base_path, "randomPeople.jpg")]
@@ -94,15 +97,19 @@ def predict(image_path):
         new_width, new_height = 800, 800
         input_image = input_image_pil.resize((new_width, new_height), pil.LANCZOS)
         input_image = transforms.ToTensor()(input_image).unsqueeze(0)
-        output = faster_rcnn(input_image)[0]
+        #output = faster_rcnn(input_image)[0]
+        output = keypoint_rcnn(input_image)[0]
 
         #[top left x position, top left y position, width, height]
         output["boxes"] = output["boxes"].numpy()
         output["labels"] = output["labels"].numpy()
+        output["keypoints"] = output["keypoints"].numpy()
         output["scores"] = output["scores"].numpy()
 
         output["labels"] = [ coco_labels[label] for label in output["labels"] ]
         output["boxes"][:,::2] *= original_width/new_width
         output["boxes"][:,1::2] *= original_height/new_height
+        output["keypoints"][:,:,0] *= original_width/new_width
+        output["keypoints"][:,:,1] *= original_height/new_height
 
         return depth, output
