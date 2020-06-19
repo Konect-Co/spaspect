@@ -152,7 +152,7 @@ def calculate3DCoordinates(depthMap, pixelCoordinate):
     delta_y = k * math.atan(offset[1])
     
     #3D direction vector
-    3DdirectionVector = [math.tan(delta_x),1,math.tan(delta_y - v)]
+    3DdirectionVector = [math.tan(delta_x) , 1 , math.tan(delta_y - v)]
     
     #finds the magnitude of the 3D direction vector(needed for normalization)
     magnitude = math.sqrt(3DdirectionVector[0]**2 + 3DdirectionVector[1]**2 + 3DdirectionVector[2]**2)
