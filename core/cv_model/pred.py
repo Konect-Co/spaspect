@@ -112,4 +112,8 @@ def predict(image_path):
         output["keypoints"][:,:,0] *= original_width/new_width
         output["keypoints"][:,:,1] *= original_height/new_height
 
-        return depth, output
+        #TODO: Sort output so it includes only labels with highest probability predictions
+
+        output["depth"] = depth
+
+        return output
