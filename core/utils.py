@@ -2,6 +2,9 @@ import cv2
 import numpy as np
 import math
 
+def add(a, b):
+    return a+b
+
 def _readImage(imagePath):
     image = cv2.imread(imagePath)
     return image
