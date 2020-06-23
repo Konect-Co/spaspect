@@ -24,7 +24,7 @@ keypoint_rcnn.eval()
 
 model_name = "mono+stereo_640x192"
 base_path = sys.path[1]#os.getcwd()
-paths = [os.path.join(base_path, "keywest2.jpg")]
+paths = [os.path.join(base_path, "keywest.jpg")]
 output_directory = base_path
 
 if torch.cuda.is_available():
