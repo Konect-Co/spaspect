@@ -22,35 +22,48 @@ def _getPixelDepth(pixelCoordinate, depthMap, pixelRadius=10):
     pixelCoordinateY = pixelCoordinate[1]
     
     #extracts all the pixels that are within a 10 pixel radius from the center pixel coordinate
-    neededPixels = np.asarray([])
-    for pixelX in range(pixelCoordinateX-pixelRadius, pixelCoordinateX+pixelRadius):
-        for pixelY in range(pixelCoordinateY-pixelRadius, pixelCoordinateY+pixelRadius):
+    #neededPixels = np.asarray([])
+    neededPixels = []
+    for pixelX in range(int(pixelCoordinateX-pixelRadius), int(pixelCoordinateX+pixelRadius)):
+        for pixelY in range(int(pixelCoordinateY-pixelRadius), int(pixelCoordinateY+pixelRadius)):
             if (pixelX - pixelCoordinateX)**2 + (pixelY - pixelCoordinateY)**2 <= (pixelRadius**2):
-                    neededPixels.append(pixelX,pixelY)
+                    #np.append(neededPixels,(pixelX,pixelY))
+                    neededPixel = [pixelX,pixelY]
+                    neededPixels.append(neededPixel)
                 
     #gets the depth of neededPixels using depth estimation
     pixelDepths = []
-    for pixels in neededPixels:
-        pixelDepths.append(depthMap[pixels])
+    neededPixelsLength = len(neededPixels)
+    for i in range(neededPixelsLength):
+        neededPixelX = neededPixels[i][0]
+        neededPixelY = neededPixels[i][1]
+        pixelDepths.append(depthMap[neededPixelX][neededPixelY])
     
     #finds the final needed depth
+    #print("neededPixels: ",neededPixels)
+    #print("Depth map: ",depthMap)
+    #print("Pixel depths: ",pixelDepths)
     length = len(pixelDepths)
+    #print("length of pixelDepths: ",length)
     pixelDepths.sort()
+    #print("PixelDepths after sorting: ",pixelDepths)
     neededLength = int(length/2)
+    #print("Needed length: ",neededLength)
     neededDepth = pixelDepths[neededLength]
 
     return neededDepth
 
 def _calculateSpatialCoordinate(pixelCoordinate, center, verticalAngle, k, height, depthMap, pixelRadius):
     #finds the offset of object from center of image(distance)
-    offset = pixelCoordinate-center
+    pkShape = pixelCoordinate.shape
+    offset = pixelCoordinate-center#.reshape(pkShape)
 
     #needed to find the camera direction vector(how much camera has to move to have a direct view of object)
     delta_x = k * math.atan(offset[0])
     delta_y = k * math.atan(offset[1])
 
     #3D direction vector
-    directionVector = [math.tan(delta_x), 1, math.tan(delta_y - verticalAngle)]
+    directionVector = np.array([math.tan(delta_x), 1, math.tan(delta_y - verticalAngle)])
 
     #finds the magnitude of the 3D direction vector(needed for normalization)
     magnitude = math.sqrt(directionVector[0]**2 + directionVector[1]**2 + directionVector[2]**2)
