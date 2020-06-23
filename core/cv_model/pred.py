@@ -24,7 +24,7 @@ keypoint_rcnn.eval()
 
 model_name = "mono+stereo_640x192"
 base_path = sys.path[1]#os.getcwd()
-paths = [os.path.join(base_path, "randomPeople.jpg")]
+paths = [os.path.join(base_path, "keywest.jpg")]
 output_directory = base_path
 
 if torch.cuda.is_available():
@@ -33,8 +33,10 @@ else:
     device = torch.device("cpu")
 
 model_path = os.path.join(base_path, "cv_model", "models", model_name)
-encoder_path = os.path.join(model_path, "encoder.pth")
-depth_decoder_path = os.path.join(model_path, "depth.pth")
+#encoder_path = os.path.join(model_path, "/cv_model/models/encoder.pth")
+encoder_path = "./cv_model/models/mono+stereo_640x192/encoder.pth"
+#depth_decoder_path = os.path.join(model_path, "depth.pth")
+depth_decoder_path = "./cv_model/models/mono+stereo_640x192/depth.pth"
 
 # LOADING PRETRAINED MODEL
 encoder = networks.ResnetEncoder(18, False)

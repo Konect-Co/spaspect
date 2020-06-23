@@ -2,9 +2,9 @@ import os
 import numpy as np
 import json
 import math
-from torchvision import transforms, datasets
+from vision.torchvision import transforms, datasets
 
-from utils import *
+import utils
 from cv_model import pred
 
 #TODO: Write this in C++ to optimize inference speed
@@ -27,7 +27,7 @@ class SpaSpectCore:
 		self.calibration = configInfo["calibration"]
 		self.resolution = configInfo["resolution"]
 
-		self.calibConstant = calculateCalibrationConstant()
+		self.calibConstant = self.calculateCalibrationConstant()
 
 		self.image = None
 		self.CVOutput = None
@@ -35,9 +35,11 @@ class SpaSpectCore:
 		self.labels = None
 		self.spatialCoordinates = None
 		self.pixelCoordinates = None
+		self.updateImage()
+		self.updatePredictions()
 
 		#array of positions needed for pose estimation
-		COCO_PERSON_KEYPOINT_NAMES = [
+		self.COCO_PERSON_KEYPOINT_NAMES = [
 			'nose',
 			'left_eye',
 			'right_eye',
@@ -75,15 +77,15 @@ class SpaSpectCore:
 	"""
 	Function that is responsible for updating the image by reading it from imagePath
 	"""
-	def updateImage():
-		image = _readImage(self.imagePath)
+	def updateImage(self):
+		image = utils._readImage(self.imagePath)
 		self.image = image
 		return image
 
 	"""
 	Runs the computer vision model on the specified image and stores the output
 	"""
-	def updatePredictions():
+	def updatePredictions(self):
 		output = pred.predict(self.imagePath)
 		
 		self.CVOutput = output
@@ -92,7 +94,7 @@ class SpaSpectCore:
 	"""
 	One-time use function to calibrate the calibration constant for the given configuration
 	"""
-	def calculateCalibrationConstant():
+	def calculateCalibrationConstant(self):
 		assert self.calibration != None and "EMPTY: calibration value is None."
 
 		#calculating calibration information from the calibration pixel and Spatial coordinates
@@ -101,7 +103,7 @@ class SpaSpectCore:
 		verticalAngle = self.calibration["verticalAngle"]
 		height = self.calibration["cameraHeight"]
 
-		calibConstant = _calculateCalibrationConstant(verticalAngle, height, calibPixelCoordinate, calibSpatialCoordinate)
+		calibConstant = utils._calculateCalibrationConstant(verticalAngle, height, calibPixelCoordinate, calibSpatialCoordinate)
 		self.calibConstant = calibConstant
 
 		return calibConstant
@@ -110,29 +112,46 @@ class SpaSpectCore:
 	ASSISTANT BIG BOI FUNCTION
 	Uses pixelCoordinate and calibration information to calculate a spatial coordinate
 	"""
-	def calculateSpatialCoordinate(pixelCoordinate):
+	def calculateSpatialCoordinate(self):
 
 		#all necessary variables from calibration file
-		center = self.calibration["centerpoint"]
+		center = np.array(self.calibration["centerpoint"])
+		#print(center)
 		verticalAngle = self.calibration["verticalAngle"]
 		height = self.calibration["cameraHeight"]
+		depthMap = pred.predict("keywest.jpg")["depth"]
+		pixelRadius = 10
+		#print(depthMap)
 
 		#finds the pixel coordinate of the nose of a person(nose just for now. It might change)
-		pixelCoordinate = self.output["keypoints"][:][COCO_PERSON_KEYPOINT_NAMES.index("nose")]
-
+		
+		numPeople = self.CVOutput["keypoints"].shape[0]
+		#print(numPeople)
+		for i in range(numPeople):
+			pixelCoordinate = self.CVOutput["keypoints"][i][self.COCO_PERSON_KEYPOINT_NAMES.index("nose")][:2]
+			
+		#print(self.CVOutput["keypoints"].shape)
+		#print(pixelCoordinate)
 		#calibration constant
-		k = calculateCalibrationConstant()
+		k = self.calculateCalibrationConstant()
 
-		actualSpatialCoord = _calculateSpatialCoordinate(pixelCoordinate, center, verticalAngle, k, height)
+		actualSpatialCoord = utils._calculateSpatialCoordinate(pixelCoordinate, center, verticalAngle, k, height, depthMap, pixelRadius)
 
 		return actualSpatialCoord
+    
 
 	"""
 	BIG BOI Function
 	Uses pixelCoordinates to make the map
 	"""
-	def calculateSpatialMap():
+	def calculateSpatialMap(self):
 		spatialCoordinates = []
 		for pixelCoordinate in self.pixelCoordinates:
-			spatialCoordinates.append(calculateSpatialCoordinate(pixelCoordinate))
+			spatialCoordinates.append(self.calculateSpatialCoordinate(pixelCoordinate))
 		self.spatialCoordinates = spatialCoordinates
+		return
+
+configPath = "sample_config.json"
+imagePath = "keywest.jpg"
+coreExample = SpaSpectCore(configPath, imagePath)
+print(coreExample.calculateSpatialCoordinate())
