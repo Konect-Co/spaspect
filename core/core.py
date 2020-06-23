@@ -119,7 +119,7 @@ class SpaSpectCore:
 		#print(center)
 		verticalAngle = self.calibration["verticalAngle"]
 		height = self.calibration["cameraHeight"]
-		depthMap = pred.predict("keywest.jpg")["depth"]
+		depthMap = pred.predict("keywest2.jpg")["depth"]
 		pixelRadius = 10
 		#print(depthMap)
 
@@ -152,6 +152,6 @@ class SpaSpectCore:
 		return
 
 configPath = "sample_config.json"
-imagePath = "keywest.jpg"
+imagePath = "keywest2.jpg"
 coreExample = SpaSpectCore(configPath, imagePath)
 print(coreExample.calculateSpatialCoordinate())
