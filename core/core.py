@@ -2,6 +2,7 @@ import os
 import numpy as np
 import json
 import math
+import sys
 from vision.torchvision import transforms, datasets
 
 import utils
@@ -67,7 +68,7 @@ class SpaSpectCore:
 			'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 'snowboard', 'sports ball',
 			'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard', 'tennis racket',
 			'bottle', 'N/A', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl',
-			'banana', 'apple', 'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza',
+			'banana', 'apple', '	andwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza',
 			'donut', 'cake', 'chair', 'couch', 'potted plant', 'bed', 'N/A', 'dining table',
 			'N/A', 'N/A', 'toilet', 'N/A', 'tv', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone',
 			'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'N/A', 'book',
@@ -119,7 +120,7 @@ class SpaSpectCore:
 		#print(center)
 		verticalAngle = self.calibration["verticalAngle"]
 		height = self.calibration["cameraHeight"]
-		depthMap = pred.predict("keywest.jpg")["depth"]
+		depthMap = pred.predict("pics/TimesSquare.mp4")["depth"]
 		pixelRadius = 10
 		#print(depthMap)
 
@@ -134,6 +135,7 @@ class SpaSpectCore:
 		#print(pixelCoordinate)
 		#calibration constant
 		k = self.calculateCalibrationConstant()
+		#print(k)
 
 		actualSpatialCoord = utils._calculateSpatialCoordinate(pixelCoordinate, center, verticalAngle, k, height, depthMap, pixelRadius)
 
@@ -151,7 +153,10 @@ class SpaSpectCore:
 		self.spatialCoordinates = spatialCoordinates
 		return
 
-configPath = "sample_config.json"
-imagePath = "keywest.jpg"
+configPath = "configs/times_square.json"
+imagePath = "pics/TimesSquare.mp4"
 coreExample = SpaSpectCore(configPath, imagePath)
-print(coreExample.calculateSpatialCoordinate())
+
+sys.stdout = open("textfiles/3DCoords.txt","w")
+print("3D Coordinates: ", coreExample.calculateSpatialCoordinate())
+sys.stdout.close()

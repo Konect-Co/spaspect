@@ -1,0 +1,12 @@
+{
+	"location": "Myrtle Beach, South Carolina",
+	"link": "https://www.earthcam.com/usa/southcarolina/myrtlebeach/?cam=myrtlebeach_hd2",
+	"resolution": [1080, 1920],
+	"calibration": {
+		"verticalAngle":40,
+		"cameraHeight":2.4384,
+		"calibPixelCoordinate":[0.60078, 0.92334],
+		"calibSpatialCoordinate":[0, 2.4384, 0],
+		"centerpoint":[0,0]
+	}
+}

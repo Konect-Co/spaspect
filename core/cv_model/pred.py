@@ -24,7 +24,7 @@ keypoint_rcnn.eval()
 
 model_name = "mono+stereo_640x192"
 base_path = sys.path[1]#os.getcwd()
-paths = [os.path.join(base_path, "keywest.jpg")]
+paths = [os.path.join(base_path, "pics/TimesSquare.mp4")]
 output_directory = base_path
 
 if torch.cuda.is_available():
@@ -76,46 +76,65 @@ coco_labels = [
 
 def predict(image_path):
     with torch.no_grad():
-        # Load image and preprocess
-        input_image_pil = pil.open(image_path).convert('RGB')
-        original_width, original_height = input_image_pil.size
-        input_image = input_image_pil.resize((feed_width, feed_height), pil.LANCZOS)
-        input_image = transforms.ToTensor()(input_image).unsqueeze(0)
-
-        # PREDICTION
-        input_image = input_image.to(device)
-        features = encoder(input_image)
+        # Load image from video and preprocess
+        live_stream = cv2.VideoCapture(image_path)
+        ret, frame = live_stream.read()
+        i = 0
+        while ret:
+            if ret == False:
+                 break
+            cv2.imwrite("videoframes/frame%d.jpg" % i, frame)#.convert('RGB')
+            ret, frame = live_stream.read()
+            #print('Read a new frame: ', ret)
+            i+=1
+        allImages = live_stream.release()
+        #print(allImages)
+        for j in range(i):
+            image= "videoframes/frame%d.jpg" %j
+            #new_image = tuple(tuple(b.replace(" ","")for b in a)for a in image)
+            #print(image)
+            input_image_pil = pil.open(image).convert('RGB')
+			#print("Images: ",input_image_pil)
+            original_width, original_height = input_image_pil.size
+            input_image = input_image_pil.resize((feed_width, feed_height), pil.LANCZOS)
+            input_image = transforms.ToTensor()(input_image).unsqueeze(0)
+			# PREDICTION
+            input_image = input_image.to(device)
+            features = encoder(input_image)
         
-        outputs = depth_decoder(features)
+            outputs = depth_decoder(features)
 
-        disp = outputs[("disp", 0)]
-        disp_resized = torch.nn.functional.interpolate(
+            disp = outputs[("disp", 0)]
+            disp_resized = torch.nn.functional.interpolate(
             disp, (original_height, original_width), mode="bilinear", align_corners=False)
         
-        _, depth = disp_to_depth(disp_resized, 0.1, 100)
-        depth = depth.numpy()
-        depth = np.reshape(depth, (original_height, original_width))
+            _, depth = disp_to_depth(disp_resized, 0.1, 100)
+            depth = depth.numpy()
+            depth = np.reshape(depth, (original_height, original_width))
         
-        new_width, new_height = 800, 800
-        input_image = input_image_pil.resize((new_width, new_height), pil.LANCZOS)
-        input_image = transforms.ToTensor()(input_image).unsqueeze(0)
-        #output = faster_rcnn(input_image)[0]
-        output = keypoint_rcnn(input_image)[0]
+            new_width, new_height = 800, 800
+            input_image = input_image_pil.resize((new_width, new_height), pil.LANCZOS)
+            input_image = transforms.ToTensor()(input_image).unsqueeze(0)
+            #output = faster_rcnn(input_image)[0]
+            output = keypoint_rcnn(input_image)[0]
 
-        #[top left x position, top left y position, width, height]
-        output["boxes"] = output["boxes"].numpy()
-        output["labels"] = output["labels"].numpy()
-        output["keypoints"] = output["keypoints"].numpy()
-        output["scores"] = output["scores"].numpy()
+            #[top left x position, top left y position, width, height]
+            output["boxes"] = output["boxes"].numpy()
+            output["labels"] = output["labels"].numpy()
+            output["keypoints"] = output["keypoints"].numpy()
+            output["scores"] = output["scores"].numpy()
 
-        output["labels"] = [ coco_labels[label] for label in output["labels"] ]
-        output["boxes"][:,::2] *= original_width/new_width
-        output["boxes"][:,1::2] *= original_height/new_height
-        output["keypoints"][:,:,0] *= original_width/new_width
-        output["keypoints"][:,:,1] *= original_height/new_height
+            output["labels"] = [ coco_labels[label] for label in output["labels"] ]
+            output["boxes"][:,::2] *= original_width/new_width
+            output["boxes"][:,1::2] *= original_height/new_height
+            output["keypoints"][:,:,0] *= original_width/new_width
+            output["keypoints"][:,:,1] *= original_height/new_height
 
-        #TODO: Sort output so it includes only labels with highest probability predictions
+            #TODO: Sort output so it includes only labels with highest probability predictions
 
-        output["depth"] = depth
+            output["depth"] = depth
+            j+=1
+            print("Going to next frame image.")
+		
 
         return output
