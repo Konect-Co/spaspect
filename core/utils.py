@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import math
 
-def add(a, b):
+def _add(a, b):
     return a+b
 
 def _readImage(imagePath):
