@@ -33,6 +33,15 @@ app.get('/styles.css', function (req, res){
 	});
 });
 
+app.get('/test.json', function (req, res){
+	fs.readFile("./test.json", function (err, content) {
+		if (err) { res.end(); return; }
+		res.writeHeader(200, {"Content-Type": "text/json"});
+		res.write(content);
+		res.end();
+	});
+});
+
 var PORT=3000;
 app.listen(PORT, function() {
 	console.log("Listening on port " + PORT);

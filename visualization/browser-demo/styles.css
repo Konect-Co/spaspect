@@ -5,7 +5,6 @@
 	bottom: 0%;
 	left: 0%;
 	border: 15px solid orange;
-	background-color: green;
 }
 
 #mapDiv {
@@ -15,7 +14,6 @@
 	bottom: 50%;
 	left: 0%;
 	border: 15px solid yellow;
-	background-color: gray;
 }
 
 #plotDiv {
@@ -25,5 +23,4 @@
 	bottom: 0%;
 	left: 50%;
 	border: 15px solid red;
-	background-color: yellow;
 }
