@@ -29,4 +29,5 @@ def test_calculateCalibrationConstant():
 			d = ast.literal_eval(row[3].strip())
 			expected = float(row[4])
 			print(a)
-			assert utils._calculateCalibrationConstant(a,b,c,d) == expected
+			assert utils._calculateCalibrationConstant(a,b,c,d) == expected		
+#def test_getPixelDepth():
