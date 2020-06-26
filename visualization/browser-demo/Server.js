@@ -6,17 +6,8 @@ app.get('/', function (req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/draw3DPlot.js', function (req, res){
-	fs.readFile("./draw3DPlot.js", function (err, content) {
-		if (err) { res.end(); return; }
-		res.writeHeader(200, {"Content-Type": "text/js"});
-		res.write(content);
-		res.end();
-	});
-});
-
-app.get('/drawMap.js', function (req, res){
-	fs.readFile("./drawMap.js", function (err, content) {
+app.get('/drawPlots.js', function (req, res){
+	fs.readFile("./drawPlots.js", function (err, content) {
 		if (err) { res.end(); return; }
 		res.writeHeader(200, {"Content-Type": "text/js"});
 		res.write(content);
