@@ -26,7 +26,7 @@ var layout = {
 }
 
 Plotly.setPlotConfig({
-  mapboxAccessToken: "INSERT TOKEN HERE"
+  mapboxAccessToken: "pk.eyJ1Ijoic3Jhdml0MSIsImEiOiJja2JzY3NpcHgwMGJnMnZzYTY5ZWsyeDR6In0.CIOWohypCmf_oCzed32xRA"
 })
 
-Plotly.newPlot('overheadMap', data, layout)
+Plotly.newPlot('mapDiv', data, layout)

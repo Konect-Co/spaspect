@@ -25,4 +25,4 @@ var layout = {
         t: 0
     }
 };
-Plotly.newPlot('3DPlot', data, layout);
+Plotly.newPlot('plotDiv', data, layout);
