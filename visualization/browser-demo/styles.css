@@ -1,19 +1,58 @@
+#header {
+	position: absolute;
+	height:10%;
+	width:100%;
+	top:0%;
+	text-align: center;
+	font-family: Arial;
+	background-color:#eee;
+}
+
+#main-content {
+	position: relative;
+	top:10%;
+	height:90%;
+}
+
 #videoDiv {
+	position: absolute;
+	top: 0%;
+	right: 50%;
+	bottom: 50%;
+	left: 0%;
+	border: 15px solid #777;
+}
+
+#mapDiv {
 	position: absolute;
 	top: 50%;
 	right: 50%;
 	bottom: 0%;
 	left: 0%;
-	border: 15px solid orange;
+	border: 15px solid #555;
 }
 
-#mapDiv {
+#statsDiv {
+	font-family: Arial;
 	position: absolute;
 	top: 0%;
 	right: 0%;
 	bottom: 50%;
-	left: 0%;
-	border: 15px solid yellow;
+	left: 50%;
+	border: 15px solid #ddd;
+}
+
+#stats-header {
+	text-align: center;
+	top:25%;
+}
+
+#stats {
+
+	height:100%;
+	width:100%
+	position: absolute;
+	text-align: center;
 }
 
 #plotDiv {
@@ -22,5 +61,5 @@
 	right: 0%;
 	bottom: 0%;
 	left: 50%;
-	border: 15px solid red;
+	border: 15px solid #aaa;
 }
