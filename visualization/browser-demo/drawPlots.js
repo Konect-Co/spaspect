@@ -120,6 +120,6 @@
 
 		Plotly.newPlot('mapDiv', data, layout);
 	};
-	xhttp.open("GET", "test.json", true);
+	xhttp.open("GET", "output.json", true);
 	xhttp.send();
 //}, 10000);
