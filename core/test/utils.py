@@ -58,7 +58,6 @@ def _getPixelDepth(pixelCoordinate, depthMap, pixelRadius=10):
 
 def _calculateSpatialCoordinate(pixelCoordinate, center, verticalAngle, k, height, depthMap, pixelRadius):
     #finds the offset of object from center of image(distance)
-    pixelCoordinate = np.array(pixelCoordinate)
     pkShape = pixelCoordinate.shape
     offset = pixelCoordinate-center#.reshape(pkShape)
 

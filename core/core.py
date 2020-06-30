@@ -136,7 +136,7 @@ class SpaSpectCore:
 		#print(pixelCoordinate)
 		#calibration constant
 		k = self.calculateCalibrationConstant()
-		#print(k)
+		print(k)
 
 		actualSpatialCoord = utils._calculateSpatialCoordinate(pixelCoordinate, center, verticalAngle, k, height, depthMap, pixelRadius)
 
