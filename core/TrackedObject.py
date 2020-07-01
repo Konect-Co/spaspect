@@ -51,13 +51,17 @@ def add(self, time, bounding_box):
 		history[time] = bounding_box
 		return
 
-def updateVelocity(self):
+def updateVelocity(self, time_i, time_f):
 		#assigned : Richard
 		#given that there are at least two bounding boxes in history
 		#calculate the pixel velocity
 		#velocity = difference in position(in pixels)/difference in time(time between each frame)
-
-		velocity = 0
-		#TODO: Implement this method
+		
+		bounding_box_i = self.history[time_i] #initial position
+		bounding_box_f = self.history[time_f] #final position
+		
+		xVelocity = (bounding_box_f[0] - bounding_box_i[0])/(time_f - time_i)
+		yVelocity = (bounding_box_f[1] - bounding_box_i[1])/(time_f - time_i)
+		velocity = [xVelocity, yVelocity]
 		self.velocity = velocity
 		return
