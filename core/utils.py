@@ -114,7 +114,7 @@ def makeVisualizationOutput(pm, output, distance_threshold=2, score_threshold = 
 	return predOutput
 
 #this function calculates the IoU between two boxes
-def compute_iou (box1, box2):
+def computeIOU (box1, box2):
   b1_p1x = box1[0]
   b1_p1y = box1[1]
   b1_p2x = box1[2]
