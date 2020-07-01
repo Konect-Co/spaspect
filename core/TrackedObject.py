@@ -1,4 +1,5 @@
 import utils
+import cv_model.utils as cv_utils
 import time
 import random
 
@@ -84,7 +85,7 @@ class TrackedObject(object):
 				for box_i in range(len(boundingBoxes)):
 					box = boundingBoxes[box_i]
 
-					IOU = utils.computeIOU(predictedBox, box)
+					IOU = cv_utils.computeIOU(predictedBox, box)
 					IOUValues[box_i] = IOU
 				IOUValues = sorted(allIOUValues.items(), reverse=True, key = lambda kv:(kv[1], kv[0]))
 				allIOUValues[trackedEntity.getName()] = IOUValues

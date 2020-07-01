@@ -15,6 +15,7 @@ import torchvision.models as models
 import torch
 
 import cv2
+import cv_model.detectMask as detectMask
 
 faster_rcnn = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
 faster_rcnn.eval()
@@ -75,47 +76,48 @@ coco_labels = [
 ]
 
 def predict(image_path):
-    with torch.no_grad():
-        # Load image and preprocess
-        input_image_pil = pil.open(image_path).convert('RGB')
-        original_width, original_height = input_image_pil.size
-        input_image = input_image_pil.resize((feed_width, feed_height), pil.LANCZOS)
-        input_image = transforms.ToTensor()(input_image).unsqueeze(0)
+	with torch.no_grad():
+		# Load image and preprocess
+		input_image_pil = pil.open(image_path).convert('RGB')
+		original_width, original_height = input_image_pil.size
+		input_image = input_image_pil.resize((feed_width, feed_height), pil.LANCZOS)
+		input_image = transforms.ToTensor()(input_image).unsqueeze(0)
 
-        # PREDICTION
-        input_image = input_image.to(device)
-        features = encoder(input_image)
-        
-        outputs = depth_decoder(features)
+		# PREDICTION
+		input_image = input_image.to(device)
+		features = encoder(input_image)
 
-        disp = outputs[("disp", 0)]
-        disp_resized = torch.nn.functional.interpolate(
-            disp, (original_height, original_width), mode="bilinear", align_corners=False)
-        
-        _, depth = disp_to_depth(disp_resized, 0.1, 100)
-        depth = depth.numpy()
-        depth = np.reshape(depth, (original_height, original_width))
-        
-        new_width, new_height = 800, 800
-        input_image = input_image_pil.resize((new_width, new_height), pil.LANCZOS)
-        input_image = transforms.ToTensor()(input_image).unsqueeze(0)
-        #output = faster_rcnn(input_image)[0]
-        output = keypoint_rcnn(input_image)[0]
+		outputs = depth_decoder(features)
 
-        #[top left x position, top left y position, width, height]
-        output["boxes"] = output["boxes"].numpy()
-        output["labels"] = output["labels"].numpy()
-        output["keypoints"] = output["keypoints"].numpy()
-        output["scores"] = output["scores"].numpy()
+		disp = outputs[("disp", 0)]
+		disp_resized = torch.nn.functional.interpolate(
+			disp, (original_height, original_width), mode="bilinear", align_corners=False)
 
-        output["labels"] = [ coco_labels[label] for label in output["labels"] ]
-        output["boxes"][:,::2] *= original_width/new_width
-        output["boxes"][:,1::2] *= original_height/new_height
-        output["keypoints"][:,:,0] *= original_width/new_width
-        output["keypoints"][:,:,1] *= original_height/new_height
+		_, depth = disp_to_depth(disp_resized, 0.1, 100)
+		depth = depth.numpy()
+		depth = np.reshape(depth, (original_height, original_width))
 
-        #TODO: Sort output so it includes only labels with highest probability predictions
+		new_width, new_height = 800, 800
+		input_image = input_image_pil.resize((new_width, new_height), pil.LANCZOS)
+		input_image = transforms.ToTensor()(input_image).unsqueeze(0)
+		#output = faster_rcnn(input_image)[0]
+		output = keypoint_rcnn(input_image)[0]
 
-        output["depth"] = depth
+	#TODO: Sort output so it includes only labels with highest probability predictions
+	#[top left x position, top left y position, width, height]
+	output["boxes"] = output["boxes"].numpy()
+	output["labels"] = output["labels"].numpy()
+	output["keypoints"] = output["keypoints"].numpy()
+	output["scores"] = output["scores"].numpy()
 
-        return output
+	output["labels"] = [ coco_labels[label] for label in output["labels"] ]
+	output["boxes"][:,::2] *= original_width/new_width
+	output["boxes"][:,1::2] *= original_height/new_height
+	output["keypoints"][:,:,0] *= original_width/new_width
+	output["keypoints"][:,:,1] *= original_height/new_height
+
+	output["masks"] = detectMask.genPredictions(image_path)
+
+	output["depth"] = depth
+
+	return output

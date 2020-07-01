@@ -1,4 +1,4 @@
-import utils
+import PixelMapper
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
@@ -8,6 +8,7 @@ import streamlink
 import time
 import math
 import sys
+import utils
 import TrackedObject
 
 def main(config_info):
@@ -20,8 +21,7 @@ def main(config_info):
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
 
-	#pm = utils.PixelMapper(quad_coords["pixel"], quad_coords["lonlat"], quad_coords["lonlat_origin"])
-	pm = utils.PixelMapper.fromfile(configPath)
+	pm = PixelMapper.PixelMapper.fromfile(configPath)
 
 	video = True
 	frame_rate = cv2.CAP_PROP_FPS
@@ -39,7 +39,7 @@ def main(config_info):
 		cv2.imwrite(imagePath, image)
 		output = pred.predict(imagePath)
 
-
+		predOutput = utils.makeVisualizationOutput(pm, output)
 		with open(outputPath, 'w') as file:
 			file.write(json.dumps(predOutput))
 
@@ -56,8 +56,11 @@ def main(config_info):
 
 
 if __name__ == "__main__":
-	runtimeVariablesFilename = "/home/ravit/Konect-Code/spaspect-project/spaspect/core/runtimeVariables.json"
-	with open(runtimeVariablesFilename, "r") as f:
-		runtimeInfo = json.loads(f.read())
-		sys.exit(main(runtimeInfo))
-	
+	args = {
+		"imagePath":"/home/ravit/Pictures/Frame.jpg",
+		"outputPath":"/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/browser-demo/output.json",
+		"configPath":"/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/browser-demo/config.json",
+		"streamLink":"/home/ravit/Videos/TimesSquare2.mp4",
+		"isVideo":True
+	}
+	sys.exit(main(args))
