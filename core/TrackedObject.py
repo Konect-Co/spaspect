@@ -12,7 +12,6 @@ class TrackedObject(object):
 	objects = {}
 
 	def __init__(self, name, label, boundingBox):
-		
 		#name of the tracked object
 		self.name = name
 		#class for the bounding box
@@ -56,13 +55,13 @@ class TrackedObject(object):
 			#remove all tracked objects which have not been updated within updateThreshold seconds
 			to_delete = []
 			
-			for tracked_key in objects:
-				tracked = objects[tracked_key]
+			for tracked_key in cls.objects:
+				tracked = cls.objects[tracked_key]
 				if (currTime-tracked.getLastUpdate() > updateThreshold):
 					to_delete.append(tracked_key)
 			
 			for delete_i in to_delete:
-				del objects[delete_i]
+				del cls.objects[delete_i]
 			
 			return
 
@@ -77,9 +76,11 @@ class TrackedObject(object):
 			#TODO: (for future) Make algorithm more efficient by implementing grids in the image
 			cls.updateTime()
 
+			print("[DEBUG] boundingBoxes", boundingBoxes)
+
 			allIOUValues = {}
-			for name in objects.keys():
-				trackedEntity = objects[name]
+			for name in cls.objects.keys():
+				trackedEntity = cls.objects[name]
 				predictedBox = trackedEntity.computePrediction()
 				IOUValues = {}
 				for box_i in range(len(boundingBoxes)):
@@ -89,23 +90,8 @@ class TrackedObject(object):
 					IOUValues[box_i] = IOU
 				IOUValues = sorted(allIOUValues.items(), reverse=True, key = lambda kv:(kv[1], kv[0]))
 				allIOUValues[trackedEntity.getName()] = IOUValues
-				
-			keys = allIOUValues.keys()
-			for val in keys:
-				maximum_iou = allIOUValues[val][0]
-				minIOU = 0.3
-				if maximum_iou < minIOU:
-					name1 = str(random.random())
-					label = "person"
-					boundingBox = boundingBoxes[allIOUValues[val].keys()[0]]
-					newObject = TrackedObject(name1,label,boundingBox)
-					return
-				else:
-					val.addBox(allIOUValues[val].keys()[0])
-					key = allIOUValues[val].keys()[0]
-					del(allIOUValues[val])
-					for trackingKey in allIOUValues.keys():
-						   del(allIOUValues[trackingKey][key])
+			
+			print("[DEBUG] allIOUValues", allIOUValues)
 
 			"""
 			Now, we have a 2D dictionary with the row corresponding to each existing tracked object
@@ -119,6 +105,53 @@ class TrackedObject(object):
 				- Assign the bounding box corresponding to the highest IoU to the corresponding tracking object
 			- Delete the row and column of the highest IOU from the 2D dictionary
 			"""
+			#storing the indices of the new boxes that are to be created
+			minThresholdIOU = 0.3			
+			newBoxes = []			
+			while True:
+				keys = allIOUValues.keys()
+				if len(keys) == 0:
+					break
+
+				maximum_iou = 0
+				maximumTracking = keys[0]
+
+				for trackingObj in keys:
+					#problem: val is not the global maximum just for the current tracked object
+					iou = allIOUValues[trackingObj][0]
+					if iou>maximum_iou:
+						maximum_iou = iou
+						maximumTracking = trackingObj
+				
+				#if the greatest iou left is lower than the minimum threshold
+				#adding all remaining bounding boxes to be created as new objects
+				if maximum_iou < minThresholdIOU:
+					for box_i in allIOUValues[keys[0]].keys():
+						newBoxes.append(box_i)
+					break
+
+				#if not, we update the latest box and repeat
+				else:
+					maximumTracking.addBox(allIOUValues[maximumTracking].keys()[0])
+					boxKey = allIOUValues[maximumTracking].keys()[0]
+					
+					#deleting the row and column of the maximum IoU
+					for trackingKey in allIOUValues.keys():
+						   del(allIOUValues[trackingKey][boxKey])
+					
+					#adding remaining boxes
+					for box_i in allIOUValues[maximumTracking].keys():
+						newBoxes.append(box_i)
+					del(allIOUValues[val])
+					print("[DEBUG] \tTracked object being updated")
+
+			#making a new object
+			for newBoxIndex in newBoxes:
+				name1 = str(random.random())
+				label = "person"
+				boundingBox = boundingBoxes[newBoxIndex]
+				print("[DEBUG] \tNew object being constructed")
+				newObject = TrackedObject(name1,label,boundingBox)
 
 			cls.prune()
 			return

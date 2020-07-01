@@ -1,15 +1,16 @@
-import PixelMapper
-import numpy as np
-import cv2
-import matplotlib.pyplot as plt
-from cv_model import pred
 import json
 import streamlink
 import time
 import math
 import sys
 import utils
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+
+import PixelMapper
 import TrackedObject
+from cv_model import pred
 
 def main(config_info):
 	imagePath = config_info["imagePath"]
@@ -38,6 +39,8 @@ def main(config_info):
 
 		cv2.imwrite(imagePath, image)
 		output = pred.predict(imagePath)
+		TrackedObject.TrackedObject.track(output["boxes"])
+		print(TrackedObject.TrackedObject.objects)
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
 		with open(outputPath, 'w') as file:
@@ -53,7 +56,6 @@ def main(config_info):
 				cap.read()
 
 	return 0
-
 
 if __name__ == "__main__":
 	args = {
