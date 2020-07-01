@@ -1,5 +1,6 @@
 import utils
 import time
+import random
 
 class TrackedObject(object):
 	#number of seconds without detection until tracked object can be removed
@@ -85,8 +86,25 @@ class TrackedObject(object):
 
 					IOU = utils.computeIOU(predictedBox, box)
 					IOUValues[box_i] = IOU
-				IOUValues = sorted(key_value.items(), reverse=True, key = lambda kv:(kv[1], kv[0]))
+				IOUValues = sorted(allIOUValues.items(), reverse=True, key = lambda kv:(kv[1], kv[0]))
 				allIOUValues[trackedEntity.getName()] = IOUValues
+				
+			keys = allIOUValues.keys()
+			for val in keys:
+				maximum_iou = allIOUValues[val][0]
+				minIOU = 0.3
+				if maximum_iou < minIOU:
+					name1 = str(random.random())
+					label = "person"
+					boundingBox = boundingBoxes[allIOUValues[val].keys()[0]]
+					newObject = TrackedObject(name1,label,boundingBox)
+					return
+				else:
+					val.addBox(allIOUValues[val].keys()[0])
+					key = allIOUValues[val].keys()[0]
+					del(allIOUValues[val])
+					for trackingKey in allIOUValues.keys():
+						   del(allIOUValues[trackingKey][key])
 
 			"""
 			Now, we have a 2D dictionary with the row corresponding to each existing tracked object
