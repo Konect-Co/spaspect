@@ -9,7 +9,8 @@ class TrackedObject(object):
 	#all objects that are being tracked
 	objects = {}
 
-	def __init__(self, name, label):
+	def __init__(self, name, label, boundingBox):
+		
 		#name of the tracked object
 		self.name = name
 		#class for the bounding box
@@ -19,7 +20,12 @@ class TrackedObject(object):
 		#dictionary storing time as key and bounding box as value
 		self.history = {}
 		#number of seconds since last detection of object
-		self.lastUpdate = 0
+		self.lastUpdate = currTime
+		#adding box
+		self.addBox(boundingBox)
+		#adding self to objects
+		assert name not in objects.keys()
+		objects[name] = self
 	
 	def getName(self):
 		return self.name
@@ -79,10 +85,7 @@ class TrackedObject(object):
 
 					IOU = utils.computeIOU(predictedBox, box)
 					IOUValues[box_i] = IOU
-					#check IoU with every bounding box
-					#assign the correct bounding box as the latest box of this particular tracked object
-					#Warning: Make sure though that one bounding box is not assigned to multiple tracked objects
-				IOUValues = sorted(key_value.items(), key = lambda kv:(kv[1], kv[0]))
+				IOUValues = sorted(key_value.items(), reverse=True, key = lambda kv:(kv[1], kv[0]))
 				allIOUValues[trackedEntity.getName()] = IOUValues
 
 			"""
@@ -95,17 +98,11 @@ class TrackedObject(object):
 				- return
 			- Otherwise
 				- Assign the bounding box corresponding to the highest IoU to the corresponding tracking object
-			- Delete the column of the highest IOU from the 2D dictionary
+			- Delete the row and column of the highest IOU from the 2D dictionary
 			"""
 
 			cls.prune()
 			return
-
-	@classmethod
-	def addObject(cls, trackedObject):
-		name = trackedObject.getName()
-		assert name not in objects.keys()
-		objects[name] = trackedObject
 
 	def addBox(self, bounding_box):
 		#assigned : Ravit
