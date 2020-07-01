@@ -39,16 +39,6 @@ def main(config_info):
 		cv2.imwrite(imagePath, image)
 		output = pred.predict(imagePath)
 
-		predOutput = utils.makeVisualizationOutput(pm, output)
-		object_box = predOutput["current_box"]
-		predicted_box = predOutput["predicted_box"]
-		boxes_iou = utils.compute_iou(object_box, predicted_box)
-		
-		
-		
-		#change number maybe
-		if boxes_iou <= 0.5:
-			#do something
 
 		with open(outputPath, 'w') as file:
 			file.write(json.dumps(predOutput))
