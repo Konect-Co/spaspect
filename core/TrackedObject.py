@@ -1,3 +1,5 @@
+import utils
+
 class TrackedObject(object):
 	def __init__(self, name, label):
 		#name of the tracked object
@@ -20,32 +22,40 @@ class TrackedObject(object):
 
 	#TODO: Add getter functions for all of the instance/class variables
 
-	@classmethod
-	def updateTime():
+@classmethod
+def updateTime():
+		#assigned : Santript
 		#TODO
 		#Updates the class time variable when called
-
-	@classmethod
-	def prune(cls):
-		#remove all tracked objects which have not been updated within updateThreshold seconds
-		#TODO
 		return
 
-	@classmethod
-	def addAll(cls, boundingBoxes):
+@classmethod		
+def prune(cls):
+		#remove all tracked objects which have not been updated within updateThreshold seconds
+		#TODO
+		#assigned : Santript
+		return
+
+@classmethod
+def addAll(cls, boundingBoxes):
 		#this method is the essence of the tracking algorithm
 		#it goes through the boundingBoxes in the new detection
 		#and updates the tracked objects' positions through the add function
 		#this should update the time stored in the class variable
 		#TODO
+		#assigned : Cassiano
+		return
 
-	def add(self, time, bounding_box):
+def add(self, time, bounding_box):
+		#assigned : Ravit
 		history[time] = bounding_box
 		return
 
-	def updateVelocity(self):
+def updateVelocity(self):
+		#assigned : Richard
 		#given that there are at least two bounding boxes in history
 		#calculate the pixel velocity
+		#velocity = difference in position(in pixels)/difference in time(time between each frame)
 
 		velocity = 0
 		#TODO: Implement this method
