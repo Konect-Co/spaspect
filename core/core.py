@@ -8,6 +8,7 @@ import streamlink
 import time
 import math
 import sys
+import TrackedObject
 
 def main(config_info):
 	imagePath = config_info["imagePath"]
@@ -39,10 +40,20 @@ def main(config_info):
 		output = pred.predict(imagePath)
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
+		object_box = predOutput["current_box"]
+		predicted_box = predOutput["predicted_box"]
+		boxes_iou = utils.compute_iou(object_box, predicted_box)
+		
+		
+		
+		#change number maybe
+		if boxes_iou <= 0.5:
+			#do something
 
 		with open(outputPath, 'w') as file:
 			file.write(json.dumps(predOutput))
 
+		startTime = time.time()
 		interval = int(time.time()-startTime)
 		if (interval<5):
 			time.sleep(5-interval)

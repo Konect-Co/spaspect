@@ -2,6 +2,7 @@ import numpy as np
 import math
 import cv2
 import json
+import TrackedObject
 
 """
 Create an object for converting pixels to geographic coordinates,
@@ -85,7 +86,9 @@ def makeVisualizationOutput(pm, output, distance_threshold=2, score_threshold = 
 	for i in range(len(output["boxes"])):
 		if (output["scores"][i] < score_threshold):
 			break
+		allBoxes = output["boxes"]
 		box = output["boxes"][i]
+		predicted_box = TrackedObject.computePrediction()
 		
 		midpoint = [int((box[0]+box[2])/2), box[3]]
 
@@ -110,7 +113,7 @@ def makeVisualizationOutput(pm, output, distance_threshold=2, score_threshold = 
 				safe[i] = 0
 				safe[j] = 0
 	
-	predOutput = {"3DCoordinates":coords3D, "lat-long":long_lats, "safe":safe}
+	predOutput = {"3DCoordinates":coords3D, "lat-long":long_lats, "safe":safe, "current_box":box, "predicted_box":predicted_box, "allBoxes":allBoxes}
 	return predOutput
 
 #this function calculates the IoU between two boxes
