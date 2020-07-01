@@ -7,7 +7,7 @@ class TrackedObject(object):
 	#keeping track of the time
 	currTime = 0
 	#all objects that are being tracked
-	objects = []
+	objects = {}
 
 	def __init__(self, name, label):
 		#name of the tracked object
@@ -48,42 +48,69 @@ class TrackedObject(object):
 			#remove all tracked objects which have not been updated within updateThreshold seconds
 			to_delete = []
 			
-			for tracked_i in range(len(objects)):
-				tracked = objects[tracked_i]
+			for tracked_key in objects:
+				tracked = objects[tracked_key]
 				if (currTime-tracked.getLastUpdate() > updateThreshold):
-					to_delete.append(tracked_i)
+					to_delete.append(tracked_key)
 			
-			to_delete.sort(reverse=True)
 			for delete_i in to_delete:
 				del objects[delete_i]
 			
 			return
 
 	@classmethod
-	def addAll(cls, boundingBoxes):
+	def track(cls, boundingBoxes):
 			#this method is the essence of the tracking algorithm
 			#it goes through the boundingBoxes in the new detection
 			#and updates the tracked objects' positions through the add function
 			#this should update the time stored in the class variable
-			#assigned : Cassiano
+			#assigned : Santript
+
+			#TODO: (for future) Make algorithm more efficient by implementing grids in the image
 			cls.updateTime()
 
-			for (name in history.keys()):
-				trackedEntity = history[name]
+			allIOUValues = {}
+			for name in objects.keys():
+				trackedEntity = objects[name]
 				predictedBox = trackedEntity.computePrediction()
-				for box in boundingBoxes:
-					print("Do stuff!")
+				IOUValues = {}
+				for box_i in range(len(boundingBoxes)):
+					box = boundingBoxes[box_i]
+
+					IOU = utils.computeIOU(predictedBox, box)
+					IOUValues[box_i] = IOU
 					#check IoU with every bounding box
 					#assign the correct bounding box as the latest box of this particular tracked object
 					#Warning: Make sure though that one bounding box is not assigned to multiple tracked objects
+				IOUValues = sorted(key_value.items(), key = lambda kv:(kv[1], kv[0]))
+				allIOUValues[trackedEntity.getName()] = IOUValues
+
+			"""
+			Now, we have a 2D dictionary with the row corresponding to each existing tracked object
+			and each column corresponding to each bounding box.
+			Here's the procedure for updating the bounding boxes of tracked entities
+			- Start with the highest IoU currently in the 2D dictionary
+			- If the highest IoU is lower than the threshold IoU, then
+				- take all existing bounding boxes and assign them to new tracking objects
+				- return
+			- Otherwise
+				- Assign the bounding box corresponding to the highest IoU to the corresponding tracking object
+			- Delete the column of the highest IOU from the 2D dictionary
+			"""
 
 			cls.prune()
 			return
 
-	def add(self, bounding_box):
+	@classmethod
+	def addObject(cls, trackedObject):
+		name = trackedObject.getName()
+		assert name not in objects.keys()
+		objects[name] = trackedObject
+
+	def addBox(self, bounding_box):
 		#assigned : Ravit
-		assert self.lastUpdate != currTime
-		
+		assert self.lastUpdate != currTime		
+
 		history[currTime] = bounding_box
 		self.lastUpdate = currTime
 		return
@@ -95,6 +122,7 @@ class TrackedObject(object):
 		#velocity = difference in position(in pixels)/difference in time(time between each frame)
 		if len(self.history) < 2:
 			self.velocity = [0, 0]
+			return
 
 		time_i = self.history.keys()[-1]
 		time_f = self.history.keys()[-2]
