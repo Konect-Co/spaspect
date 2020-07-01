@@ -112,3 +112,52 @@ def makeVisualizationOutput(pm, output, distance_threshold=2, score_threshold = 
 	
 	predOutput = {"3DCoordinates":coords3D, "lat-long":long_lats, "safe":safe}
 	return predOutput
+
+#this function calculates the IoU between two boxes
+def compute_iou (box1, box2):
+  b1_p1x = box1[0]
+  b1_p1y = box1[1]
+  b1_p2x = box1[2]
+  b1_p2y = box1[3]
+  b2_p1x = box2[0]
+  b2_p1y = box2[1]
+  b2_p2x = box2[2]
+  b2_p2y = box2[3]
+  
+  x_overlap = False
+  y_overlap = False
+  
+  if (b2_p2x>b1_p1x and b1_p2x>b2_p1x):
+    x_overlap = True
+  if (b1_p2x>b2_p1x and b2_p2x>b1_p1x):
+    x_overlap = True
+  if (b2_p2y>b1_p1y and b1_p2y>b2_p1y):
+    y_overlap = True
+  if (b1_p2y>b2_p1y and b2_p2y>b1_p1y):
+    y_overlap = True
+  
+  overlap = x_overlap and y_overlap
+  
+  if not overlap:
+    return 0
+  
+  x_values = [b1_p1x, b1_p2x, b2_p1x, b2_p2x]
+  y_values = [b1_p1y, b2_p2y, b2_p1y, b2_p2y]
+  
+  x_values.sort()
+  y_values.sort()
+  
+  box1_area = 0
+  box2_area = 0
+  overlap_area = 0
+  
+  box1_area = abs(b1_p2x-b1_p1x) * abs(b1_p2y-b1_p1y)
+  box2_area = abs(b2_p2x-b2_p1x) * abs(b2_p2y-b2_p1y)
+  
+  overlap_area = abs(x_values[2]-x_values[1])*abs(y_values[2]-y_values[1])
+  
+  total_area = box1_area + box2_area - overlap_area
+  
+  iou = overlap_area/total_area
+  
+  return iou
