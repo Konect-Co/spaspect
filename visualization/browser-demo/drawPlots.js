@@ -8,7 +8,7 @@ xhttp.onreadystatechange = function() {
 	}
 	
 	//Safety classification rules are in this exact order:
-	//    if unmasked individual (regardless of distance), bright red individual
+	//    if unmasked individual (regardless of distance), dark red individual
 	//    else if individual is masked but distance is critical, bright red individual
 	//    else if unsure about mask, orange individual
 	//    otherwise, mark cyan for safe individual
