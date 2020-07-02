@@ -6,25 +6,48 @@ xhttp.onreadystatechange = function() {
 	} else {
 		return;
 	}
-
+	
+	//Safety classification rules are in this exact order:
+	//    if unmasked individual (regardless of distance), bright red individual
+	//    else if individual is masked but distance is critical, bright red individual
+	//    else if unsure about mask, orange individual
+	//    otherwise, mark cyan for safe individual
 	var x_values_safe = [];
 	var y_values_safe = [];
 	var z_values_safe = [];
 	var x_values_unsafe = [];
 	var y_values_unsafe = [];
 	var z_values_unsafe = [];
+	var x_values_mask_unsure = [];
+	var y_values_mask_unsure = [];
+	var z_values_mask_unsure = [];
+	var x_values_unmasked = [];
+	var y_values_unmasked = [];
+	var z_values_unmasked = [];
+
 	for (let i = 0; i < data['3DCoordinates'].length; i++) {
 		var curr_coordinate = data['3DCoordinates'][i];
-		if (data['safe'][i] == 1) {
-			x_values_safe.push(curr_coordinate[0]);
-			y_values_safe.push(curr_coordinate[1]);
-			z_values_safe.push(curr_coordinate[2]);
-		} else if (data['safe'][i] == 0) {
+		if (data['wearingMasks'][i] == 2) {
+			x_values_unmasked.push(curr_coordinate[0]);
+			y_values_unmasked.push(curr_coordinate[1]);
+			z_values_unmasked.push(curr_coordinate[2]);
+		}else if (data['safe'][i] == 0) {
 			x_values_unsafe.push(curr_coordinate[0]);
 			y_values_unsafe.push(curr_coordinate[1]);
 			z_values_unsafe.push(curr_coordinate[2]);
+		}else if (data['wearingMasks'][i] == 0) {
+			x_values_mask_unsure.push(curr_coordinate[0]);
+			y_values_mask_unsure.push(curr_coordinate[1]);
+			z_values_mask_unsure.push(curr_coordinate[2]);
+		} else if (data['wearingMasks'][i] == 1) {
+			x_values_safe.push(curr_coordinate[0]);
+			y_values_safe.push(curr_coordinate[1]);
+			z_values_safe.push(curr_coordinate[2]);
 		}
 	}
+
+
+
 
 	var lat_values = [];
 	var long_values = [];
@@ -47,7 +70,7 @@ xhttp.onreadystatechange = function() {
 	    marker: {
 	        size: 8,
 	        line: {
-	            color: 'rgba(217, 217, 217, 0.14)',
+	            color: 'rgba(0, 139, 139, 0.14)',
 	            width: 0.5
 	        },
 	        opacity: 0.8
@@ -64,6 +87,23 @@ xhttp.onreadystatechange = function() {
 	    marker: {
 	        size: 8,
 	        line: {
+	            color: 'rgba(139, 0, 0, 0.14)',
+	            width: 0.5
+	        },
+	        opacity: 0.8
+	    },
+	    type: 'scatter3d'
+	};
+
+	var trace_unmasked = {
+	    x: x_values_unmasked,
+	    y: y_values_unmasked,
+	    z: z_values_unmasked,
+		name: 'maskViolation',
+	    mode: 'markers',
+	    marker: {
+	        size: 8,
+	        line: {
 	            color: 'rgba(217, 0, 0, 0.14)',
 	            width: 0.5
 	        },
@@ -72,7 +112,24 @@ xhttp.onreadystatechange = function() {
 	    type: 'scatter3d'
 	};
 
-	var data1 = [trace_safe, trace_unsafe];
+	var trace_mask_unverified = {
+	    x: x_values_mask_unsure,
+	    y: y_values_mask_unsure,
+	    z: z_values_mask_unsure,
+		name: 'unverifiedMask',
+	    mode: 'markers',
+	    marker: {
+	        size: 8,
+	        line: {
+	            color: 'rgba(217, 217, 217, 0.14)',
+	            width: 0.5
+	        },
+	        opacity: 0.8
+	    },
+	    type: 'scatter3d'
+	};
+
+	var data1 = [trace_safe, trace_unsafe, trace_unmasked, trace_mask_unverified];
 	var layout = {
 	    margin: {
 	        l: 0,
@@ -81,6 +138,8 @@ xhttp.onreadystatechange = function() {
 	        t: 0
 	    }
 	};
+
+
 	Plotly.newPlot('plotDiv', data1, layout);
 
 	//==========================
