@@ -7,6 +7,7 @@ def makeVisualizationOutput(pm, output, distance_threshold=2, score_threshold = 
 	long_lats = []
 	wearingMasks = []
 	for i in range(len(output["boxes"])):
+		#print("Boxes", output["boxes"][i])
 		if (output["scores"][i] < score_threshold):
 			break
 		box = output["boxes"][i]
@@ -18,15 +19,21 @@ def makeVisualizationOutput(pm, output, distance_threshold=2, score_threshold = 
 
 		#0=unsure, 1=wearing, 2=not wearing
 		wearingMask = 0
+		#print(output["masks"])
 		for maskOut in output["masks"]:
 			face_box = maskOut[0]
 			mask = maskOut[1]
-			
-			if (cv_utils.computeIOA(face_box, box) > 0.9):
+			#print("boxA: ",face_box)
+			#print("boxB: ",box)
+			IOA = cv_utils.computeIOA(face_box, box)
+			#print("IOA: ", IOA)
+			if (IOA > 0.9):
 				if (mask>0.7):
 					wearingMask = 1
-				else:
+				elif (mask < 0.7):
 					wearingMask = 2
+				else:
+					wearingMask = 0
 				break
 
 		long_lats.append(long_lat)

@@ -42,6 +42,8 @@ def main(config_info):
 		TrackedObject.TrackedObject.track(output["boxes"])
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
+		mask = predOutput["wearingMasks"]
+		print("MASKS: ",mask)
 		with open(outputPath, 'w') as file:
 			file.write(json.dumps(predOutput))
 
@@ -58,10 +60,10 @@ def main(config_info):
 
 if __name__ == "__main__":
 	args = {
-		"imagePath":"/home/ravit/Pictures/Frame.jpg",
-		"outputPath":"/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/browser-demo/output.json",
-		"configPath":"/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/browser-demo/config.json",
-		"streamLink":"/home/ravit/Videos/TimesSquare2.mp4",
+		"imagePath":"/home/santript/spaspect/Pictures/Frame.jpg",
+		"outputPath":"/home/santript/spaspect/spaspect/visualization/browser-demo/output.json",
+		"configPath":"/home/santript/spaspect/spaspect/visualization/browser-demo/config.json",
+		"streamLink":"/home/santript/spaspect/GuyMask.mp4",
 		"isVideo":True
 	}
 	sys.exit(main(args))

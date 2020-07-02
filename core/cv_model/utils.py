@@ -9,12 +9,15 @@ def computeIntersection(boxA, boxB):
 		return 0
 
 	xVals = [boxA[0], boxA[2], boxB[0], boxB[2]]
-	yVals = [boxA[1], boxB[3], boxB[1], boxB[3]]
-
+	#print("xVals: ",xVals)
+	yVals = [boxA[1], boxA[3], boxB[1], boxB[3]]
+	#print("yVals: ",yVals)
 	xVals.sort()
 	yVals.sort()
-
-	intersection = xVals[2]-xVals[1]*yVals[2]-yVals[1]
+	
+	#print("New xVals: ",xVals)
+	#print("New yVals: ",yVals)
+	intersection = (xVals[2]-xVals[1])*(yVals[2]-yVals[1])
 	return intersection
 
 #this function computes the IoU between two boxes
@@ -30,8 +33,10 @@ def computeIOU (boxA, boxB):
 #this function computes Intersection over Area of A
 def computeIOA (boxA, boxB):
 	intersection = computeIntersection(boxA, boxB)
+	#print("Intersection: ",intersection)
 
 	aArea = computeArea(boxA)
+	#print("area of boxA: ",aArea)
 	iou = intersection/aArea
 
 	return iou

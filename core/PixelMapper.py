@@ -68,8 +68,8 @@ class PixelMapper(object):
 		"""
 		Convert a set of 3D coordinates to lon-lat coordinates
 		"""
-		lon_m = _coords3d[1]
-		lat_m = _coords3d[0]
+		lon_m = _coords3D[1]
+		lat_m = _coords3D[0]
 		
 		lon_d = lon_m / self.lon_const
 		lat_d = lat_m / self.lat_const
