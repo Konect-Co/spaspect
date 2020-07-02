@@ -40,7 +40,6 @@ def main(config_info):
 		cv2.imwrite(imagePath, image)
 		output = pred.predict(imagePath)
 		TrackedObject.TrackedObject.track(output["boxes"])
-		print(TrackedObject.TrackedObject.objects)
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
 		with open(outputPath, 'w') as file:

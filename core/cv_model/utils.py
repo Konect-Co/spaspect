@@ -15,6 +15,7 @@ def computeIntersection(boxA, boxB):
 	yVals.sort()
 
 	intersection = xVals[2]-xVals[1]*yVals[2]-yVals[1]
+	return intersection
 
 #this function computes the IoU between two boxes
 def computeIOU (boxA, boxB):

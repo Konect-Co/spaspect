@@ -21,12 +21,12 @@ class TrackedObject(object):
 		#dictionary storing time as key and bounding box as value
 		self.history = {}
 		#number of seconds since last detection of object
-		self.lastUpdate = currTime
+		self.lastUpdate = type(self).currTime
 		#adding box
 		self.addBox(boundingBox)
 		#adding self to objects
-		assert name not in objects.keys()
-		objects[name] = self
+		assert name not in type(self).objects.keys()
+		type(self).objects[name] = self
 	
 	def getName(self):
 		return self.name
@@ -47,7 +47,7 @@ class TrackedObject(object):
 	def updateTime(cls):
 			#assigned : Santript
 			#Updates the class time variable when called
-			currTime = time.time()
+			cls.currTime = time.time()
 			return
 
 	@classmethod		
@@ -57,7 +57,7 @@ class TrackedObject(object):
 			
 			for tracked_key in cls.objects:
 				tracked = cls.objects[tracked_key]
-				if (currTime-tracked.getLastUpdate() > updateThreshold):
+				if (cls.currTime-tracked.getLastUpdate() > cls.updateThreshold):
 					to_delete.append(tracked_key)
 			
 			for delete_i in to_delete:
@@ -76,8 +76,6 @@ class TrackedObject(object):
 			#TODO: (for future) Make algorithm more efficient by implementing grids in the image
 			cls.updateTime()
 
-			print("[DEBUG] boundingBoxes", boundingBoxes)
-
 			allIOUValues = {}
 			for name in cls.objects.keys():
 				trackedEntity = cls.objects[name]
@@ -90,8 +88,6 @@ class TrackedObject(object):
 					IOUValues[box_i] = IOU
 				IOUValues = sorted(allIOUValues.items(), reverse=True, key = lambda kv:(kv[1], kv[0]))
 				allIOUValues[trackedEntity.getName()] = IOUValues
-			
-			print("[DEBUG] allIOUValues", allIOUValues)
 
 			"""
 			Now, we have a 2D dictionary with the row corresponding to each existing tracked object
@@ -107,50 +103,52 @@ class TrackedObject(object):
 			"""
 			#storing the indices of the new boxes that are to be created
 			minThresholdIOU = 0.3			
-			newBoxes = []			
-			while True:
-				keys = allIOUValues.keys()
-				if len(keys) == 0:
-					break
+			newBoxes = []
+			if len(allIOUValues.keys()) == 0:
+				newBoxes = range(len(boundingBoxes))
+			else:
+				while True:
+					keys = allIOUValues.keys()
+					if len(keys) == 0:
+						break
+					if len(allIOUValues[list(keys)[0]]) == 0:
+						break
 
-				maximum_iou = 0
-				maximumTracking = keys[0]
+					maximum_iou = 0
+					maximumTracking = list(keys)[0]
 
-				for trackingObj in keys:
-					#problem: val is not the global maximum just for the current tracked object
-					iou = allIOUValues[trackingObj][0]
-					if iou>maximum_iou:
-						maximum_iou = iou
-						maximumTracking = trackingObj
-				
-				#if the greatest iou left is lower than the minimum threshold
-				#adding all remaining bounding boxes to be created as new objects
-				if maximum_iou < minThresholdIOU:
-					for box_i in allIOUValues[keys[0]].keys():
-						newBoxes.append(box_i)
-					break
-
-				#if not, we update the latest box and repeat
-				else:
-					maximumTracking.addBox(allIOUValues[maximumTracking].keys()[0])
-					boxKey = allIOUValues[maximumTracking].keys()[0]
+					for trackingObj in keys:
+						iou = allIOUValues[trackingObj][0]
+						if iou>maximum_iou:
+							maximum_iou = iou
+							maximumTracking = trackingObj
 					
-					#deleting the row and column of the maximum IoU
-					for trackingKey in allIOUValues.keys():
-						   del(allIOUValues[trackingKey][boxKey])
-					
-					#adding remaining boxes
-					for box_i in allIOUValues[maximumTracking].keys():
-						newBoxes.append(box_i)
-					del(allIOUValues[val])
-					print("[DEBUG] \tTracked object being updated")
+					#if the greatest iou left is lower than the minimum threshold
+					#adding all remaining bounding boxes to be created as new objects
+					if maximum_iou < minThresholdIOU:
+						for box_i in allIOUValues[keys[0]].keys():
+							newBoxes.append(box_i)
+						break
+
+					#if not, we update the latest box and repeat
+					else:
+						maximumTracking.addBox(list(allIOUValues[maximumTracking].keys())[0])
+						boxKey = list(allIOUValues[maximumTracking].keys())[0]
+						
+						#deleting the row and column of the maximum IoU
+						for trackingKey in allIOUValues.keys():
+							   del(allIOUValues[trackingKey][boxKey])
+						
+						#adding remaining boxes
+						for box_i in allIOUValues[maximumTracking].keys():
+							newBoxes.append(box_i)
+						del(allIOUValues[val])
 
 			#making a new object
 			for newBoxIndex in newBoxes:
 				name1 = str(random.random())
 				label = "person"
 				boundingBox = boundingBoxes[newBoxIndex]
-				print("[DEBUG] \tNew object being constructed")
 				newObject = TrackedObject(name1,label,boundingBox)
 
 			cls.prune()
@@ -158,10 +156,11 @@ class TrackedObject(object):
 
 	def addBox(self, bounding_box):
 		#assigned : Ravit
-		assert self.lastUpdate != currTime		
+		if len(self.history.keys()) != 0:
+			assert self.lastUpdate != type(self).currTime		
 
-		history[currTime] = bounding_box
-		self.lastUpdate = currTime
+		self.history[type(self).currTime] = bounding_box
+		self.lastUpdate = type(self).currTime
 		return
 
 	def updateVelocity(self):
@@ -173,8 +172,8 @@ class TrackedObject(object):
 			self.velocity = [0, 0]
 			return
 
-		time_i = self.history.keys()[-1]
-		time_f = self.history.keys()[-2]
+		time_i = list(self.history.keys())[-1]
+		time_f = list(self.history.keys())[-2]
 
 		bounding_box_i = self.history[time_i] #initial position
 		bounding_box_f = self.history[time_f] #final position
@@ -187,24 +186,24 @@ class TrackedObject(object):
 		return
 
 	def computePrediction(self):
-		assert self.lastUpdate != currTime
-		delta_t = currTime - self.lastUpdate
+		if len(self.history.keys()) != 0:
+			assert self.lastUpdate != type(self).currTime
+		delta_t = type(self).currTime - self.lastUpdate
 
 		velocity = self.getVelocity()
 		history = self.getHistory()
-		lastPosition = history[hisotry.keys()[-1]]
+		lastPosition = history[list(history.keys())[-1]]
 		predictedPosition = [0] * len(lastPosition) #should be [0, 0]
 
 		#if the velocity is 0, return the current box as is
 		if (velocity == 0):
 			return lastPosition
 
+		assert len(lastPosition) == 4
+		assert len(velocity) == 2
 		for coord_i in range(len(lastPosition)):
-			coord = lastPosition[coord_i]
-			assert len(coord) == len()
-			for component_i in range(len(coord)):
-				currComponent = coord[component_i]
-				currComponent += velocity[component_i]*delta_t
-				predictedPosition[coord_i][component_i] = currComponent
+			currComponent = lastPosition[coord_i]
+			currComponent += velocity[coord_i%2]*delta_t
+			predictedPosition[coord_i] = currComponent
 		
-		return currentPosition				
+		return predictedPosition				
