@@ -205,5 +205,4 @@ class TrackedObject(object):
 			currComponent = lastPosition[coord_i]
 			currComponent += velocity[coord_i%2]*delta_t
 			predictedPosition[coord_i] = currComponent
-		
 		return predictedPosition				

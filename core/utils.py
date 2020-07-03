@@ -6,6 +6,8 @@ def makeVisualizationOutput(pm, output, distance_threshold=2, score_threshold = 
 	coords3D = []
 	long_lats = []
 	wearingMasks = []
+	faceBoxes = []
+	boxes = []
 	for i in range(len(output["boxes"])):
 		#print("Boxes", output["boxes"][i])
 		if (output["scores"][i] < score_threshold):
@@ -20,11 +22,15 @@ def makeVisualizationOutput(pm, output, distance_threshold=2, score_threshold = 
 		#0=unsure, 1=wearing, 2=not wearing
 		wearingMask = 0
 		#print(output["masks"])
+		faceBoxes_subList = []
+		boxes_subList = []
 		for maskOut in output["masks"]:
 			face_box = maskOut[0]
 			mask = maskOut[1]
 			#print("boxA: ",face_box)
 			#print("boxB: ",box)
+			faceBoxes_subList.append(face_box)
+			boxes_subList.append(box)
 			IOA = cv_utils.computeIOA(face_box, box)
 			#print("IOA: ", IOA)
 			if (IOA > 0.9):
@@ -39,10 +45,16 @@ def makeVisualizationOutput(pm, output, distance_threshold=2, score_threshold = 
 		long_lats.append(long_lat)
 		coords3D.append(coord3D)
 		wearingMasks.append(wearingMask)
+		faceBoxes.append(np.array(faceBoxes_subList).tolist())
+		boxes.append(np.array(boxes_subList).tolist())
 
 	if (coords3D != []):
 		long_lats = np.swapaxes(np.asarray(long_lats), 0, 1).tolist()
 		coords3D = np.asarray(coords3D).tolist()
+	if (faceBoxes != []):
+		faceBoxes = np.asarray(faceBoxes).tolist()
+	if (boxes != []):
+		boxes = np.asarray(boxes).tolist()
 
 	safe = [1] * len(coords3D)
 	for i in range(len(coords3D)):
@@ -54,6 +66,7 @@ def makeVisualizationOutput(pm, output, distance_threshold=2, score_threshold = 
 			if (distance < distance_threshold):
 				safe[i] = 0
 				safe[j] = 0
-	
-	predOutput = {"3DCoordinates":coords3D, "lat-long":long_lats, "wearingMasks":wearingMasks, "safe":safe}
+	#print("faceBoxes:", faceBoxes)
+	#print("boxes:", boxes)
+	predOutput = {"3DCoordinates":coords3D, "lat-long":long_lats,"Boxes":boxes, "Faces":faceBoxes, "wearingMasks":wearingMasks, "safe":safe}
 	return predOutput
