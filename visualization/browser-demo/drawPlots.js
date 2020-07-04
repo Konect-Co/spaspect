@@ -11,16 +11,16 @@ function update() {
 		}
 
 		document.getElementById("statsTotal").innerHTML = data['3DCoordinates'].length;
-		
-		//Safety classification rules are in this exact order:
-		//    if unmasked individual (regardless of distance), dark red individual
-		//    else if individual is masked but distance is critical, bright red individual
-		//    else if unsure about mask, orange individual
-		//    otherwise, mark cyan for safe individual
-		var safe_values = [[],[],[]];
-		var undistanced_values = [[],[],[]];
-		var unmasked_values = [[],[],[]];
-		var undistanced_unmasked_values = [[],[],[]];
+
+		var x_values = [];
+		var y_values = [];
+		var z_values = [];
+
+		var color_values = [];
+		var text_values = [];
+
+		var undistancedCount = 0;
+		var unmaskedCount = 0;
 
 		for (let i = 0; i < data['3DCoordinates'].length; i++) {
 			var curr_coordinate = data['3DCoordinates'][i];
@@ -28,27 +28,29 @@ function update() {
 			var unmasked = data['masked'][i] == 2 ? true : false;
 			var undistanced = data['distanced'][i] == 0 ? true : false;
 			
-			if (unmasked && undistanced) {
-				undistanced_unmasked_values[0].push(curr_coordinate[0]);
-				undistanced_unmasked_values[1].push(curr_coordinate[1]);
-				undistanced_unmasked_values[2].push(curr_coordinate[2]);
-			} else if (unmasked) {
-				unmasked_values[0].push(curr_coordinate[0]);
-				unmasked_values[1].push(curr_coordinate[1]);
-				unmasked_values[2].push(curr_coordinate[2]);
-			} else if (undistanced) {
-				undistanced_values[0].push(curr_coordinate[0]);
-				undistanced_values[1].push(curr_coordinate[1]);
-				undistanced_values[2].push(curr_coordinate[2]);
-			} else {
-				safe_values[0].push(curr_coordinate[0]);
-				safe_values[1].push(curr_coordinate[1]);
-				safe_values[2].push(curr_coordinate[2]);
-			}
+			x_values.push(curr_coordinate[0]);
+			y_values.push(curr_coordinate[1]);
+			z_values.push(curr_coordinate[2]);
+
+			var color = unmasked || undistanced ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 255, 0, 1)';
+			color_values.push(color);
+
+			var distanced_txt = undistanced ? "undistanced" : "distanced";
+			var unmasked_txt = unmasked ? "unmasked" : "not unmasked";
+
+			var full_txt = distanced_txt + " and " + unmasked_txt;
+			text_values.push(full_txt);
+
+			if (undistanced)
+				undistancedCount++;
+			if (unmasked)
+				unmaskedCount++;
+
+
 		}
 
-		document.getElementById("statsUndistanced").innerHTML = undistanced_values[0].length + undistanced_unmasked_values[0].length;
-		document.getElementById("statsUnmasked").innerHTML = unmasked_values[0].length + undistanced_unmasked_values[0].length;
+		document.getElementById("statsUndistanced").innerHTML = undistancedCount;
+		document.getElementById("statsUnmasked").innerHTML = unmaskedCount;
 
 		var lat_values = [];
 		var long_values = [];
@@ -62,75 +64,25 @@ function update() {
 		}
 
 		//==========================
-		var trace_safe = {
-			x: safe_values[0],
-			y: safe_values[1],
-			z: safe_values[2],
-			name: 'safe',
+		var trace = {
+			x: x_values,
+			y: y_values,
+			z: z_values,
+			name: 'people',
 			mode: 'markers',
 			marker: {
-				color: 'rgba(0, 100, 0, 0.5)',
+				color: color_values,
 				size: 8,
 				line: {
 					width: 0.5
 				},
 				opacity: 0.8
 			},
-			type: 'scatter3d'
+			type: 'scatter3d',
+			text:text_values
 		};
 
-		var trace_undistanced = {
-			x: undistanced_values[0],
-			y: undistanced_values[1],
-			z: undistanced_values[2],
-			name: 'undistanced',
-			mode: 'markers',
-			marker: {
-				color: 'rgba(255, 150, 0, 0.5)',
-				size: 8,
-				line: {
-					width: 0.5
-				},
-				opacity: 0.8
-			},
-			type: 'scatter3d'
-		};
-
-		var trace_unmasked = {
-			x: unmasked_values[0],
-			y: unmasked_values[1],
-			z: unmasked_values[2],
-			name: 'unmasked',
-			mode: 'markers',
-			marker: {
-				color: 'rgba(255, 255, 0, 0.5)',
-				size: 8,
-				line: {
-					width: 0.5
-				},
-				opacity: 0.8
-			},
-			type: 'scatter3d'
-		};
-
-		var trace_mask_undistanced_unmasked = {
-			x: undistanced_unmasked_values[0],
-			y: undistanced_unmasked_values[1],
-			z: undistanced_unmasked_values[2],
-			name: 'undistanced_unmasked',
-			mode: 'markers',
-			marker: {
-				color: 'rgba(255, 0, 0, 0.5)',
-				size: 8,
-				line: {
-					width: 0.5
-				},
-				opacity: 0.8
-			},
-			type: 'scatter3d'
-		};
-
-		var scatterData = [trace_safe, trace_undistanced, trace_unmasked, trace_mask_undistanced_unmasked];
+		var scatterData = [trace]//, trace_undistanced, trace_unmasked, trace_mask_undistanced_unmasked];
 		var scatterLayout = {
 			margin: {
 				l: 0,
@@ -149,8 +101,7 @@ function update() {
 		mode:'markers',
 		marker: {
 			size:8
-		},
-		text:['Person1', 'Person2']
+		}
 		}]
 
 		var layout = {
