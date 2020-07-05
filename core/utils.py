@@ -41,7 +41,7 @@ def makeVisualizationOutput(pm, output, distance_threshold=2, score_threshold = 
 				else:
 					wearingMask = 0
 				break
-
+		print("Masks: ",wearingMask)
 		long_lats.append(long_lat)
 		coords3D.append(coord3D)
 		wearingMasks.append(wearingMask)

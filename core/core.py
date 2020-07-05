@@ -87,10 +87,10 @@ def main(config_info):
 
 if __name__ == "__main__":
 	args = {
-		"imagePath":"/mnt/d/Konect/spaspect/Frames", #changed this to save all the frames in one folder
-		"outputPath":"/mnt/d/Konect/spaspect/visualization/browser-demo/output.json",
-		"configPath":"/mnt/d/Konect/spaspect/visualization/browser-demo/config.json",
-		"streamLink":"/mnt/d/Konect/spaspect/core/TEMPDATA_Testing-Track-Function/TimesSquare2.mp4",
+		"imagePath":"/home/santript/ImportantProjects/Frames", #changed this to save all the frames in one folder
+		"outputPath":"/home/santript/ImportantProjects/spaspect/visualization/browser-demo/output.json",
+		"configPath":"/home/santript/ImportantProjects/spaspect/visualization/browser-demo/config.json",
+		"streamLink":"/home/santript/ImportantProjects/spaspect/core/TEMPDATA_Testing-Track-Function/positiveControl.mp4",
 		"isVideo":True
 	}
 	sys.exit(main(args))
