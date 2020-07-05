@@ -1,0 +1,97 @@
+<!HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<meta name="description" content="Demo for spaspect visualization.">
+		<meta name="author" content="Ravit Sharma">
+		<title>SpaSpect Dashboard Demo</title>
+
+		<link rel="stylesheet" href="styles.css">
+
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  		<script src="drawPlots.js"></script>
+
+	</head>
+	<body>
+		<div id="login_div" class="main-div">
+			<h3>Log in to access the dashboard</h3>
+			<input type="email" placeholder="Email..." id="email_field" />
+			<input type="password" placeholder="Password..." id="password_field" />
+
+			<button onclick="login()">Login to Account</button>
+		</div>
+
+		<div id="dashboardPage">
+			<div id="header">
+				<h1>Konect SpaSpect Dashboard</h1>
+				<div id="dashboard-select-div">
+					Select dashboard: 
+					<select id="dashboard-select" onchange="updateDashboard()">
+						<option value="TimesSquare">Times Square</option>
+						<option value="Dublin">Dublin</option>
+					</select>
+				</div>
+			</div>
+			<div id="main-content"> 
+				<div id="videoDiv">
+					<!--<embed src="https://www.myearthcam.com/manila?embed" width="100%" height="100%">-->
+					<video autoplay id="video-src" width="100%" height="100%">
+					<!--<image src="image.jpg" height="100%" width="100%">-->
+				</div>
+				<div id="mapDiv"style="height: 45%"></div>
+				<div id="plotDiv"></div>
+				<div id="statsDiv">
+					<div id="stats-header">
+						<h2>Statistics</h2>
+					</div>
+					<div id="stats">
+						<h3>Total count: <span id="statsTotal"></span></h3>
+						<h3>Undistanced count: <span id="statsUndistanced"></span></h3>
+						<h3>Unmasked count: <span id="statsUnmasked"></span></h3>
+					</div>
+				</div>
+			</div>
+		<div>
+
+		<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+		<script>
+		  // Your web app's Firebase configuration
+		  var firebaseConfig = "protected";
+		  // Initialize Firebase
+		  firebase.initializeApp(firebaseConfig);
+		  firebase.analytics();
+		</script>
+		<script src="index.js"></script>
+	</body>
+	<footer>
+		<script>
+			var configFile="config/TimesSquare.json";
+
+			function updateDashboard() {
+				var selectObj = document.getElementById("dashboard-select");
+				var configFile = "config/" + selectObj.options[selectObj.selectedIndex].value + ".json";
+				updateDashboardArgs(configFile);
+			}
+
+			function updateDashboardArgs(configFile) {
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (!(this.readyState == 4 && this.status == 200)) {
+						return;
+					}
+					var config = JSON.parse(xhttp.responseText);
+					setInterval(update(config, 1000));
+				}
+				xhttp.open("GET", configFile, true);
+				xhttp.send();
+			}
+
+			updateDashboard();
+		</script>
+	</footer>
+</html>

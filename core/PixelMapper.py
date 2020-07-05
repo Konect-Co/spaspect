@@ -24,8 +24,8 @@ class PixelMapper(object):
 	@classmethod
 	def fromfile(cls, filename):
 		with open(filename, "r") as f:
-			config = json.loads(f.read())
-			info = cls(config["pixel"], config["lonlat"], config["lonlat_origin"])
+			calibration = json.loads(f.read())["calibration"]
+			info = cls(calibration["pixel"], calibration["lonlat"], calibration["lonlat_origin"])
 			return info
         
 	def pixel_to_lonlat(self, pixel):
