@@ -48,6 +48,7 @@ def main(config_info):
 
 		frame_index += 1
 		
+		#TODO: This should not override the config file but add to it
 		with open(outputPath, 'w') as file:
 			file.write(json.dumps(predOutput))
 

@@ -13,33 +13,38 @@
 		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   		<script src="drawPlots.js"></script>
-
 	</head>
 	<body>
 		<div id="login_div" class="main-div">
 			<h3>Log in to access the dashboard</h3>
-			<input type="email" placeholder="Email..." id="email_field" />
-			<input type="password" placeholder="Password..." id="password_field" />
+			<p id="login-error-msg" class="error-msg">Template error msg</p>
+			<input type="email" placeholder="Email..." id="login_email_field" />
+			<input type="password" placeholder="Password..." id="login_password_field" />
 
 			<button onclick="login()">Login to Account</button>
+			<button onclick="loginGoogle()">Log in with Google</button>
+			<button onclick="signupPage()">Don't have an account yet? Sign up</button>
 		</div>
+		<div id="signup_div" class="main-div">
+			<h3>Sign up with a Konect account</h3>
+			<input type="email" placeholder="Email..." id="signup_email_field" />
+			<input type="password" placeholder="Password..." id="signup_password_field" />
 
+			<button onclick="signup()">Sign up</button>
+			<button onclick="loginPage()">Already have an account? Log in</button>
+		</div>
 		<div id="dashboardPage">
 			<div id="header">
 				<h1>Konect SpaSpect Dashboard</h1>
-				<div id="dashboard-select-div">
-					Select dashboard: 
-					<select id="dashboard-select" onchange="updateDashboard()">
-						<option value="TimesSquare">Times Square</option>
-						<option value="Dublin">Dublin</option>
-					</select>
+				<div id="nav-bar">
+					<button onclick="logout()">Log out</button>
+					Select dashboard:
+					<select id="dashboard-select" onchange="updateDashboard()"></select>
 				</div>
 			</div>
 			<div id="main-content"> 
 				<div id="videoDiv">
-					<!--<embed src="https://www.myearthcam.com/manila?embed" width="100%" height="100%">-->
-					<video autoplay id="video-src" width="100%" height="100%">
-					<!--<image src="image.jpg" height="100%" width="100%">-->
+					<embed width="100%" height="100%" src="https://www.earthcam.com/world/ireland/dublin/?cam=templebar" sandbox></embed>
 				</div>
 				<div id="mapDiv"style="height: 45%"></div>
 				<div id="plotDiv"></div>
@@ -60,38 +65,23 @@
 		<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
 		<script>
-		  // Your web app's Firebase configuration
-		  var firebaseConfig = "protected";
-		  // Initialize Firebase
-		  firebase.initializeApp(firebaseConfig);
-		  firebase.analytics();
+			// Your web app's Firebase configuration
+			var firebaseConfig = {
+				apiKey: "AIzaSyD6Cm1InAFK-ecUq-F6ku8EQL_4oE_WTF0",
+				authDomain: "spaspect-dashboard.firebaseapp.com",
+				databaseURL: "https://spaspect-dashboard.firebaseio.com",
+				projectId: "spaspect-dashboard",
+				storageBucket: "spaspect-dashboard.appspot.com",
+				messagingSenderId: "270336614615",
+				appId: "1:270336614615:web:f4f64e4b5624fa8ca8d092",
+				measurementId: "G-D03KWN0SXS"
+			};
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+			firebase.analytics();
 		</script>
 		<script src="index.js"></script>
 	</body>
 	<footer>
-		<script>
-			var configFile="config/TimesSquare.json";
-
-			function updateDashboard() {
-				var selectObj = document.getElementById("dashboard-select");
-				var configFile = "config/" + selectObj.options[selectObj.selectedIndex].value + ".json";
-				updateDashboardArgs(configFile);
-			}
-
-			function updateDashboardArgs(configFile) {
-				var xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (!(this.readyState == 4 && this.status == 200)) {
-						return;
-					}
-					var config = JSON.parse(xhttp.responseText);
-					setInterval(update(config, 1000));
-				}
-				xhttp.open("GET", configFile, true);
-				xhttp.send();
-			}
-
-			updateDashboard();
-		</script>
 	</footer>
 </html>
