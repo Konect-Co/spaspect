@@ -1,6 +1,7 @@
 var lastUpdate = 0;
 
 function initializeDashboard() {
+  lastUpdate = 0;
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (!(this.readyState == 4 && this.status == 200)) {
@@ -140,3 +141,5 @@ function signup(){
 function logout(){
   firebase.auth().signOut();
 }
+
+setInterval(function(){updateDashboard()}, 1000);

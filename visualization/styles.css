@@ -16,6 +16,9 @@ select, button{
   width: 20%;
   margin: 0px auto;
   margin-top: 25px;
+}
+
+.login-signup-wrapper {
   padding: 20px;
   display: block;
   background-color: #343E6E;

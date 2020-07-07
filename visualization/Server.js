@@ -17,6 +17,10 @@ app.get('/', function (req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/Pictures/Logo.png', function (req, res){
+	res.sendFile(__dirname + '/Pictures/Logo.png');
+});
+
 app.get('/index.js', function(req, res){
 	fs.readFile("./index.js", function(err, content) {
 		if (err) { res.end(); return;}
@@ -116,6 +120,7 @@ app.post('/environment', function(req, res) {
 				if (authorized) {
 					response["authorized"] = true;
 					dbDashboards.doc(dashboard).get().then((doc) => {
+						//TODO: check if doc is undefined
 						var docTime = doc._updateTime._seconds + doc._updateTime._nanoseconds*1e-9;
 						response["currentTime"] = docTime;
 
