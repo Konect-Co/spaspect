@@ -4,42 +4,57 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width">
 		<meta name="description" content="Demo for spaspect visualization.">
-		<meta name="author" content="Ravit Sharma">
+		<meta name="author" content="Ravit Sharma, Santript Sharma">
 		<title>SpaSpect Dashboard Demo</title>
 
 		<link rel="stylesheet" href="styles.css">
-
+		
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   		<script src="drawPlots.js"></script>
+            
 	</head>
 	<body>
-		<div id="login_div" class="main-div">
-			<h3>Log in to access the dashboard</h3>
-			<p id="login-error-msg" class="error-msg">Template error msg</p>
-			<input type="email" placeholder="Email..." id="login_email_field" />
-			<input type="password" placeholder="Password..." id="login_password_field" />
+    	<div id="logo_region">
+        	<a href="https://sites.google.com/view/konect-co/home"><img id="logo" src="Pictures/Logo.png" alt="Konect" align="left"></a>
+        </div>
+        <nav id="nav-bar">
+			<ul>
+				<li class="current"><a href="https://sites.google.com/view/konect-co/home">HOME</a></li>
+				<li class="current"><a href="https://forms.gle/2cawfpZZQ8oLonSz5">CONTACT</a></li>
+			</ul>
+		</nav>
+		
+        <div id="main-space">
+    		<div id="login_div" class="main-div">
+    			<h3 style="font-family:Arial;color:white;text-align:center">Log In To The SpaSpect Dashboard</h3>
+    			<p id="login-error-msg" class="error-msg">Template error msg</p>
+    			<input type="email" placeholder="<Enter email here>" id="login_email_field" />
+    			<input type="password" placeholder="<Enter password here>" id="login_password_field" />
+			
+        		<button onclick="login()">Login to Account</button>
+        		<button onclick="loginGoogle()">Log in with Google</button>
+        		<button onclick="signupPage()">Sign up for account</button>
+    		</div>
+    		<div id="signup_div" class="main-div">
+    			<h3 style="font-family:Arial;color:white;text-align:center">Sign up with a Konect account</h3>
+    			<input type="email" placeholder="<Enter your email>" id="signup_email_field" />
+    			<input type="password" placeholder="<Enter new password>" id="signup_password_field" />
 
-			<button onclick="login()">Login to Account</button>
-			<button onclick="loginGoogle()">Log in with Google</button>
-			<button onclick="signupPage()">Don't have an account yet? Sign up</button>
+    			<button onclick="loginPage()">Login to Account</button>
+    		</div>
 		</div>
-		<div id="signup_div" class="main-div">
-			<h3>Sign up with a Konect account</h3>
-			<input type="email" placeholder="Email..." id="signup_email_field" />
-			<input type="password" placeholder="Password..." id="signup_password_field" />
-
-			<button onclick="signup()">Sign up</button>
-			<button onclick="loginPage()">Already have an account? Log in</button>
-		</div>
+    </body>
+    <body>
 		<div id="dashboardPage">
 			<div id="header">
-				<h1>Konect SpaSpect Dashboard</h1>
-				<div id="nav-bar">
-					<button onclick="logout()">Log out</button>
+				<h1 style="font-family:Candara;font-size:35px">SpaSpect Dashboard</h1>
+				<div id="dashboard-nav-bar"><b>
 					Select dashboard:
 					<select id="dashboard-select" onchange="updateDashboard()"></select>
+					<button type="button" onclick="logout()">Log out</button>
+					</b>
 				</div>
 			</div>
 			<div id="main-content"> 
@@ -60,7 +75,8 @@
 				</div>
 			</div>
 		<div>
-
+    </body>
+    
 		<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
