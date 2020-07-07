@@ -119,5 +119,5 @@ def predict(image_path):
 	output["masks"] = detectMask.genPredictions(image_path)
 
 	output["depth"] = depth
-	
+
 	return output

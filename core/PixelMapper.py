@@ -17,7 +17,6 @@ class PixelMapper(object):
 		self.M = cv2.getPerspectiveTransform(np.float32(pixel_array),np.float32(lonlat_array))
 		self.invM = cv2.getPerspectiveTransform(np.float32(lonlat_array),np.float32(pixel_array))
 		
-		self.pixel_array = pixel_array
 		self.lonlat_origin = lonlat_origin
 		self.lon_const = 40075000 * math.cos(lonlat_origin[0]*math.pi/180) / 360
 		self.lat_const = 111320
@@ -79,6 +78,3 @@ class PixelMapper(object):
 		lat_coord = lon_d + self.lonlat_origin[1]
 		
 		return [lon_d, lat_d]
-
-	def getPixels(self):
-		return self.pixel_array
