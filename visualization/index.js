@@ -1,3 +1,5 @@
+var lastUpdate = 0;
+
 function initializeDashboard() {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
@@ -40,12 +42,15 @@ function updateDashboardArgs(dashboardID) {
     }
 
     var config = JSON.parse(xhr.responseText);
-    setInterval(update(config, 1000));
+    if (config["authorized"] && !config["toDate"]) {
+      lastUpdate = config["currentTime"];
+      update(config["dashboard"]);
+    }
     console.log("Success in getting response from Post request to get environment file", xhr.responseText);
   }
   xhr.open("POST", "environment", true);
   firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
-    xhr.send(JSON.stringify({"idtoken":idToken, "dashboard":dashboardID}));
+    xhr.send(JSON.stringify({"idtoken":idToken, "dashboard":dashboardID, "lastUpdate":lastUpdate}));
   }).catch(function(error) { console.error(error); });
 }
 
@@ -70,7 +75,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     if(user != null){
       var email_id = user.email;
-      console.log("Welcome User : " + email_id);
+      console.log("Welcome User:", email_id);
     }
 
   } else {

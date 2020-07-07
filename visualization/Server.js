@@ -9,6 +9,7 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 const dbUsers = db.collection('users');
+const dbDashboards = db.collection('dashboards');
 
 //TODO: Clean up Express app considering Reg Ex rules for routing
 
@@ -89,45 +90,50 @@ app.post('/environment', function(req, res) {
 		bodyJSON = JSON.parse(body);
 		var idToken = bodyJSON["idtoken"];
 		var dashboard = bodyJSON["dashboard"];
+		var lastUpdate = bodyJSON["lastUpdate"];
 
 		admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
 			let uid = decodedToken.uid;
-
-			dbUsers.doc(uid).get().then((doc) => {
+			var response = {"authorized":false, "toDate":false, "currentTime":null, "dashboard":null};
+			dbUsers.doc(uid).get().then ((doc) => {
+				var userData;
 				if (doc.exists) {
-					var userData = doc.data();
-					var accessibleEnvironments = userData["accessibleEnvironments"];
-
-					var authorized = false;
-					Object.keys(accessibleEnvironments).forEach(function (key) {
-						if (dashboard == key) {
-							authorized = true;
-							//TODO: How can we break out of this?
-						}
-					});
-					if (authorized) {
-						fs.readFile("./output/" + dashboard + ".json", function(err, content) {
-							if (err) { res.end(); return; }
-							res.writeHead(200);
-							res.write(content);
-							res.end();
-						});
-					} else {
-						console.log("Dashboard", dashboard,"NOT AUTHORIZED for user", uid);
-						res.writeHead(403);
-						res.end();
-					}
+					userData = doc.data();
 				} else {
-					fs.readFile("./demoEnvs.json", function(err, content) {
-						if (err) { res.end(); return; }
-						console.log("Initializing account of id", uid);
-						var userData = JSON.parse(content);
-						dbUsers.doc(uid).set(userData);
+					console.log("Initializing account of id", uid);
+					dbUsers.doc(uid).set(userData);
+					userData = JSON.parse(fs.readFileSync("./demoEnvs.json"));
+				}
+				var accessibleEnvironments = userData["accessibleEnvironments"];
 
-						res.writeHead(200);
-						res.write(JSON.stringify(userData["accessibleEnvironments"]));
+				var authorized = false;
+				Object.keys(accessibleEnvironments).forEach(function (key) {
+					if (dashboard == key) {
+						authorized = true;
+						//TODO: How can we break out of this?
+					}
+				});
+				if (authorized) {
+					response["authorized"] = true;
+					dbDashboards.doc(dashboard).get().then((doc) => {
+						var docTime = doc._updateTime._seconds + doc._updateTime._nanoseconds*1e-9;
+						response["currentTime"] = docTime;
+
+						if (docTime > lastUpdate) {
+							response["toDate"] = false;
+							response["dashboard"] = doc.data();
+						} else {
+							response["toDate"] = true;
+						}
+						res.write(JSON.stringify(response));
 						res.end();
 					});
+				} else {
+					response["authorized"] = false;
+					console.log("Dashboard", dashboard,"NOT AUTHORIZED for user", uid);
+					res.writeHead(403);
+					res.write(JSON.stringify(response));
+					res.end();
 				}
 
 			});
