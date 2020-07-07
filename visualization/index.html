@@ -1,0 +1,87 @@
+<!HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<meta name="description" content="Demo for spaspect visualization.">
+		<meta name="author" content="Ravit Sharma">
+		<title>SpaSpect Dashboard Demo</title>
+
+		<link rel="stylesheet" href="styles.css">
+
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  		<script src="drawPlots.js"></script>
+	</head>
+	<body>
+		<div id="login_div" class="main-div">
+			<h3>Log in to access the dashboard</h3>
+			<p id="login-error-msg" class="error-msg">Template error msg</p>
+			<input type="email" placeholder="Email..." id="login_email_field" />
+			<input type="password" placeholder="Password..." id="login_password_field" />
+
+			<button onclick="login()">Login to Account</button>
+			<button onclick="loginGoogle()">Log in with Google</button>
+			<button onclick="signupPage()">Don't have an account yet? Sign up</button>
+		</div>
+		<div id="signup_div" class="main-div">
+			<h3>Sign up with a Konect account</h3>
+			<input type="email" placeholder="Email..." id="signup_email_field" />
+			<input type="password" placeholder="Password..." id="signup_password_field" />
+
+			<button onclick="signup()">Sign up</button>
+			<button onclick="loginPage()">Already have an account? Log in</button>
+		</div>
+		<div id="dashboardPage">
+			<div id="header">
+				<h1>Konect SpaSpect Dashboard</h1>
+				<div id="nav-bar">
+					<button onclick="logout()">Log out</button>
+					Select dashboard:
+					<select id="dashboard-select" onchange="updateDashboard()"></select>
+				</div>
+			</div>
+			<div id="main-content"> 
+				<div id="videoDiv">
+					<embed width="100%" height="100%" src="https://www.earthcam.com/world/ireland/dublin/?cam=templebar" sandbox></embed>
+				</div>
+				<div id="mapDiv"style="height: 45%"></div>
+				<div id="plotDiv"></div>
+				<div id="statsDiv">
+					<div id="stats-header">
+						<h2>Statistics</h2>
+					</div>
+					<div id="stats">
+						<h3>Total count: <span id="statsTotal"></span></h3>
+						<h3>Undistanced count: <span id="statsUndistanced"></span></h3>
+						<h3>Unmasked count: <span id="statsUnmasked"></span></h3>
+					</div>
+				</div>
+			</div>
+		<div>
+
+		<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+		<script>
+			// Your web app's Firebase configuration
+			var firebaseConfig = {
+				apiKey: "AIzaSyD6Cm1InAFK-ecUq-F6ku8EQL_4oE_WTF0",
+				authDomain: "spaspect-dashboard.firebaseapp.com",
+				databaseURL: "https://spaspect-dashboard.firebaseio.com",
+				projectId: "spaspect-dashboard",
+				storageBucket: "spaspect-dashboard.appspot.com",
+				messagingSenderId: "270336614615",
+				appId: "1:270336614615:web:f4f64e4b5624fa8ca8d092",
+				measurementId: "G-D03KWN0SXS"
+			};
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+			firebase.analytics();
+		</script>
+		<script src="index.js"></script>
+	</body>
+	<footer>
+	</footer>
+</html>

@@ -13,12 +13,17 @@ import PixelMapper
 import TrackedObject
 from cv_model import pred
 
+root_dir = "/home/ravit/Konect-Code/spaspect-project/spaspect/visualization"
+
 def main(config_info):
 	imagePath = config_info["imagePath"]
-	outputPath = config_info["outputPath"]
-	streamLink = config_info["streamLink"]
 	configPath = config_info["configPath"]
 	video = config_info["isVideo"]
+
+	with open(configPath, 'r') as f:
+		config = json.loads(f.read())
+		streamLink = os.path.join(root_dir, config["video-source"])
+		outputPath = os.path.join(root_dir, config["output-file"])
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
@@ -43,6 +48,7 @@ def main(config_info):
 
 		frame_index += 1
 		
+		#TODO: This should not override the config file but add to it
 		with open(outputPath, 'w') as file:
 			file.write(json.dumps(predOutput))
 
@@ -62,9 +68,7 @@ root_path = "/home/ravit/Konect-Code/spaspect-project/spaspect"
 if __name__ == "__main__":
 	args = {
 		"imagePath":"/home/ravit/Pictures/Frame.jpg",
-		"outputPath":os.path.join(root_path, "visualization", "browser-demo", "output.json"),
-		"configPath":os.path.join(root_path, "visualization", "browser-demo", "config.json"),
-		"streamLink":"/home/ravit/Videos/TimesSquare2.mp4",
+		"configPath":"/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/config/TimesSquare.json",
 		"isVideo":True
 	}
 	sys.exit(main(args))
