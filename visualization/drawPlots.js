@@ -6,11 +6,11 @@ function update(data) {
 		document.getElementById("video-src").setAttribute("src", config["video-source"]);
 	}*/
 
-	document.getElementById("statsTotal").innerHTML = data['3DCoordinates'].length;
+	document.getElementById("statsTotal").innerHTML = data['masked'].length;
 
-	var x_values = [];
-	var y_values = [];
-	var z_values = [];
+	var x_values = data['X3D_vals'];
+	var y_values = data['Y3D_vals'];
+	var z_values = data['Z3D_vals'];
 
 	var color_values = [];
 	var text_values = [];
@@ -18,15 +18,9 @@ function update(data) {
 	var undistancedCount = 0;
 	var unmaskedCount = 0;
 
-	for (let i = 0; i < data['3DCoordinates'].length; i++) {
-		var curr_coordinate = data['3DCoordinates'][i];
-
+	for (let i = 0; i < data['masked'].length; i++) {
 		var unmasked = data['masked'][i] == 2 ? true : false;
 		var undistanced = data['distanced'][i] == 0 ? true : false;
-		
-		x_values.push(curr_coordinate[0]);
-		y_values.push(curr_coordinate[1]);
-		z_values.push(curr_coordinate[2]);
 
 		var color = unmasked || undistanced ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 255, 0, 1)';
 		color_values.push(color);
@@ -46,16 +40,8 @@ function update(data) {
 	document.getElementById("statsUndistanced").innerHTML = undistancedCount;
 	document.getElementById("statsUnmasked").innerHTML = unmaskedCount;
 
-	var lat_values = [];
-	var long_values = [];
-
-	//assert length of data['lat-long'][0] == data['lat-long'][1]
-	for (let i = 0; i < data['lat-long'][0].length; i++) {
-		var curr_geolocation = data['lat-long'];
-
-		lat_values.push(curr_geolocation[0][i]);
-		long_values.push(curr_geolocation[1][i]);
-	}
+	var lat_values = data['lat_vals'];
+	var long_values = data['lon_vals'];
 
 	//==========================
 	var trace = {
