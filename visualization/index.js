@@ -142,4 +142,4 @@ function logout(){
   firebase.auth().signOut();
 }
 
-setInterval(function(){updateDashboard()}, 1000);
+//setInterval(function(){updateDashboard()}, 1000);
