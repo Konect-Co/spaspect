@@ -15,10 +15,10 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 
 # Use a service account
-cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
+cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-73fbdcc01a.json')
 firebase_admin.initialize_app(cred)
 
-root_dir = "/home/ravit/Konect-Code/spaspect-project/spaspect/visualization"
+root_dir = "/home/santript/ImportantProjects/spaspect/visualization"
 db = firestore.client()
 
 def main(dashboard):
@@ -27,9 +27,9 @@ def main(dashboard):
 	#with open("/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/output/0443639c-bfc1-11ea-b3de-0242ac130004.json", "r") as f:
 	#	dashboardInfo = json.loads(f.read())
 
-	imagePath = "/home/ravit/Konect-Code/Frame.jpg"
+	imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
 	streamLink = dashboardInfo["streamlink"]
-	streamLink = "/home/ravit/Downloads/TimesSquare2.mp4"
+	streamLink = "/home/santript/ImportantProjects/Files/TimesSquare2.mp4"
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
@@ -62,7 +62,8 @@ def main(dashboard):
 		output = pred.predict(imagePath)
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
-
+		print(predOutput["trackedObjects"])
+        
 		frame_index += 1
 		
 		dashboardInfo["output"] = predOutput
@@ -84,12 +85,12 @@ def main(dashboard):
 	return 0
 
 
-root_path = "/home/ravit/Konect-Code/spaspect-project/spaspect"
+root_path = "/home/santript/ImportantProjects/spaspect"
 if __name__ == "__main__":
 	args = {
-		"imagePath":"/home/ravit/Pictures/Frame.jpg",
+		"imagePath":"/home/santript/ImportantProjects/Frames/Frame.jpg",
 		"dashboard":"",
-		"configPath":"/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/config/TimesSquare.json",
+		"configPath":"/home/santript/ImportantProjects/spaspect/visualization/config/TimesSquare.json",
 		"isVideo":True
 	}
 	dashboard = "0443639c-bfc1-11ea-b3de-0242ac130004"

@@ -142,7 +142,7 @@ class TrackedObject(object):
 						#adding remaining boxes
 						for box_i in allIOUValues[maximumTracking].keys():
 							newBoxes.append(box_i)
-						del(allIOUValues[val])
+						del(allIOUValues[box_i])
 
 			#making a new object
 			for newBoxIndex in newBoxes:
