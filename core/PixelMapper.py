@@ -20,13 +20,6 @@ class PixelMapper(object):
 		self.lonlat_origin = lonlat_origin
 		self.lon_const = 40075000 * math.cos(lonlat_origin[0]*math.pi/180) / 360
 		self.lat_const = 111320
-	
-	@classmethod
-	def fromfile(cls, filename):
-		with open(filename, "r") as f:
-			calibration = json.loads(f.read())["calibration"]
-			info = cls(calibration["pixel"], calibration["lonlat"], calibration["lonlat_origin"])
-			return info
         
 	def pixel_to_lonlat(self, pixel):
 		"""

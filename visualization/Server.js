@@ -22,30 +22,21 @@ app.get('/Pictures/Logo.png', function (req, res){
 });
 
 app.get('/index.js', function(req, res){
-	fs.readFile("./index.js", function(err, content) {
+	res.sendFile(__dirname + '/index.js');
+	/*fs.readFile("./index.js", function(err, content) {
 		if (err) { res.end(); return;}
 		res.writeHeader(200, {"Content-Type": "text/js"});
 		res.write(content);
 		res.end();
-	});
+	});*/
 });
 
 app.get('/drawPlots.js', function (req, res){
-	fs.readFile("./drawPlots.js", function (err, content) {
-		if (err) { res.end(); return; }
-		res.writeHeader(200, {"Content-Type": "text/js"});
-		res.write(content);
-		res.end();
-	});
+	res.sendFile(__dirname + '/drawPlots.js');
 });
 
 app.get('/styles.css', function (req, res){
-	fs.readFile("./styles.css", function (err, content) {
-		if (err) { res.end(); return; }
-		res.writeHeader(200, {"Content-Type": "text/css"});
-		res.write(content);
-		res.end();
-	});
+	res.sendFile(__dirname + '/styles.css');
 });
 
 app.post('/dashboards', function(req, res) {
@@ -99,7 +90,8 @@ app.post('/environment', function(req, res) {
 		admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
 			let uid = decodedToken.uid;
 			var response = {"authorized":false, "toDate":false, "currentTime":null, "dashboard":null};
-			dbUsers.doc(uid).get().then ((doc) => {
+			var docPromise = dbUsers.doc(uid).get()
+			docPromise.then ((doc) => {
 				var userData;
 				if (doc.exists) {
 					userData = doc.data();
@@ -119,19 +111,29 @@ app.post('/environment', function(req, res) {
 				});
 				if (authorized) {
 					response["authorized"] = true;
-					dbDashboards.doc(dashboard).get().then((doc) => {
-						//TODO: check if doc is undefined
-						var docTime = doc._updateTime._seconds + doc._updateTime._nanoseconds*1e-9;
-						response["currentTime"] = docTime;
+					var dashboardPromise = dbDashboards.doc(dashboard).get();
+					dashboardPromise.catch (()=> {
+						console.log("Error in obtaining dashboard doc");
+					});
+					dashboardPromise.then ((doc) => {
+						if (doc.exists) {
+							var docTime = doc._updateTime._seconds + doc._updateTime._nanoseconds*1e-9;
+							response["currentTime"] = docTime;
 
-						if (docTime > lastUpdate) {
-							response["toDate"] = false;
-							response["dashboard"] = doc.data();
+							if (docTime > lastUpdate) {
+								response["toDate"] = false;
+								response["dashboard"] = doc.data()["output"];
+							} else {
+								response["toDate"] = true;
+							}
+							res.write(JSON.stringify(response));
+							res.end();
 						} else {
-							response["toDate"] = true;
+							response["authorized"] = false;
+							res.writeHead(404);
+							res.write(JSON.stringify(response));
+							res.end();
 						}
-						res.write(JSON.stringify(response));
-						res.end();
 					});
 				} else {
 					response["authorized"] = false;
