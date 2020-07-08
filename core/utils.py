@@ -1,3 +1,5 @@
+from TrackedObject import TrackedObject
+
 import numpy as np
 import math
 import cv_model.utils as cv_utils
@@ -51,6 +53,9 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 
 	TrackedObject.track(boxes)
 	trackedObjects = TrackedObject.objects
+	trackedObjectsDict = {}
+	for key in trackedObjects.keys():
+		trackedObjectsDict[key] = trackedObjects[key].toDict()
 
 	distanced = [1] * len(X3D_vals)
 	for i in range(len(X3D_vals)):
@@ -64,5 +69,8 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 				distanced[j] = 0
 		if 1 not in distanced:
 			break
-	predOutput = {"X3D_vals":X3D_vals, "Y3D_vals":Y3D_vals, "Z3D_vals":Z3D_vals, "lat_vals":lat_vals, "lon_vals":lon_vals, "masked":masked, "distanced":distanced, "trackedObjects":trackedObjects}
+
+	predOutput = {"X3D_vals":X3D_vals, "Y3D_vals":Y3D_vals, "Z3D_vals":Z3D_vals,
+		"lat_vals":lat_vals, "lon_vals":lon_vals, "masked":masked, "distanced":distanced, "tracked":trackedObjects}
+    
 	return predOutput

@@ -28,6 +28,15 @@ class TrackedObject(object):
 		assert name not in type(self).objects.keys()
 		type(self).objects[name] = self
 	
+	def toDict(self):
+		return {
+			"name":self.name,
+			"label":self.label,
+			"velocity":self.velocity,
+			"history":self.history,
+			"lastUpdate":self.lastUpdate
+		}
+
 	def getName(self):
 		return self.name
 

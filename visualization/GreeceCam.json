@@ -1,0 +1,12 @@
+{
+	"name": "Galatsi, Greece",
+	"embedlink":"https://www.myearthcam.com/bioshop?embed",
+	"streamlink":"http://video1.earthcam.com/myearthcam/323325d76c9d947e48a7ce130e8cdb02.flv/playlist.m3u8",
+	"calibration": {
+		"pixelX_vals": [ 585, 480, 320, 212 ],
+		"pixelY_vals": [ 331, 490, 340, 274 ],
+		"lon_vals": [ 38.016400, 38.016322, 38.016331, 38.016435 ],
+		"lat_vals": [ 23.754965, 23.754958, 23.754931, 23.754810 ],
+		"lonlat_origin": [ 38.016400, 23.754965 ]
+	}
+}
