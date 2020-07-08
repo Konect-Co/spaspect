@@ -10,11 +10,14 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 	lon_vals = []
 
 	masked = []
+	boxes = []
 	for i in range(len(CVOutput["boxes"])):
 		if (CVOutput["scores"][i] < score_threshold):
 			break
-		box = CVOutput["boxes"][i]
 		
+		box = CVOutput["boxes"][i]
+		boxes.append(box)
+
 		midpoint = [int((box[0]+box[2])/2), box[3]]
 
 		long_lat = pm.pixel_to_lonlat(midpoint)[0]
@@ -42,6 +45,9 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 		Y3D_vals.append(coord3D[1])
 		Z3D_vals.append(coord3D[2])
 		masked.append(wearingMask)
+
+	TrackedObject.track(boxes)
+	trackedObjects = TrackedObject.objects
 
 	distanced = [1] * len(X3D_vals)
 	for i in range(len(X3D_vals)):

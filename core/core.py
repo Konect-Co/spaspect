@@ -21,38 +21,6 @@ firebase_admin.initialize_app(cred)
 root_dir = "/home/ravit/Konect-Code/spaspect-project/spaspect/visualization"
 db = firestore.client()
 
-class Dashboard(object):
-	def __init__(self, name, streamlink, calibration, output):
-		self.name = name
-		self.streamlink = streamlink
-		self.calibration = calibration
-		self.output = output
-
-	@staticmethod
-	def from_dict(source):
-		result = Dashboard(source["name"], source["streamlink"], source["calibration"], source["output"])
-		return result
-
-	def to_dict(self):
-		result = {
-			u"name":self.name.decode(),
-			u"streamlink":self.streamlink.decode(),
-			u"calibration":self.calibration,
-			u"output":self.output
-		}
-		return output
-
-	def __repr__ (self):
-		return(
-			f'Dashboard(\
-				name={self.name}, \
-				streamlink={self.streamlink}, \
-				calibration={self.calibration}, \
-				output={self.output}, \
-			)'
-		)
-
-
 def main(dashboard):
 	dashboardDoc = db.collection(u'dashboards').document(dashboard)
 	dashboardInfo = dashboardDoc.get().to_dict()
