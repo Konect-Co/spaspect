@@ -143,3 +143,21 @@ function logout(){
 }
 
 setInterval(function(){updateDashboard()}, 1000);
+
+function showpasswordmain() {
+  var x = document.getElementById("login_password_field");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+
+function showpasswordsignup() {
+  var x = document.getElementById("signup_password_field");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}

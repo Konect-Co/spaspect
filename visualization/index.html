@@ -7,7 +7,9 @@
 		<meta name="author" content="Ravit Sharma, Santript Sharma">
 		<title>SpaSpect Dashboard Demo</title>
 
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 		<link rel="stylesheet" href="styles.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -27,36 +29,51 @@
 		</nav>
 		<div class="login-signup-wrapper">
     		<div id="login_div" class="main-div">
-    			<h3 style="font-family:Arial;color:white;text-align:center">Log In To The SpaSpect Dashboard</h3>
+    			<h3 style="font-family:Arial;color:white;text-align:center;font-size:20px">Log In To The SpaSpect Dashboard</h3>
     			<p id="login-error-msg" class="error-msg">Template error msg</p>
-    			<input type="email" placeholder="<Enter email here>" id="login_email_field" />
-    			<input type="password" placeholder="<Enter password here>" id="login_password_field" />
+    			<div class="input-container">
+        			<i class="fa fa-envelope icon"></i>
+        			<input type="email" placeholder="name@example.com" id="login_email_field" name="Email">
+    			</div>
+    			<div class="input-container">
+        			<i class="fa fa-key icon"></i>
+        			<input type="password" placeholder="Password" class="input-field" id="login_password_field" name="psw">
+        		</div>
+    			<input type="checkbox" id="align-checkbox" onclick="showpasswordmain()"><a style="color:white;font-family:Arial;font-size:14px" id="align-checkbox-text">Show Password</a>
 			
-        		<button onclick="login()">Login to Account</button>
-        		<button onclick="loginGoogle()">Log in with Google</button>
-        		<button onclick="signupPage()">Sign up for account</button>
+        		<button style="border:2px solid #fff" onclick="login()">Sign into Account</button>
+        		<button onclick="signupPage()">Sign up for an account</button>
+                <button href="#" class="fa fa-google" onclick="loginGoogle()"><b style="font-family:Arial;font-size:13px;text-align:center"> Sign in with Google</b></button>
     		</div>
 		</div>
 		<div class="login-signup-wrapper">
     		<div id="signup_div" class="main-div">
     			<h3 style="font-family:Arial;color:white;text-align:center">Sign up with a Konect account</h3>
-    			<input type="email" placeholder="<Enter your email>" id="signup_email_field" />
-    			<input type="password" placeholder="<Enter new password>" id="signup_password_field" />
+    			<div class="input-container">
+        			<i class="fa fa-envelope icon"></i>
+        			<input type="email" placeholder="name@example.com" id="signup_email_field" name="Email">
+    			</div>
+    			<div class="input-container">
+        			<i class="fa fa-key icon"></i>
+        			<input type="password" placeholder="New Password" class="input-field" id="signup_password_field" name="psw">
+        		</div>
+        		<input type="checkbox" id="align-checkbox" onclick="showpasswordsignup()"><a style="color:white;font-family:Arial;font-size:14px" id="align-checkbox-text">Show Password</a>
 
-				<button onclick="signup()">Sign up</button>
-    			<button onclick="loginPage()">Login to Account</button>
+				<button class="fa fa-sign-in" onclick="signup()"><b style="font-family:Arial;font-size:13px;text-align:center"> Sign Up</b></button>
+    			<button onclick="loginPage()">Back to Login</button>
     		</div>
     	</div>
 		<div id="dashboardPage">
 			<div id="header">
-				<h1 style="font-family:Candara;font-size:35px">SpaSpect Dashboard</h1>
+				<h1 style="font-family:Candara;font-size:35px;color:#fff">SpaSpect Dashboard</h1>
 				<div id="dashboard-nav-bar"><b>
-					<select id="dashboard-select" onchange="updateDashboard()"></select>
-					<button type="button" onclick="initializeDashboard()">Refresh options</button>
-					<button type="button" onclick="logout()">Log out</button>
+					<b style="color:white;font-family:Arial;font-size:14px">Options:</b><select id="dashboard-select" onchange="updateDashboard()"></select>
+					<button class="fas fa-refresh" type="button" onclick="initializeDashboard()"><b style="font-family:Arial;font-size:13px;text-align:center"> Refresh options</b></button>
+					<button class="fa fa-sign-out" type="button" onclick="logout()"><b style="font-family:Arial;font-size:13px;text-align:center"> Log out</b></button>
 					</b>
 				</div>
-			</div>
+				<!--add img here-->	
+            </div>
 			<div id="main-content"> 
 				<div id="videoDiv">
 					<iframe width="100%" height="100%" src="https://www.myearthcam.com/bioshop?embed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
