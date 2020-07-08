@@ -33,22 +33,10 @@ app.get('/index.js', function(req, res){
 
 app.get('/drawPlots.js', function (req, res){
 	res.sendFile(__dirname + '/drawPlots.js');
-	/*fs.readFile("./drawPlots.js", function (err, content) {
-		if (err) { res.end(); return; }
-		res.writeHeader(200, {"Content-Type": "text/js"});
-		res.write(content);
-		res.end();
-	});*/
 });
 
 app.get('/styles.css', function (req, res){
 	res.sendFile(__dirname + '/styles.css');
-	fs.readFile("./styles.css", function (err, content) {
-		if (err) { res.end(); return; }
-		res.writeHeader(200, {"Content-Type": "text/css"});
-		res.write(content);
-		res.end();
-	});
 });
 
 app.post('/dashboards', function(req, res) {
@@ -134,7 +122,7 @@ app.post('/environment', function(req, res) {
 
 							if (docTime > lastUpdate) {
 								response["toDate"] = false;
-								response["dashboard"] = doc.data();
+								response["dashboard"] = doc.data()["output"];
 							} else {
 								response["toDate"] = true;
 							}
