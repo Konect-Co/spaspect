@@ -4,7 +4,7 @@ function initializeDashboard() {
   lastUpdate = 0;
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
-    if (!(this.readyState == 4 && this.status == 200)) {
+    if (this.status != 200) {
       console.log("Error in obtaining list of environments with a status of " + this.status);
       return;
     }
@@ -37,7 +37,7 @@ function initializeDashboard() {
 function updateDashboardArgs(dashboardID) {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
-    if (!(this.readyState == 4 && this.status == 200)) {
+    if (this.status != 200) {
       console.log("Error in obtaining environment file with a status of " + this.status);
       return;
     }

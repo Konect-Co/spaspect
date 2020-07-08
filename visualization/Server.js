@@ -23,12 +23,6 @@ app.get('/Pictures/Logo.png', function (req, res){
 
 app.get('/index.js', function(req, res){
 	res.sendFile(__dirname + '/index.js');
-	/*fs.readFile("./index.js", function(err, content) {
-		if (err) { res.end(); return;}
-		res.writeHeader(200, {"Content-Type": "text/js"});
-		res.write(content);
-		res.end();
-	});*/
 });
 
 app.get('/drawPlots.js', function (req, res){
