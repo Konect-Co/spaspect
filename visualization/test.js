@@ -9,7 +9,7 @@ const db = admin.firestore();
 const dbUsers = db.collection('users');
 const dbDashboards = db.collection('dashboards');
 
-id = "0443639c-bfc1-11ea-b3de-0242ac130004"
+id = "d3c4fd41-8892-453b-bc00-64d1f494284b"
 /*dbDashboards.doc(id).get().then((doc) => {
 	if (doc.exists) {
 		var dashboardData = doc.data();
@@ -18,5 +18,5 @@ id = "0443639c-bfc1-11ea-b3de-0242ac130004"
 	}
 });*/
 
-var content = fs.readFileSync("/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/output/" + id + ".json");
+var content = fs.readFileSync("/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/GreeceCam.json");
 dbDashboards.doc(id).set(JSON.parse(content));

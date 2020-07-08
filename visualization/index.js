@@ -17,8 +17,8 @@ function initializeDashboard() {
       sel.removeChild(sel.firstChild);
 
     Object.keys(accessibleEnvironments).forEach(function(key) {
+      //TODO: use name specified in dashboard configuration rather than the one in accessibleEnvironments
       var txt = accessibleEnvironments[key];
-
       var opt = document.createElement('option');
       opt.appendChild( document.createTextNode(txt));
       opt.value = key; 
@@ -42,12 +42,12 @@ function updateDashboardArgs(dashboardID) {
       return;
     }
 
+    console.log("Success in getting response from Post request to get environment file", xhr.responseText);
     var config = JSON.parse(xhr.responseText);
     if (config["authorized"] && !config["toDate"]) {
       lastUpdate = config["currentTime"];
       update(config["dashboard"]);
     }
-    console.log("Success in getting response from Post request to get environment file", xhr.responseText);
   }
   xhr.open("POST", "environment", true);
   firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
@@ -55,9 +55,11 @@ function updateDashboardArgs(dashboardID) {
   }).catch(function(error) { console.error(error); });
 }
 
-function updateDashboard() {
+function updateDashboard(forceUpdate=false) {
   var selectObj = document.getElementById("dashboard-select");
   if (selectObj.selectedIndex != -1) {
+    if (forceUpdate)
+      lastUpdate = 0;
     var dashboardID = selectObj.options[selectObj.selectedIndex].value;
     console.log("Currently selected dashboard", dashboardID);
     updateDashboardArgs(dashboardID);
@@ -142,7 +144,7 @@ function logout(){
   firebase.auth().signOut();
 }
 
-setInterval(function(){updateDashboard()}, 1000);
+//setInterval(function(){updateDashboard()}, 1000);
 
 function showpasswordmain() {
   var x = document.getElementById("login_password_field");

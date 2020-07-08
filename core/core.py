@@ -8,7 +8,6 @@ import numpy as np
 import cv2
 
 import PixelMapper
-import TrackedObject
 from cv_model import pred
 import firebase_admin
 from firebase_admin import credentials
@@ -29,7 +28,6 @@ def main(dashboard):
 
 	imagePath = "/home/ravit/Konect-Code/Frame.jpg"
 	streamLink = dashboardInfo["streamlink"]
-	streamLink = "/home/ravit/Downloads/TimesSquare2.mp4"
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
@@ -86,11 +84,5 @@ def main(dashboard):
 
 root_path = "/home/ravit/Konect-Code/spaspect-project/spaspect"
 if __name__ == "__main__":
-	args = {
-		"imagePath":"/home/ravit/Pictures/Frame.jpg",
-		"dashboard":"",
-		"configPath":"/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/config/TimesSquare.json",
-		"isVideo":True
-	}
-	dashboard = "0443639c-bfc1-11ea-b3de-0242ac130004"
+	dashboard = "d3c4fd41-8892-453b-bc00-64d1f494284b"
 	sys.exit(main(dashboard))

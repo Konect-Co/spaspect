@@ -117,8 +117,10 @@ app.post('/environment', function(req, res) {
 							if (docTime > lastUpdate) {
 								response["toDate"] = false;
 								response["dashboard"] = doc.data()["output"];
+								console.log("Request for dashboard with id", dashboard);
 							} else {
 								response["toDate"] = true;
+								console.log("Request unupdated for dashboard with id", dashboard);
 							}
 							res.write(JSON.stringify(response));
 							res.end();
