@@ -1,16 +1,18 @@
 var first = true;
 
 function update(data) {
-	//TODO: Update videos
-	/*if (document.getElementById("video-src").getAttribute("src") != config["video-source"]) {
-		document.getElementById("video-src").setAttribute("src", config["video-source"]);
-	}*/
+	document.getElementById("video-src").setAttribute("src", data["streamlink"]);
+	//TODO: Seems like this doesn't update the video successfully
+	var player = videojs('video');
+	player.play();
 
-	document.getElementById("statsTotal").innerHTML = data['masked'].length;
+	//TODO: Check if the data actually has an output section
+	dashboard = data["output"];
+	document.getElementById("statsTotal").innerHTML = dashboard['masked'].length;
 
-	var x_values = data['X3D_vals'];
-	var y_values = data['Y3D_vals'];
-	var z_values = data['Z3D_vals'];
+	var x_values = dashboard['X3D_vals'];
+	var y_values = dashboard['Y3D_vals'];
+	var z_values = dashboard['Z3D_vals'];
 
 	var color_values = [];
 	var text_values = [];
@@ -18,9 +20,9 @@ function update(data) {
 	var undistancedCount = 0;
 	var unmaskedCount = 0;
 
-	for (let i = 0; i < data['masked'].length; i++) {
-		var unmasked = data['masked'][i] == 2 ? true : false;
-		var undistanced = data['distanced'][i] == 0 ? true : false;
+	for (let i = 0; i < dashboard['masked'].length; i++) {
+		var unmasked = dashboard['masked'][i] == 2 ? true : false;
+		var undistanced = dashboard['distanced'][i] == 0 ? true : false;
 
 		var color = unmasked || undistanced ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 255, 0, 1)';
 		color_values.push(color);
@@ -40,8 +42,8 @@ function update(data) {
 	document.getElementById("statsUndistanced").innerHTML = undistancedCount;
 	document.getElementById("statsUnmasked").innerHTML = unmaskedCount;
 
-	var lat_values = data['lat_vals'];
-	var long_values = data['lon_vals'];
+	var lat_values = dashboard['lat_vals'];
+	var long_values = dashboard['lon_vals'];
 
 	//==========================
 	var trace = {
@@ -71,7 +73,7 @@ function update(data) {
 			t: 0
 		}
 	};
-	
+
 
 	//==========================
 	var mapData = [{

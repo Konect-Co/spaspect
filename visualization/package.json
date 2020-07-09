@@ -6,6 +6,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "firebase-admin": "^8.13.0",
+    "formidable": "^1.2.2",
     "fs": "^0.0.1-security"
   },
   "devDependencies": {},
