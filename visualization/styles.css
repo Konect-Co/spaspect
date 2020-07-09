@@ -25,7 +25,6 @@ select, button{
 }
 
 .btn{
-
    float:left;
 }
 
@@ -84,8 +83,7 @@ select, button{
 	display: none;
 }
 
-.inner
-{
+.inner {
     display: inline-block;
 }
 
@@ -130,49 +128,6 @@ select, button{
   opacity: 1;
 }
 
-
-.fa-google {
-  background: #dd4b39;
-  color: white;
-  text-align:center;
-}
-
-.fa-sign-in{
-    color:white;
-    text-align:center;
-}
-
-.fa-sign-out{
-    color:white;
-    text-align:center;
-}
-
-.fa-refresh{
-    color:white;
-    text-align:center;
-}
-
-.fa-home{
-    color:white;
-    text-align:center;
-}
-
-#fa-video-camera{
-    margin-top:20px;
-    text-align:center;
-}
-
-#logo {
-	height:50px;
-}
-
-#logo_region {
-    position: relative;
-    border-bottom: 4px solid orange;
-    padding: 70px;
-    background-color: #60514E;
-}
-
 #main-space{
     top: 70px;
     padding: 30px;
@@ -190,25 +145,21 @@ select, button{
 	position: absolute;
 	height:15%;
 	width:100%;
-	top:-175px;
 	text-align: center;
 	font-family: Arial;
 	background-color:transparent;
-	
 }
 
 #dashboard-nav-bar {
 	position: absolute;
 	top: 0;
 	right: 0;
-	margin: 20px;
 }
 
 #dashboard-nav-bar button{
     background-color:#D42C2C;
     color:#fff;
     border: 2px solid red;
-    margin:15px;
     border-radius:5px
 }
 
@@ -217,39 +168,52 @@ select, button{
 }
 
 #nav-bar {
+	position: relative;
+	border-bottom: 4px solid orange;
+	background-color: #60514E;
+}
+
+#nav-buttons {
 	position: absolute;
-	top: 50px;
 	right: 0;
-	margin: 20px;
+	top: 0;
+	overflow: hidden;
 }
 
-#nav-bar ul {
-  display: flex;
-  align-items: center;
-  list-style: none;
+#universal-nav-buttons {
+	float: left;
 }
 
-#nav-bar ul li a {
-  color: #fff;
-  padding: 0.75rem;
-  margin: 0 1rem;
-  font-family: Arial;
+#dashboard-nav-buttons {
+	overflow: hidden;
 }
 
-#nav-bar ul li a:hover {
-  background: #ffbc00;
-  border-radius: 5px;
-}
-
-.current a{
-  color:#e8491d;
+.nav-btn {
   font-weight:bold;
+	background-color: #ddd;
+	border-radius: 5px;
+	color: #000;
+	padding: 0.25rem;
+	margin: 0 1rem;
+	font-family: Arial;
+}
+
+.nav-btn:hover {
+  background: #ffbc00;
+}
+
+#nav-logo {
+
+}
+
+#logo {
+	height:50px;
 }
 
 #main-content {
 	position: relative;
-	top:10%;
-	height:90%;
+	top:0%;
+	height:100%;
 }
 
 #videoDiv {
@@ -259,6 +223,10 @@ select, button{
 	bottom: 50%;
 	left: 0%;
 	border: 15px ridge #7B7B7B;
+}
+
+#video {
+  /*vertical-align: middle;*/
 }
 
 #mapDiv {
@@ -286,7 +254,6 @@ select, button{
 }
 
 #stats {
-
 	height:100%;
 	width:100%
 	position: absolute;
@@ -300,4 +267,42 @@ select, button{
 	bottom: -5px;
 	left: 50%;
 	border: 15px ridge #7B7B7B;
+}
+
+#addSite {
+	position: relative;
+	height: 90%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#add-site-form {
+	margin: auto;
+	padding: 20px;
+  background-color: #343E6E;
+}
+
+.fa-google {
+  background: #dd4b39;
+  color: white;
+  text-align:center;
+}
+
+.fa-sign-in{
+    text-align:center;
+}
+
+.fa-sign-out{
+    text-align:center;
+}
+
+.fa-refresh{
+    text-align:center;
+}
+
+.fa-home{
+    color:white;
+    text-align:center;
 }
