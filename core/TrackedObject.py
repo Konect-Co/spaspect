@@ -179,11 +179,11 @@ class TrackedObject(object):
 		#given that there are at least two bounding boxes in history
 		#calculate the pixel velocity
 		#velocity = difference in position(in pixels)/difference in time(time between each frame)
-		"""
+		
 		if len(self.history.keys()) < 2:
 			self.velocity = [0, 0]
 			return
-        """
+        
 
 		time_i = list(self.history.keys())[-1]
 		time_f = list(self.history.keys())[-2]
