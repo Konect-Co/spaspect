@@ -27,7 +27,7 @@ class TrackedObject(object):
 		#adding self to objects
 		assert name not in type(self).objects.keys()
 		type(self).objects[name] = self
-	
+
 	def toDict(self):
 		return {
 			"name":self.name,
@@ -59,19 +59,19 @@ class TrackedObject(object):
 			cls.currTime = time.time()
 			return
 
-	@classmethod		
+	@classmethod
 	def prune(cls):
 			#remove all tracked objects which have not been updated within updateThreshold seconds
 			to_delete = []
-			
+
 			for tracked_key in cls.objects:
 				tracked = cls.objects[tracked_key]
 				if (cls.currTime-tracked.getLastUpdate() > cls.updateThreshold):
 					to_delete.append(tracked_key)
-			
+
 			for delete_i in to_delete:
 				del cls.objects[delete_i]
-			
+
 			return
 
 	@classmethod
@@ -111,7 +111,7 @@ class TrackedObject(object):
 			- Delete the row and column of the highest IOU from the 2D dictionary
 			"""
 			#storing the indices of the new boxes that are to be created
-			minThresholdIOU = 0.3			
+			minThresholdIOU = 0.3
 			newBoxes = []
 			if len(allIOUValues.keys()) == 0:
 				newBoxes = range(len(boundingBoxes))
@@ -131,7 +131,7 @@ class TrackedObject(object):
 						if iou>maximum_iou:
 							maximum_iou = iou
 							maximumTracking = trackingObj
-					
+
 					#if the greatest iou left is lower than the minimum threshold
 					#adding all remaining bounding boxes to be created as new objects
 					if maximum_iou < minThresholdIOU:
@@ -143,11 +143,11 @@ class TrackedObject(object):
 					else:
 						maximumTracking.addBox(list(allIOUValues[maximumTracking].keys())[0])
 						boxKey = list(allIOUValues[maximumTracking].keys())[0]
-						
+
 						#deleting the row and column of the maximum IoU
 						for trackingKey in allIOUValues.keys():
 							   del(allIOUValues[trackingKey][boxKey])
-						
+
 						#adding remaining boxes
 						for box_i in allIOUValues[maximumTracking].keys():
 							newBoxes.append(box_i)
@@ -166,10 +166,11 @@ class TrackedObject(object):
 	def addBox(self, bounding_box):
 		#assigned : Ravit
 		if len(self.history.keys()) != 0:
-			assert self.lastUpdate != type(self).currTime		
+			assert self.lastUpdate != type(self).currTime
 
 		self.history[type(self).currTime] = bounding_box
 		self.lastUpdate = type(self).currTime
+		self.updateVelocity()
 		return
 
 	def updateVelocity(self):
@@ -186,10 +187,10 @@ class TrackedObject(object):
 
 		bounding_box_i = self.history[time_i] #initial position
 		bounding_box_f = self.history[time_f] #final position
-		
+
 		xVelocity = (bounding_box_f[0] - bounding_box_i[0])/(time_f - time_i)
 		yVelocity = (bounding_box_f[1] - bounding_box_i[1])/(time_f - time_i)
-		
+
 		velocity = [xVelocity, yVelocity]
 		self.velocity = velocity
 		return
@@ -214,4 +215,4 @@ class TrackedObject(object):
 			currComponent = lastPosition[coord_i]
 			currComponent += velocity[coord_i%2]*delta_t
 			predictedPosition[coord_i] = currComponent
-		return predictedPosition				
+		return predictedPosition

@@ -28,6 +28,7 @@ def main(dashboard):
 
 	imagePath = "/home/ravit/Konect-Code/Frame.jpg"
 	streamLink = dashboardInfo["streamlink"]
+	streamLink = "/home/ravit/Downloads/TimesSquare2.mp4"
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
