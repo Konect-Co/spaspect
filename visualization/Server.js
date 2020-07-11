@@ -82,6 +82,7 @@ app.post('/environment', function(req, res) {
 		var idToken = bodyJSON["idtoken"];
 		var dashboard = bodyJSON["dashboard"];
 		var lastUpdate = bodyJSON["lastUpdate"];
+		console.log("Body contains request for dashboard", dashboard);
 
 		admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
 			let uid = decodedToken.uid;
@@ -107,6 +108,7 @@ app.post('/environment', function(req, res) {
 				});
 				if (authorized) {
 					response["authorized"] = true;
+					console.log("Request for dashboard with id", dashboard);
 					var dashboardPromise = dbDashboards.doc(dashboard).get();
 					dashboardPromise.catch (()=> {
 						console.log("Error in obtaining dashboard doc");
@@ -119,7 +121,6 @@ app.post('/environment', function(req, res) {
 							if (docTime > lastUpdate) {
 								response["toDate"] = false;
 								response["dashboard"] = doc.data();
-								console.log("Request for dashboard with id", dashboard);
 							} else {
 								response["toDate"] = true;
 								console.log("Request unupdated for dashboard with id", dashboard);
