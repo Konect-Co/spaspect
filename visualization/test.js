@@ -1,26 +1,24 @@
-var fs = require("fs");
-var admin = require('firebase-admin');
+const {google} = require('googleapis');
+function getAccessToken() {
+  return new Promise(function(resolve, reject) {
+    var key = require('./service-account.json');
+    var jwtClient = new google.auth.JWT(
+      key.client_email,
+      null,
+      key.private_key,
+      ["https://www.googleapis.com/auth/cloud-platform"],
+      null
+    );
+    jwtClient.authorize(function(err, tokens) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(tokens.access_token);
+    });
+  });
+}
 
-admin.initializeApp({
-	credential: admin.credential.applicationDefault(),
-	databaseURL: 'https://spaspect-dashboard.firebaseio.com'
+getAccessToken().then((access_token) => {
+	console.log(access_token);
 });
-const db = admin.firestore();
-const dbUsers = db.collection('users');
-const dbDashboards = db.collection('dashboards');
-
-id = "d3c4fd41-8892-453b-bc00-64d1f494284b"
-var content = fs.readFileSync("<wherever you have the Greece json stored locally>");
-dbDashboards.doc(id).set(JSON.parse(content));
-
-
-dbDashboards.doc(id).get().then((doc) => {
-	if (doc.exists) {
-		var dashboardData = doc.data();
-
-		console.log(doc._updateTime);
-	}
-});
-
-/*var content = fs.readFileSync("/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/GreeceCam.json");
-dbDashboards.doc(id).set(JSON.parse(content));*/
