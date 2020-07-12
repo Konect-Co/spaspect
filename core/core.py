@@ -12,19 +12,21 @@ from cv_model import pred
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+import TrackedObject
 
 # Use a service account
 cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
 firebase_admin.initialize_app(cred)
 
-root_dir = "/home/ravit/Konect-Code/spaspect-project/spaspect/visualization"
+root_dir = "/home/santript/ImportantProjects/spaspect/visualization"
 db = firestore.client()
 
 def main(dashboard):
 	dashboardDoc = db.collection(u'dashboards').document(dashboard)
 	dashboardInfo = dashboardDoc.get().to_dict()
+	#print("Dashboard Info: ",dashboardInfo)
 	#with open("/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/output/0443639c-bfc1-11ea-b3de-0242ac130004.json", "r") as f:
-	#	dashboardInfo = json.loads(f.read())
+	#dashboardInfo = json.loads(f.read())
 
 	imagePath = "/home/ravit/Konect-Code/Frame.jpg"
 	streamLink = dashboardInfo["streamlink"]
@@ -33,6 +35,7 @@ def main(dashboard):
 	cap.open(streamLink)
 
 	calibration = dashboardInfo["calibration"]
+	dashboardOutput = dashboardInfo["output"]
 	pixelX = calibration["pixelX_vals"]
 	pixelY = calibration["pixelY_vals"]
 	pixel_array = [[pixelX[i], pixelY[i]] for i in range(len(pixelX))]
@@ -44,9 +47,6 @@ def main(dashboard):
 	video = False
 	frame_rate = cv2.CAP_PROP_FPS
 	frame_index = 0
-
-	for _ in range(10):
-		cap.read()
 
 	while True:
 		print("FRAME", frame_index, "##############")
@@ -60,13 +60,22 @@ def main(dashboard):
 		output = pred.predict(imagePath)
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
-
+		#print("predOutput:",predOutput)
+		#print(predOutput["tracked"])
+		        
 		frame_index += 1
-		
-		dashboardInfo["output"] = predOutput
-		
+
+		dashboardOutput["X3D_vals"] = predOutput["X3D_vals"]
+		dashboardOutput["Y3D_vals"] = predOutput["Y3D_vals"]
+		dashboardOutput["Z3D_vals"] = predOutput["Z3D_vals"]
+		dashboardOutput["lat_vals"] = predOutput["lat_vals"]
+		dashboardOutput["lon_vals"] = predOutput["lon_vals"]
+		dashboardOutput["masked"] = predOutput["masked"]
+		dashboardOutput["distanced"] = predOutput["distanced"]
+		dashboardOutput["tracked"] = predOutput["tracked"]
+        
 		dashboardDoc.set(dashboardInfo)
-		
+        
 		#break
 		
 		"""
@@ -82,7 +91,6 @@ def main(dashboard):
 	return 0
 
 
-root_path = "/home/ravit/Konect-Code/spaspect-project/spaspect"
 if __name__ == "__main__":
 	dashboard = "86176f90-d02c-4a5b-94f7-c6baf24d2f7f"
 	sys.exit(main(dashboard))

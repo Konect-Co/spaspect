@@ -3,6 +3,7 @@ from TrackedObject import TrackedObject
 import numpy as np
 import math
 import cv_model.utils as cv_utils
+import TrackedObject
 
 def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=0.80):
 	X3D_vals = []
@@ -27,6 +28,8 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 
 		#0=unsure, 1=wearing, 2=not wearing
 		wearingMask = 0
+		faceBoxes_subList = []
+		boxes_subList = []
 		for maskOut in CVOutput["masks"]:
 			face_box = maskOut[0]
 			mask = maskOut[1]
@@ -48,8 +51,8 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 		Z3D_vals.append(coord3D[2])
 		masked.append(wearingMask)
 
-	TrackedObject.track(boxes)
-	trackedObjects = TrackedObject.objects
+	TrackedObject.TrackedObject.track(boxes)
+	trackedObjects = TrackedObject.TrackedObject.objects
 	trackedObjectsDict = {}
 	for key in trackedObjects.keys():
 		trackedObjectsDict[key] = trackedObjects[key].toDict()
@@ -66,6 +69,8 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 				distanced[j] = 0
 		if 1 not in distanced:
 			break
+
 	predOutput = {"X3D_vals":X3D_vals, "Y3D_vals":Y3D_vals, "Z3D_vals":Z3D_vals,
-		"lat_vals":lat_vals, "lon_vals":lon_vals, "masked":masked, "distanced":distanced, "tracked":trackedObjects}
+		"lat_vals":lat_vals, "lon_vals":lon_vals, "masked":masked, "distanced":distanced, "tracked":trackedObjectsDict}
+    
 	return predOutput

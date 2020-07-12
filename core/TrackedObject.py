@@ -51,6 +51,8 @@ class TrackedObject(object):
 
 	def getLastUpdate(self):
 		return self.lastUpdate
+	def getHistoryKeys(self):
+		return list(self.history.keys())
 
 	@classmethod
 	def updateTime(cls):
@@ -151,7 +153,7 @@ class TrackedObject(object):
 						#adding remaining boxes
 						for box_i in allIOUValues[maximumTracking].keys():
 							newBoxes.append(box_i)
-						del(allIOUValues[val])
+						del(allIOUValues[box_i])
 
 			#making a new object
 			for newBoxIndex in newBoxes:
@@ -168,7 +170,7 @@ class TrackedObject(object):
 		if len(self.history.keys()) != 0:
 			assert self.lastUpdate != type(self).currTime
 
-		self.history[type(self).currTime] = bounding_box
+		self.history[str(type(self).currTime)] = bounding_box.tolist()
 		self.lastUpdate = type(self).currTime
 		self.updateVelocity()
 		return
@@ -178,9 +180,11 @@ class TrackedObject(object):
 		#given that there are at least two bounding boxes in history
 		#calculate the pixel velocity
 		#velocity = difference in position(in pixels)/difference in time(time between each frame)
-		if len(self.history) < 2:
+		
+		if len(self.history.keys()) < 2:
 			self.velocity = [0, 0]
 			return
+        
 
 		time_i = list(self.history.keys())[-1]
 		time_f = list(self.history.keys())[-2]
