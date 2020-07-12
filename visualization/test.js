@@ -1,24 +1,14 @@
-const {google} = require('googleapis');
-function getAccessToken() {
-  return new Promise(function(resolve, reject) {
-    var key = require('./service-account.json');
-    var jwtClient = new google.auth.JWT(
-      key.client_email,
-      null,
-      key.private_key,
-      ["https://www.googleapis.com/auth/cloud-platform"],
-      null
-    );
-    jwtClient.authorize(function(err, tokens) {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(tokens.access_token);
-    });
-  });
-}
+var fs = require("fs");
+var admin = require('firebase-admin');
 
-getAccessToken().then((access_token) => {
-	console.log(access_token);
+admin.initializeApp({
+credential: admin.credential.applicationDefault(),
+databaseURL: 'https://spaspect-dashboard.firebaseio.com'
 });
+const db = admin.firestore();
+const dbUsers = db.collection('users');
+const dbDashboards = db.collection('dashboards');
+
+id = "86176f90-d02c-4a5b-94f7-c6baf24d2f7f"
+var content = fs.readFileSync("./VeniceBeach.json");
+dbDashboards.doc(id).set(JSON.parse(content));

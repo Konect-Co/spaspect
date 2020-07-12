@@ -127,8 +127,9 @@ function updateDashboardArgs(dashboardID) {
       return;
     }
 
+    console.log("Success in getting response from Post request to get environment file", xhr.responseText);
     var config = JSON.parse(xhr.responseText);
-    console.log("Success in getting response from Post request to get environment file", config);
+    
     if (config["authorized"] && !config["toDate"]) {
       lastUpdate = config["currentTime"];
       var dashboard = config["dashboard"];
@@ -172,4 +173,4 @@ function submitAddSite() {
   }).catch(function(error) { console.error(error); });
 }
 
-//setInterval(function(){updateDashboard()}, 1000);
+setInterval(function(){updateDashboard()}, 1000);

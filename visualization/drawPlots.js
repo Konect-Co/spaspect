@@ -1,10 +1,14 @@
 var first = true;
 
 function update(data) {
-	document.getElementById("video-src").setAttribute("src", data["streamlink"]);
+	console.log("setting video link to", data["streamlink"])
+	//document.getElementById("video-src").setAttribute("src", data["streamlink"]);
 	//TODO: Seems like this doesn't update the video successfully
 	var player = videojs('video');
-	player.play();
+	player.src(data["streamlink"]);
+	player.ready(function() {
+		player.play();
+	});
 
 	//TODO: Check if the data actually has an output section
 	dashboard = data["output"];

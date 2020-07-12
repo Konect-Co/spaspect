@@ -28,7 +28,6 @@ def main(dashboard):
 
 	imagePath = "/home/ravit/Konect-Code/Frame.jpg"
 	streamLink = dashboardInfo["streamlink"]
-	streamLink = "/home/ravit/Downloads/TimesSquare2.mp4"
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
@@ -85,5 +84,5 @@ def main(dashboard):
 
 root_path = "/home/ravit/Konect-Code/spaspect-project/spaspect"
 if __name__ == "__main__":
-	dashboard = "d3c4fd41-8892-453b-bc00-64d1f494284b"
+	dashboard = "86176f90-d02c-4a5b-94f7-c6baf24d2f7f"
 	sys.exit(main(dashboard))
