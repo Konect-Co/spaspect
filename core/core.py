@@ -15,7 +15,7 @@ from firebase_admin import firestore
 import TrackedObject
 
 # Use a service account
-cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-73fbdcc01a.json')
+cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
 firebase_admin.initialize_app(cred)
 
 root_dir = "/home/santript/ImportantProjects/spaspect/visualization"
@@ -28,9 +28,8 @@ def main(dashboard):
 	#with open("/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/output/0443639c-bfc1-11ea-b3de-0242ac130004.json", "r") as f:
 	#dashboardInfo = json.loads(f.read())
 
-	imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
-	#streamLink = dashboardInfo["streamlink"]
-	streamLink = "/home/santript/ImportantProjects/Files/TimesSquare2.mp4"
+	imagePath = "/home/ravit/Konect-Code/Frame.jpg"
+	streamLink = dashboardInfo["streamlink"]
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
@@ -49,9 +48,6 @@ def main(dashboard):
 	frame_rate = cv2.CAP_PROP_FPS
 	frame_index = 0
 
-	for _ in range(10):
-		cap.read()
-
 	while True:
 		print("FRAME", frame_index, "##############")
 		
@@ -68,32 +64,7 @@ def main(dashboard):
 		#print(predOutput["tracked"])
 		        
 		frame_index += 1
-		"""
-		data = {
-            u'X3D_vals': predOutput["X3D_vals"],
-            u'Y3D_vals': predOutput["Y3D_vals"],
-            u'Z3D_vals': predOutput["Z3D_vals"],
-            u'lat_vals': predOutput["lat_vals"],
-            u'lon_vals': predOutput["lon_vals"],
-            u'masked': predOutput["masked"],
-            u'tracked': predOutput["tracked"],
-            u'distanced': predOutput["distanced"]
-        }
-        """
-        
-		#dashboardOutput = predOutput
-		"""
-		dashboardDoc.set({
-            u'X3D_vals': predOutput["X3D_vals"],
-            u'Y3D_vals': predOutput["Y3D_vals"],
-            u'Z3D_vals': predOutput["Z3D_vals"],
-            u'lat_vals': predOutput["lat_vals"],
-            u'lon_vals': predOutput["lon_vals"],
-            u'masked': predOutput["masked"],
-            u'tracked': predOutput["tracked"],
-            u'distanced': predOutput["distanced"]
-        })
-        """
+
 		dashboardOutput["X3D_vals"] = predOutput["X3D_vals"]
 		dashboardOutput["Y3D_vals"] = predOutput["Y3D_vals"]
 		dashboardOutput["Z3D_vals"] = predOutput["Z3D_vals"]
@@ -102,8 +73,6 @@ def main(dashboard):
 		dashboardOutput["masked"] = predOutput["masked"]
 		dashboardOutput["distanced"] = predOutput["distanced"]
 		dashboardOutput["tracked"] = predOutput["tracked"]
-        
-		print("New Dashboardinfo: ",dashboardInfo)
         
 		dashboardDoc.set(dashboardInfo)
         
@@ -122,9 +91,6 @@ def main(dashboard):
 	return 0
 
 
-root_path = "/home/santript/ImportantProjects/spaspect"
 if __name__ == "__main__":
-
-	dashboard = "d3c4fd41-8892-453b-bc00-64d1f494284b"
-
+	dashboard = "86176f90-d02c-4a5b-94f7-c6baf24d2f7f"
 	sys.exit(main(dashboard))

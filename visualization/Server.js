@@ -82,7 +82,6 @@ app.post('/environment', function(req, res) {
 		var idToken = bodyJSON["idtoken"];
 		var dashboard = bodyJSON["dashboard"];
 		var lastUpdate = bodyJSON["lastUpdate"];
-		console.log("Body contains request for dashboard", dashboard);
 
 		admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
 			let uid = decodedToken.uid;
