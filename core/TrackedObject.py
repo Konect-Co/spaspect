@@ -99,6 +99,7 @@ class TrackedObject(object):
 					IOUValues[box_i] = IOU
 				IOUValues = sorted(allIOUValues.items(), reverse=True, key = lambda kv:(kv[1], kv[0]))
 				allIOUValues[trackedEntity.getName()] = IOUValues
+			print("IOU: ", allIOUValues)
 
 			"""
 			Now, we have a 2D dictionary with the row corresponding to each existing tracked object
@@ -160,8 +161,8 @@ class TrackedObject(object):
 				name1 = str(random.random())
 				label = "person"
 				boundingBox = boundingBoxes[newBoxIndex]
+				#print("PAUSE")
 				newObject = TrackedObject(name1,label,boundingBox)
-
 			cls.prune()
 			return
 
@@ -173,6 +174,7 @@ class TrackedObject(object):
 		self.history[str(type(self).currTime)] = bounding_box.tolist()
 		self.lastUpdate = type(self).currTime
 		self.updateVelocity()
+		print("History keys: ", self.history.keys())
 		return
 
 	def updateVelocity(self):
@@ -185,7 +187,6 @@ class TrackedObject(object):
 			self.velocity = [0, 0]
 			return
         
-
 		time_i = list(self.history.keys())[-1]
 		time_f = list(self.history.keys())[-2]
 
