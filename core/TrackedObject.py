@@ -3,6 +3,8 @@ import cv_model.utils as cv_utils
 import time
 import random
 
+#TODO: objects variable varies from configuration to configuration. Therefore
+	# it should be separately instantiated rather than kept in the same class.
 class TrackedObject(object):
 	#number of seconds without detection until tracked object can be removed
 	updateThreshold = 5
@@ -85,6 +87,7 @@ class TrackedObject(object):
 			#assigned : Santript
 
 			#TODO: (for future) Make algorithm more efficient by implementing grids in the image
+			#TODO: Consider edge case where the same object alternates between two tracking objects
 			cls.updateTime()
 
 			allIOUValues = {}
@@ -145,14 +148,14 @@ class TrackedObject(object):
 
 					#if not, we update the latest box and repeat
 					else:
+						boxKey = list(allIOUValues[maximumTracking][0])
 						maximumTracking.addBox(
-							boundingBoxes[list(allIOUValues[maximumTracking].keys())[0]]
+							boundingBoxes[boxKey]
 						)
-						boxKey = list(allIOUValues[maximumTracking].keys())[0]
-
+						
 						#deleting the row and column of the maximum IoU
-						for trackingKey in list(allIOUValues.keys()):
-							   del(allIOUValues[trackingKey][boxKey])
+						for trackingKey in list(allIOUValues):
+							del(allIOUValues[trackingKey][boxKey])
 
 						#adding remaining boxes
 						for box_i in list(allIOUValues[maximumTracking].keys()):

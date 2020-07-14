@@ -71,6 +71,7 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 			break
 
 	predOutput = {"X3D_vals":X3D_vals, "Y3D_vals":Y3D_vals, "Z3D_vals":Z3D_vals,
-		"lat_vals":lat_vals, "lon_vals":lon_vals, "masked":masked, "distanced":distanced, "tracked":trackedObjectsDict}
+		"lat_vals":lat_vals, "lon_vals":lon_vals, "masked":masked, "distanced":distanced,
+		"tracked":trackedObjectsDict}
     
 	return predOutput
