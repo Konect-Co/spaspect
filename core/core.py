@@ -61,11 +61,10 @@ def main(dashboard):
 		output = pred.predict(imagePath)
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
-<<<<<<< HEAD
+
 		print("predOutput:",predOutput)
 		#print(predOutput["tracked"])
-=======
->>>>>>> refs/remotes/origin/master
+
 		        
 		frame_index += 1
 

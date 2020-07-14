@@ -99,18 +99,17 @@ class TrackedObject(object):
 					IOU = cv_utils.computeIOU(predictedBox, box)
 					
 					IOUValues[box_i] = IOU
-<<<<<<< HEAD
-				IOUValues = sorted(allIOUValues.items(), reverse=True, key = lambda kv:(kv[1], kv[0]))
-				print("Items: ",allIOUValues.items())
-				print("Name: ",trackedEntity.getName())
-				#print("IOU: ", IOUValues)
-				allIOUValues[trackedEntity.getName()] = IOUValues
-			#print("IOU: ", allIOUValues)
 
-=======
+
+				#print("IOU: ", IOUValues)
+			    #print("IOU: ", allIOUValues)
+
 				IOUValues = {k : v for k, v in sorted(IOUValues.items(), reverse=True, key = lambda kv:kv[1])}
 				allIOUValues[trackedEntity] = IOUValues
->>>>>>> refs/remotes/origin/master
+                
+				print("Items: ",allIOUValues.items())
+				print("Name: ",trackedEntity.getName())
+
 			"""
 			Now, we have a 2D dictionary with the row corresponding to each existing tracked object
 			and each column corresponding to each bounding box.
@@ -146,13 +145,7 @@ class TrackedObject(object):
 							maximum_iou = iou
 							maximumTracking = trackingObj
 
-<<<<<<< HEAD
-					#if the greatest iou left is greater than or equal to the minimum threshold
-                    #update the latest box and repeat
-					
-					if maximum_iou >= minThresholdIOU:
-						maximumTracking.addBox(list(allIOUValues[maximumTracking].keys())[0])
-=======
+
 					#if the greatest iou left is lower than the minimum threshold
 					#adding all remaining bounding boxes to be created as new objects
 					if maximum_iou < minThresholdIOU:
@@ -165,7 +158,7 @@ class TrackedObject(object):
 						maximumTracking.addBox(
 							boundingBoxes[list(allIOUValues[maximumTracking].keys())[0]]
 						)
->>>>>>> refs/remotes/origin/master
+
 						boxKey = list(allIOUValues[maximumTracking].keys())[0]
 
 						#deleting the row and column of the maximum IoU
@@ -177,11 +170,6 @@ class TrackedObject(object):
 							newBoxes.append(box_i)
 						del(allIOUValues[maximumTracking])
 
-					#adding all remaining bounding boxes to be created as new objects
-					else:
-						for box_i in allIOUValues[keys[0]].keys():
-							newBoxes.append(box_i)
-							break
             #making a new object
 			for newBoxIndex in newBoxes:
 				name1 = str(random.random())

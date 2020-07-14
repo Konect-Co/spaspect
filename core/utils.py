@@ -53,7 +53,7 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 
 	TrackedObject.TrackedObject.track(boxes)
 	trackedObjects = TrackedObject.TrackedObject.objects
-	#print(trackedObjects.getHistoryKeys())
+   	#print(trackedObjects.getHistoryKeys())
 	print("Objects: ",trackedObjects)
 	trackedObjectsDict = {}
 	for key in trackedObjects.keys():
