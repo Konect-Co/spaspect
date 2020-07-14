@@ -15,7 +15,7 @@ from firebase_admin import firestore
 import TrackedObject
 
 # Use a service account
-cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
+cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-73fbdcc01a.json')
 firebase_admin.initialize_app(cred)
 
 root_dir = "/home/santript/ImportantProjects/spaspect/visualization"
@@ -28,8 +28,9 @@ def main(dashboard):
 	#with open("/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/output/0443639c-bfc1-11ea-b3de-0242ac130004.json", "r") as f:
 	#dashboardInfo = json.loads(f.read())
 
-	imagePath = "/home/ravit/Konect-Code/Frame.jpg"
-	streamLink = dashboardInfo["streamlink"]
+	imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
+	#streamLink = dashboardInfo["streamlink"]
+	streamLink = "/home/santript/ImportantProjects/Files/TimesSquare2.mp4"
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
@@ -60,7 +61,7 @@ def main(dashboard):
 		output = pred.predict(imagePath)
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
-		#print("predOutput:",predOutput)
+		print("predOutput:",predOutput)
 		#print(predOutput["tracked"])
 		        
 		frame_index += 1
@@ -73,6 +74,8 @@ def main(dashboard):
 		dashboardOutput["masked"] = predOutput["masked"]
 		dashboardOutput["distanced"] = predOutput["distanced"]
 		dashboardOutput["tracked"] = predOutput["tracked"]
+        
+		print("New Dashboard: ",dashboardInfo)
         
 		dashboardDoc.set(dashboardInfo)
         
@@ -92,5 +95,5 @@ def main(dashboard):
 
 
 if __name__ == "__main__":
-	dashboard = "86176f90-d02c-4a5b-94f7-c6baf24d2f7f"
+	dashboard = "0443639c-bfc1-11ea-b3de-0242ac130004"
 	sys.exit(main(dashboard))

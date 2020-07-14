@@ -98,8 +98,11 @@ class TrackedObject(object):
 					IOU = cv_utils.computeIOU(predictedBox, box)
 					IOUValues[box_i] = IOU
 				IOUValues = sorted(allIOUValues.items(), reverse=True, key = lambda kv:(kv[1], kv[0]))
+				print("Items: ",allIOUValues.items())
+				print("Name: ",trackedEntity.getName())
+				#print("IOU: ", IOUValues)
 				allIOUValues[trackedEntity.getName()] = IOUValues
-			print("IOU: ", allIOUValues)
+			#print("IOU: ", allIOUValues)
 
 			"""
 			Now, we have a 2D dictionary with the row corresponding to each existing tracked object
@@ -135,15 +138,10 @@ class TrackedObject(object):
 							maximum_iou = iou
 							maximumTracking = trackingObj
 
-					#if the greatest iou left is lower than the minimum threshold
-					#adding all remaining bounding boxes to be created as new objects
-					if maximum_iou < minThresholdIOU:
-						for box_i in allIOUValues[keys[0]].keys():
-							newBoxes.append(box_i)
-						break
-
-					#if not, we update the latest box and repeat
-					else:
+					#if the greatest iou left is greater than or equal to the minimum threshold
+                    #update the latest box and repeat
+					
+					if maximum_iou >= minThresholdIOU:
 						maximumTracking.addBox(list(allIOUValues[maximumTracking].keys())[0])
 						boxKey = list(allIOUValues[maximumTracking].keys())[0]
 
@@ -156,25 +154,33 @@ class TrackedObject(object):
 							newBoxes.append(box_i)
 						del(allIOUValues[box_i])
 
-			#making a new object
+					#adding all remaining bounding boxes to be created as new objects
+					else:
+						for box_i in allIOUValues[keys[0]].keys():
+							newBoxes.append(box_i)
+							break
+            #making a new object
 			for newBoxIndex in newBoxes:
 				name1 = str(random.random())
 				label = "person"
 				boundingBox = boundingBoxes[newBoxIndex]
-				#print("PAUSE")
+				print("PAUSE")
 				newObject = TrackedObject(name1,label,boundingBox)
 			cls.prune()
 			return
+			
 
 	def addBox(self, bounding_box):
 		#assigned : Ravit
 		if len(self.history.keys()) != 0:
 			assert self.lastUpdate != type(self).currTime
-
+        
+		print("Box: ",bounding_box.tolist())
 		self.history[str(type(self).currTime)] = bounding_box.tolist()
 		self.lastUpdate = type(self).currTime
 		self.updateVelocity()
-		print("History keys: ", self.history.keys())
+		#print("History keys1: ", self.history.keys()[-1])
+		#print("History keys2: ", self.history.keys()[-2])
 		return
 
 	def updateVelocity(self):
