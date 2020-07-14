@@ -95,8 +95,11 @@ class TrackedObject(object):
 				for box_i in range(len(boundingBoxes)):
 					box = boundingBoxes[box_i]
 
+					#BUG: Returning negative values, sometimes values over 1
 					IOU = cv_utils.computeIOU(predictedBox, box)
+					
 					IOUValues[box_i] = IOU
+<<<<<<< HEAD
 				IOUValues = sorted(allIOUValues.items(), reverse=True, key = lambda kv:(kv[1], kv[0]))
 				print("Items: ",allIOUValues.items())
 				print("Name: ",trackedEntity.getName())
@@ -104,6 +107,10 @@ class TrackedObject(object):
 				allIOUValues[trackedEntity.getName()] = IOUValues
 			#print("IOU: ", allIOUValues)
 
+=======
+				IOUValues = {k : v for k, v in sorted(IOUValues.items(), reverse=True, key = lambda kv:kv[1])}
+				allIOUValues[trackedEntity] = IOUValues
+>>>>>>> refs/remotes/origin/master
 			"""
 			Now, we have a 2D dictionary with the row corresponding to each existing tracked object
 			and each column corresponding to each bounding box.
@@ -123,36 +130,52 @@ class TrackedObject(object):
 				newBoxes = range(len(boundingBoxes))
 			else:
 				while True:
-					keys = allIOUValues.keys()
+					#keys = allIOUValues.keys()
+					keys = list(allIOUValues)
 					if len(keys) == 0:
 						break
-					if len(allIOUValues[list(keys)[0]]) == 0:
+					if len(allIOUValues[keys[0]]) == 0:
 						break
 
 					maximum_iou = 0
-					maximumTracking = list(keys)[0]
+					maximumTracking = keys[0]
 
 					for trackingObj in keys:
-						iou = allIOUValues[trackingObj][0]
+						iou = allIOUValues[trackingObj][list(allIOUValues[trackingObj])[0]]
 						if iou>maximum_iou:
 							maximum_iou = iou
 							maximumTracking = trackingObj
 
+<<<<<<< HEAD
 					#if the greatest iou left is greater than or equal to the minimum threshold
                     #update the latest box and repeat
 					
 					if maximum_iou >= minThresholdIOU:
 						maximumTracking.addBox(list(allIOUValues[maximumTracking].keys())[0])
+=======
+					#if the greatest iou left is lower than the minimum threshold
+					#adding all remaining bounding boxes to be created as new objects
+					if maximum_iou < minThresholdIOU:
+						for box_i in list(allIOUValues[keys[0]].keys()):
+							newBoxes.append(box_i)
+						break
+
+					#if not, we update the latest box and repeat
+					else:
+						maximumTracking.addBox(
+							boundingBoxes[list(allIOUValues[maximumTracking].keys())[0]]
+						)
+>>>>>>> refs/remotes/origin/master
 						boxKey = list(allIOUValues[maximumTracking].keys())[0]
 
 						#deleting the row and column of the maximum IoU
-						for trackingKey in allIOUValues.keys():
+						for trackingKey in list(allIOUValues.keys()):
 							   del(allIOUValues[trackingKey][boxKey])
 
 						#adding remaining boxes
-						for box_i in allIOUValues[maximumTracking].keys():
+						for box_i in list(allIOUValues[maximumTracking].keys()):
 							newBoxes.append(box_i)
-						del(allIOUValues[box_i])
+						del(allIOUValues[maximumTracking])
 
 					#adding all remaining bounding boxes to be created as new objects
 					else:
@@ -199,8 +222,8 @@ class TrackedObject(object):
 		bounding_box_i = self.history[time_i] #initial position
 		bounding_box_f = self.history[time_f] #final position
 
-		xVelocity = (bounding_box_f[0] - bounding_box_i[0])/(time_f - time_i)
-		yVelocity = (bounding_box_f[1] - bounding_box_i[1])/(time_f - time_i)
+		xVelocity = (bounding_box_f[0] - bounding_box_i[0])/(float(time_f) - float(time_i))
+		yVelocity = (bounding_box_f[1] - bounding_box_i[1])/(float(time_f) - float(time_i))
 
 		velocity = [xVelocity, yVelocity]
 		self.velocity = velocity

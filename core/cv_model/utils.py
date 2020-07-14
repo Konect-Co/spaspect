@@ -4,8 +4,7 @@ def computeArea(box):
 
 #this function computes the intersection between two boxes
 def computeIntersection(boxA, boxB):
-	if (not ((boxB[2]>boxA[0] and boxA[2]>boxB[0]) or (boxA[2]>boxB[0] and boxB[2]>boxA[0])) and
-		((boxB[3]>boxA[1] and boxA[3]>boxB[1]) or (boxA[3]>boxB[1] and boxB[3]>boxA[1]))):
+	if (boxB[0]>boxA[2] or boxA[0]>boxB[2] or boxB[1]>boxA[3] or boxA[1]>boxB[3]):
 		return 0
 
 	xVals = [boxA[0], boxA[2], boxB[0], boxB[2]]
