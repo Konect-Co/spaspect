@@ -255,7 +255,7 @@ select, button{
 
 #stats {
 	height:100%;
-	width:100%
+	width:100%;
 	position: absolute;
 	text-align: center;
 }
@@ -306,3 +306,5 @@ select, button{
     color:white;
     text-align:center;
 }
+
+
