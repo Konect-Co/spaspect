@@ -162,13 +162,7 @@ class TrackedObject(object):
 						maximumTracking.addBox(
 							boundingBoxes[boxKey]
 						)
-<<<<<<< HEAD
 
-						boxKey = list(allIOUValues[maximumTracking].keys())[0]
-
-=======
-						
->>>>>>> e12d10e7cc7623dfd6c07f925c2495ca788b0089
 						#deleting the row and column of the maximum IoU
 						for trackingKey in list(allIOUValues):
 							del(allIOUValues[trackingKey][boxKey])

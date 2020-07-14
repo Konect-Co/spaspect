@@ -28,15 +28,10 @@ def main(dashboard):
 	#with open("/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/output/0443639c-bfc1-11ea-b3de-0242ac130004.json", "r") as f:
 	#dashboardInfo = json.loads(f.read())
 
-<<<<<<< HEAD
+
 	imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
 	#streamLink = dashboardInfo["streamlink"]
 	streamLink = "/home/santript/ImportantProjects/Files/TimesSquare2.mp4"
-=======
-	imagePath = "/home/ravit/Konect-Code/Frame.jpg"
-	streamLink = dashboardInfo["streamlink"]
-	streamLink = "/home/ravit/Downloads/TimesSquare.mp4"
->>>>>>> e12d10e7cc7623dfd6c07f925c2495ca788b0089
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
