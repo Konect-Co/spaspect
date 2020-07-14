@@ -1,6 +1,8 @@
 var first = true;
 
 function update(data) {
+	console.log(data);
+
 	console.log("setting video link to", data["streamlink"])
 	//document.getElementById("video-src").setAttribute("src", data["streamlink"]);
 	//TODO: Seems like this doesn't update the video successfully
@@ -68,7 +70,12 @@ function update(data) {
 		text:text_values
 	};
 
-	var scatterData = [trace]//, trace_undistanced, trace_unmasked, trace_mask_undistanced_unmasked];
+	//TODO: Add a separate trace for the history of each person
+	//	Fill the values of the trace with the appropriate line and
+	//	color for each person by reading from the data argument.
+	//  Add this trace to scatterData variable below
+
+	var scatterData = [trace]
 	var scatterLayout = {
 		margin: {
 			l: 0,
