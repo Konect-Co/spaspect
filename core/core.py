@@ -60,8 +60,6 @@ def main(dashboard):
 		output = pred.predict(imagePath)
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
-		#print("predOutput:",predOutput)
-		#print(predOutput["tracked"])
 		        
 		frame_index += 1
 
@@ -75,18 +73,6 @@ def main(dashboard):
 		dashboardOutput["tracked"] = predOutput["tracked"]
         
 		dashboardDoc.set(dashboardInfo)
-        
-		#break
-		
-		"""
-		startTime = time.time()
-		interval = int(time.time()-startTime)
-		if (interval<5):
-			time.sleep(5-interval)
-			interval = 5
-		if (video):
-			for _ in range(interval*frame_rate):
-				cap.read()"""
 
 	return 0
 
