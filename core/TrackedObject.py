@@ -158,7 +158,7 @@ class TrackedObject(object):
 
 					#if not, we update the latest box and repeat
 					else:
-						boxKey = list(allIOUValues[maximumTracking][0])
+						boxKey = list(allIOUValues[maximumTracking])[0]
 						maximumTracking.addBox(
 							boundingBoxes[boxKey]
 						)
@@ -167,9 +167,6 @@ class TrackedObject(object):
 						for trackingKey in list(allIOUValues):
 							del(allIOUValues[trackingKey][boxKey])
 
-						#adding remaining boxes
-						for box_i in list(allIOUValues[maximumTracking].keys()):
-							newBoxes.append(box_i)
 						del(allIOUValues[maximumTracking])
 
             #making a new object
