@@ -19,6 +19,8 @@ function update(data) {
 	var x_values = dashboard['X3D_vals'];
 	var y_values = dashboard['Y3D_vals'];
 	var z_values = dashboard['Z3D_vals'];
+	var currentObjName = dashboard['tracked']['name'];
+	var pastObjName = dashboard['tracked']['history'];
 
 	var color_values = [];
 	var text_values = [];
@@ -52,6 +54,7 @@ function update(data) {
 	var long_values = dashboard['lon_vals'];
 
 	//==========================
+	
 	var trace = {
 		x: x_values,
 		y: y_values,
@@ -69,13 +72,31 @@ function update(data) {
 		type: 'scatter3d',
 		text:text_values
 	};
-
+	
+	var trace2 = {
+		x: x_values,
+		y: y_values,
+		z: z_values,
+		name: 'people',
+		mode: 'lines',
+		marker: {
+			color: color_values,
+			size: 8,
+			line: {
+				width: 0.5
+			},
+			opacity: 0.8
+		},
+		type: 'scatter3d',
+		text:text_values
+	};
+	
 	//TODO: Add a separate trace for the history of each person
 	//	Fill the values of the trace with the appropriate line and
 	//	color for each person by reading from the data argument.
 	//  Add this trace to scatterData variable below
 
-	var scatterData = [trace]
+	var scatterData = [trace,trace2]
 	var scatterLayout = {
 		margin: {
 			l: 0,

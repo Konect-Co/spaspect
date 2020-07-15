@@ -15,7 +15,7 @@ from firebase_admin import firestore
 import TrackedObject
 
 # Use a service account
-cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-73fbdcc01a.json')
+cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-8efff333dc.json')
 firebase_admin.initialize_app(cred)
 
 root_dir = "/home/santript/ImportantProjects/spaspect/visualization"
@@ -66,7 +66,7 @@ def main(dashboard):
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
 
-		print("predOutput:",predOutput)
+		#print("predOutput:",predOutput)
 		#print(predOutput["tracked"])
 
 		        
@@ -99,7 +99,7 @@ def main(dashboard):
 				midpoint_n = (int((pos_n[0] + pos_n[2])/2),int((pos_n[1] + pos_n[3])/2))
 
 				image = cv2.line(image, midpoint_c, midpoint_n, color, 2)
-		cv2.imwrite("/home/ravit/Pictures/output" + str(frame_index) + ".jpg", image)
+		cv2.imwrite("/home/santript/ImportantProjects/Frames/frame" + str(frame_index) + ".jpg", image)
 
 	return 0
 

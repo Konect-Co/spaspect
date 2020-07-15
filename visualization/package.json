@@ -8,7 +8,8 @@
     "firebase-admin": "^8.13.0",
     "formidable": "^1.2.2",
     "fs": "^0.0.1-security",
-    "googleapis": "^52.1.0"
+    "googleapis": "^52.1.0",
+    "uuid": "^8.2.0"
   },
   "devDependencies": {},
   "scripts": {

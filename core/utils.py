@@ -11,6 +11,7 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 	Z3D_vals = []
 	lat_vals = []
 	lon_vals = []
+	tracked3D_vals = {}
 
 	masked = []
 	boxes = []
@@ -50,14 +51,15 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 		Y3D_vals.append(coord3D[1])
 		Z3D_vals.append(coord3D[2])
 		masked.append(wearingMask)
-
+        
 	TrackedObject.TrackedObject.track(boxes)
 	trackedObjects = TrackedObject.TrackedObject.objects
    	#print(trackedObjects.getHistoryKeys())
-	print("Objects: ",trackedObjects)
+	#print("Objects: ",trackedObjects)
 	trackedObjectsDict = {}
 	for key in trackedObjects.keys():
 		trackedObjectsDict[key] = trackedObjects[key].toDict()
+    #tracked3D_vals[trackedObjectsDict['history']['name']] = 
 
 	distanced = [1] * len(X3D_vals)
 	for i in range(len(X3D_vals)):

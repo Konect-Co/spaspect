@@ -14,6 +14,7 @@ class TrackedObject(object):
 	objects = {}
 
 	def __init__(self, name, label, boundingBox):
+
 		#name of the tracked object
 		self.name = name
 		#class for the bounding box
@@ -55,6 +56,18 @@ class TrackedObject(object):
 		return self.lastUpdate
 	def getHistoryKeys(self):
 		return list(self.history.keys())
+    
+	@classmethod
+	def getHistoryX_vals(self, cls, X3D_vals):
+		self.history3D[str(type(self).currTime)] = X3D_vals
+		return
+	def getHistoryY_vals(self, cls, Y3D_vals):
+		self.history3D[str(type(self).currTime)] = Y3D_vals
+		return
+	def getHistoryZ_vals(self, cls, Z3D_vals):
+		self.history3D[str(type(self).currTime)] = Z3D_vals
+		return
+        
 
 	@classmethod
 	def updateTime(cls):
@@ -110,8 +123,8 @@ class TrackedObject(object):
 				IOUValues = {k : v for k, v in sorted(IOUValues.items(), reverse=True, key = lambda kv:kv[1])}
 				allIOUValues[trackedEntity] = IOUValues
                 
-				print("Items: ",allIOUValues.items())
-				print("Name: ",trackedEntity.getName())
+				#print("Items: ",allIOUValues.items())
+				#fprint("Name: ",trackedEntity.getName())
 
 			"""
 			Now, we have a 2D dictionary with the row corresponding to each existing tracked object
@@ -174,18 +187,18 @@ class TrackedObject(object):
 				name1 = str(random.random())
 				label = "person"
 				boundingBox = boundingBoxes[newBoxIndex]
-				print("PAUSE")
+				#print("PAUSE")
 				newObject = TrackedObject(name1,label,boundingBox)
 			cls.prune()
 			return
 			
 
-	def addBox(self, bounding_box):
+	def addBox(self, bounding_box, X3D_vals, Y3D_vals, Z3D_vals):
 		#assigned : Ravit
 		if len(self.history.keys()) != 0:
 			assert self.lastUpdate != type(self).currTime
         
-		print("Box: ",bounding_box.tolist())
+		#print("Box: ",bounding_box.tolist())
 		self.history[str(type(self).currTime)] = bounding_box.tolist()
 		self.lastUpdate = type(self).currTime
 		self.updateVelocity()

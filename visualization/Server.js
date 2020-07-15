@@ -3,11 +3,16 @@ var express = require("express");
 var app = express();
 var admin = require('firebase-admin');
 var formidable = require('formidable');
+//var refreshToken;
 const { v4: uuidv4 } = require('uuid');
 
 admin.initializeApp({
-	credential: admin.credential.applicationDefault(),
-	databaseURL: 'https://spaspect-dashboard.firebaseio.com'
+	databaseURL: 'https://spaspect-dashboard.firebaseio.com',
+	credential: admin.credential.cert({
+        project_id: 'spaspect-dashboard',
+        private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCQhdbQwM6yy5Iq\naDnOlcx9ZSUQcUPW7vYpnMOwH2dyRYlJyCcF7RDI2SryELiaPTfd4RbCvp2eUIYD\nZtpASpwFM/3dGkx1n0awrDXVBhw/gCzgiRlLlO+mN9wDAr9YGxNBoTwOWy0FVYSv\n2V33dT0QMXrR4EjshJP7FdpCdglDKoE27p6+1us3rnxllt2+FWUEeoPRHW9PFns8\n78ftOU285x5QALZELJl6wGBqiCZbXteRdTV1eTRX08Dy7ZlPdD14mzd+G1beLbfy\nNAwScv+vQg0sRLWcdyOmNPWYVvZajNU32asi/GlwOi6NiK2KNKbZ6k1Xu6WVa18O\nuoISv2l/AgMBAAECggEAAxihfzexhIAYFg8iZBfFwlqFss3MlfPRpRc3dvQUjoEJ\nJOIbdEfpPF88g554Lf4d2lUxIjs52Mk12W3Ozr9Y/1qhTAROoPKoeV0iCqhYLE+N\n5pOTh+30sPVw81x4kiXgh4IaSpigpPkzjmP8/2wP5Z2BwlULc6Myla8Bk7tjAd4b\n3eK7UmoXh2kPG63LU1WehADfdKKMRNK0rD367+tP/lHRfz25wz3qXli0Xchr94F+\nOe9+Ah2wt0+kG4JPcG07i/sEmIMcNFOTsZZJ+yl1W8VhHxeiz+Yt147KDJ+JTwpY\nYTP3EqyXtZAH3HL4gMhsn/XBur5hBVN7iEpeu7mLjQKBgQDIdpsBKXG/DQtxthzB\ndwduBmTu5np/3BJwJ6bBDOy0u+gPc6kISCcYQc1m34bvj6XpJTwBruM/ic6cdSlr\naZaUmm2xXKv/Aj+4dycdEqxbERufXhfPPGJ7NmEIvorn9YVKZzPzpSYqFlhPalco\nqeLSlNJKemkh7hvXeV/kTPQWswKBgQC4j8ixF1Rb1lOEeurZCEB5B5gWgrDkkw1z\nXFdflwPSh6X9b/TOYx0FloEe1PH15CD5iHYcXjT4ednanKL2k1Jhdpo4ZxbISRo+\nFum04LuZnHt7Eid7Bq61Ozn6PB+xIqIXCweT64cyBV6y6vNJboivnAVHjaHrrVGT\n38M0B1UoBQKBgQC6Z7e5O92ehzXGFk7lA5bwE5gVolH0xSKMEgL47tjJMxYWEDn1\nDorz/nROnbou14eypcIH2qVL9wwd5sCONhAkvPkVfRQeu+uez4WafjuxLtZdujQv\nq3n0EtvmMrCeA2tfhVoEzOQRLNgPeNX1ZQwbPvHQ+cT7HRvcoOuvMnOjCwKBgBQf\nEOlFutu8VSSnZf09ahIH4uvpWbHB2oCOO7RfOXp1cYJc91qc8agPTYp3+t0s/u9V\nklLrbmj8l+S+mQG69AtOK+gkTRaO6b6FLvuaWLmZltjHFOjTxK5bg6mlbmsYdIWA\nnVXiIr4wWa+178o8s8g5gVXYuiOApNkzVwvQFNelAoGBAJ3sjfru6xDrEJLiMWLL\nZPAzkyepLUTwGEP7kfv82HK5W30z2PxuwsbsL1xOftT+/8b+4hlamHwTfFoPOW1S\nD2oXoXrPRWfWBpco86WrBDTmqa1Q2wprnpLkCjcvsUTFcf67tJFbOt6k/Yi5yXnn\n2H2vXAsM8qnqEJiZnoP5jMNm\n-----END PRIVATE KEY-----\n",
+        client_email: "firebase-adminsdk-bip9h@spaspect-dashboard.iam.gserviceaccount.com"
+    })
 });
 const db = admin.firestore();
 const dbUsers = db.collection('users');
