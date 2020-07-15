@@ -51,8 +51,13 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 		Y3D_vals.append(coord3D[1])
 		Z3D_vals.append(coord3D[2])
 		masked.append(wearingMask)
+<<<<<<< HEAD
         
 	TrackedObject.TrackedObject.track(boxes)
+=======
+
+	TrackedObject.TrackedObject.track(boxes, [(lat_vals[i], lon_vals[i]) for i in range(len(lat_vals))])
+>>>>>>> 99db39f4e628833f0aaa332554d3512da2108c25
 	trackedObjects = TrackedObject.TrackedObject.objects
    	#print(trackedObjects.getHistoryKeys())
 	#print("Objects: ",trackedObjects)
