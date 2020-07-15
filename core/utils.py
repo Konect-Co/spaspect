@@ -51,7 +51,7 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 		Z3D_vals.append(coord3D[2])
 		masked.append(wearingMask)
 
-	TrackedObject.TrackedObject.track(boxes)
+	TrackedObject.TrackedObject.track(boxes, [(lat_vals[i], lon_vals[i]) for i in range(len(lat_vals))])
 	trackedObjects = TrackedObject.TrackedObject.objects
 	trackedObjectsDict = {}
 	for key in trackedObjects.keys():

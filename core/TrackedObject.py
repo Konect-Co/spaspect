@@ -79,7 +79,7 @@ class TrackedObject(object):
 			return
 
 	@classmethod
-	def track(cls, boundingBoxes):
+	def track(cls, boundingBoxes, latlonVals):
 			#this method is the essence of the tracking algorithm
 			#it goes through the boundingBoxes in the new detection
 			#and updates the tracked objects' positions through the add function
@@ -150,7 +150,7 @@ class TrackedObject(object):
 					else:
 						boxKey = list(allIOUValues[maximumTracking])[0]
 						maximumTracking.addBox(
-							boundingBoxes[boxKey]
+							boundingBoxes[boxKey], latlonVals[boxKey]
 						)
 						
 						#deleting the row and column of the maximum IoU
@@ -169,12 +169,12 @@ class TrackedObject(object):
 			cls.prune()
 			return
 
-	def addBox(self, bounding_box):
+	def addBox(self, bounding_box, latlon):
 		#assigned : Ravit
 		if len(self.history.keys()) != 0:
 			assert self.lastUpdate != type(self).currTime
 
-		self.history[str(type(self).currTime)] = bounding_box.tolist()
+		self.history[str(type(self).currTime)] = { "bounding_box": bounding_box.tolist(), "latlon": latlon}
 		self.lastUpdate = type(self).currTime
 		self.updateVelocity()
 		return
