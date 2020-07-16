@@ -66,7 +66,7 @@ def main(dashboard):
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
 
-		#print("predOutput:",predOutput)
+		print("predOutput:",predOutput)
 		#print(predOutput["tracked"])
 
 		        
@@ -84,7 +84,7 @@ def main(dashboard):
 		print("New Dashboard: ",dashboardInfo)
         
 		dashboardDoc.set(dashboardInfo)
-
+"""
 		for tracked_obj in predOutput["tracked"].values():
 			id = float(tracked_obj["name"])
 			color = (int((id%1)*255), int((id*100%1)*255), int((id*10000%1)*255))
@@ -102,7 +102,7 @@ def main(dashboard):
 		cv2.imwrite("/home/santript/ImportantProjects/Frames/frame" + str(frame_index) + ".jpg", image)
 
 	return 0
-
+"""
 
 if __name__ == "__main__":
 	dashboard = "0443639c-bfc1-11ea-b3de-0242ac130004"

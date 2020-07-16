@@ -13,7 +13,7 @@ class TrackedObject(object):
 	#all objects that are being tracked
 	objects = {}
 
-	def __init__(self, name, label, boundingBox):
+	def __init__(self, name, label, boundingBox, latlon, latlonX, latlonY):
 
 		#name of the tracked object
 		self.name = name
@@ -26,7 +26,7 @@ class TrackedObject(object):
 		#number of seconds since last detection of object
 		self.lastUpdate = type(self).currTime
 		#adding box
-		self.addBox(boundingBox)
+		self.addBox(boundingBox, latlon, latlonX, latlonY)
 		#adding self to objects
 		assert name not in type(self).objects.keys()
 		type(self).objects[name] = self
@@ -56,18 +56,6 @@ class TrackedObject(object):
 		return self.lastUpdate
 	def getHistoryKeys(self):
 		return list(self.history.keys())
-    
-	@classmethod
-	def getHistoryX_vals(self, cls, X3D_vals):
-		self.history3D[str(type(self).currTime)] = X3D_vals
-		return
-	def getHistoryY_vals(self, cls, Y3D_vals):
-		self.history3D[str(type(self).currTime)] = Y3D_vals
-		return
-	def getHistoryZ_vals(self, cls, Z3D_vals):
-		self.history3D[str(type(self).currTime)] = Z3D_vals
-		return
-        
 
 	@classmethod
 	def updateTime(cls):
@@ -92,7 +80,7 @@ class TrackedObject(object):
 			return
 
 	@classmethod
-	def track(cls, boundingBoxes):
+	def track(cls, boundingBoxes, latlonVals, latlonValsX, latlonValsY):
 			#this method is the essence of the tracking algorithm
 			#it goes through the boundingBoxes in the new detection
 			#and updates the tracked objects' positions through the add function
@@ -173,7 +161,7 @@ class TrackedObject(object):
 					else:
 						boxKey = list(allIOUValues[maximumTracking])[0]
 						maximumTracking.addBox(
-							boundingBoxes[boxKey]
+							boundingBoxes[boxKey], latlonVals[boxKey], latlonVals[boxKey][0], latlonVals[boxKey][1]
 						)
 
 						#deleting the row and column of the maximum IoU
@@ -188,18 +176,16 @@ class TrackedObject(object):
 				label = "person"
 				boundingBox = boundingBoxes[newBoxIndex]
 				#print("PAUSE")
-				newObject = TrackedObject(name1,label,boundingBox)
+				newObject = TrackedObject(name1,label,boundingBox,latlonVals, latlonValsX, latlonValsY)
 			cls.prune()
 			return
 			
 
-	def addBox(self, bounding_box, X3D_vals, Y3D_vals, Z3D_vals):
+	def addBox(self, bounding_box, latlon, latlonX, latlonY):
 		#assigned : Ravit
 		if len(self.history.keys()) != 0:
 			assert self.lastUpdate != type(self).currTime
-        
-		#print("Box: ",bounding_box.tolist())
-		self.history[str(type(self).currTime)] = bounding_box.tolist()
+		self.history[str(type(self).currTime)] = {"bounding_box": bounding_box.tolist(), "latlonX": latlonX, "latlonY": latlonY}
 		self.lastUpdate = type(self).currTime
 		self.updateVelocity()
 		#print("History keys1: ", self.history.keys()[-1])
@@ -242,8 +228,10 @@ class TrackedObject(object):
 		#if the velocity is 0, return the current box as is
 		if (velocity == 0):
 			return lastPosition
-
-		assert len(lastPosition) == 4
+        
+		print("Last position: ",lastPosition)
+		print("Length of last position: ",len(lastPosition))
+		assert len(lastPosition) == 3
 		assert len(velocity) == 2
 		for coord_i in range(len(lastPosition)):
 			currComponent = lastPosition[coord_i]
