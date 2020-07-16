@@ -193,8 +193,8 @@ class TrackedObject(object):
 		time_i = list(self.history.keys())[-1]
 		time_f = list(self.history.keys())[-2]
 
-		bounding_box_i = self.history[time_i] #initial position
-		bounding_box_f = self.history[time_f] #final position
+		bounding_box_i = self.history[time_i]['bounding_box'] #initial position
+		bounding_box_f = self.history[time_f]['bounding_box'] #final position
 
 		xVelocity = (bounding_box_f[0] - bounding_box_i[0])/(float(time_f) - float(time_i))
 		yVelocity = (bounding_box_f[1] - bounding_box_i[1])/(float(time_f) - float(time_i))
@@ -210,7 +210,7 @@ class TrackedObject(object):
 
 		velocity = self.getVelocity()
 		history = self.getHistory()
-		lastPosition = history[list(history.keys())[-1]]
+		lastPosition = history[list(history.keys())[-1]]['bounding_box']
 		predictedPosition = [0] * len(lastPosition) #should be [0, 0]
 
 		#if the velocity is 0, return the current box as is
