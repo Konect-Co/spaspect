@@ -13,7 +13,7 @@ class TrackedObject(object):
 	#all objects that are being tracked
 	objects = {}
 
-	def __init__(self, name, label, boundingBox, latlon, latlonX, latlonY):
+	def __init__(self, name, label, boundingBox, latlonX, latlonY):
 
 		#name of the tracked object
 		self.name = name
@@ -26,7 +26,7 @@ class TrackedObject(object):
 		#number of seconds since last detection of object
 		self.lastUpdate = type(self).currTime
 		#adding box
-		self.addBox(boundingBox, latlon, latlonX, latlonY)
+		self.addBox(boundingBox, latlonX, latlonY)
 		#adding self to objects
 		assert name not in type(self).objects.keys()
 		type(self).objects[name] = self
@@ -80,7 +80,7 @@ class TrackedObject(object):
 			return
 
 	@classmethod
-	def track(cls, boundingBoxes, latlonVals, latlonValsX, latlonValsY):
+	def track(cls, boundingBoxes, latlonValsX, latlonValsY):
 			#this method is the essence of the tracking algorithm
 			#it goes through the boundingBoxes in the new detection
 			#and updates the tracked objects' positions through the add function
@@ -161,7 +161,7 @@ class TrackedObject(object):
 					else:
 						boxKey = list(allIOUValues[maximumTracking])[0]
 						maximumTracking.addBox(
-							boundingBoxes[boxKey], latlonVals[boxKey], latlonVals[boxKey][0], latlonVals[boxKey][1]
+							boundingBoxes[boxKey], latlonVals[boxKey][0], latlonVals[boxKey][1]
 						)
 
 						#deleting the row and column of the maximum IoU
@@ -176,12 +176,12 @@ class TrackedObject(object):
 				label = "person"
 				boundingBox = boundingBoxes[newBoxIndex]
 				#print("PAUSE")
-				newObject = TrackedObject(name1,label,boundingBox,latlonVals, latlonValsX, latlonValsY)
+				newObject = TrackedObject(name1,label,boundingBox, latlonValsX, latlonValsY)
 			cls.prune()
 			return
 			
 
-	def addBox(self, bounding_box, latlon, latlonX, latlonY):
+	def addBox(self, bounding_box, latlonX, latlonY):
 		#assigned : Ravit
 		if len(self.history.keys()) != 0:
 			assert self.lastUpdate != type(self).currTime

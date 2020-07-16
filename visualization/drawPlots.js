@@ -73,30 +73,12 @@ function update(data) {
 		text:text_values
 	};
 	
-	var trace2 = {
-		x: x_values,
-		y: y_values,
-		z: z_values,
-		name: 'people',
-		mode: 'lines',
-		marker: {
-			color: color_values,
-			size: 8,
-			line: {
-				width: 0.5
-			},
-			opacity: 0.8
-		},
-		type: 'scatter3d',
-		text:text_values
-	};
-	
 	//TODO: Add a separate trace for the history of each person
 	//	Fill the values of the trace with the appropriate line and
 	//	color for each person by reading from the data argument.
 	//  Add this trace to scatterData variable below
 
-	var scatterData = [trace,trace2]
+	var scatterData = [trace];
 	var scatterLayout = {
 		margin: {
 			l: 0,
@@ -117,6 +99,7 @@ function update(data) {
 			size:8
 		}
 	}]
+<<<<<<< HEAD
 	//var name = dashboard['tracked']['name']
 	//var name2 = data['currentTime']
 	//console.log(name2);
@@ -155,6 +138,20 @@ function update(data) {
             
         }
     }
+=======
+	//var lat_tracing = dashboard['tracked']['history']['latlonX'];
+    //var lon_tracing = dashboard['tracked']['history']['latlonY'];
+    
+    /*var mapDataTracing = {
+		type:'scattermapbox',
+		lat:lat_tracing,
+		lon:lon_tracing,
+		mode:'lines',
+		line: {
+			size:1
+		}
+	};*/
+>>>>>>> ec9703ff733b99c014954f298d6fa1b6ace5279d
 
 	var layout = {
 		autosize: true,

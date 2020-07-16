@@ -15,7 +15,7 @@ function signupPage() {
 }
 function dashboardPage() {
   showNone();
-  document.getElementById("add-site-btn").style.display = "inline";
+  //document.getElementById("add-site-btn").style.display = "inline";
   document.getElementById("dashboard-return-btn").style.display = "none";
   document.getElementById("dashboard-nav-buttons").style.display = "block";
   document.getElementById("dashboardPage").style.display = "block";
@@ -23,7 +23,7 @@ function dashboardPage() {
 function addSitePage() {
   console.log("add site page");
   showNone();
-  document.getElementById("add-site-btn").style.display = "none";
+  //document.getElementById("add-site-btn").style.display = "none";
   document.getElementById("dashboard-return-btn").style.display = "inline";
   document.getElementById("dashboard-nav-buttons").style.display = "block";
   document.getElementById("addSite").style.display = "flex";

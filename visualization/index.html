@@ -31,7 +31,7 @@ TODO: Same fields for sign up and log in email/password
 					<ul>
 						<div id="universal-nav-buttons">
 							<a class="myButton" href="https://forms.gle/2cawfpZZQ8oLonSz5">
-								<b style="font-family:Arial;font-size:13px;text-align:center">Contact</b>
+								<b style="font-family:Arial;font-size:13px;text-align:center">Contact Us</b>
 							</a>
 							
 						</div>
@@ -109,10 +109,11 @@ TODO: Same fields for sign up and log in email/password
 		</div>
 		<div id="addSite">
 			<form id="add-site-form" method="POST" action="/newSite">
+				<b style="color:white;font-family:Arial;font-size:13px;text-align:center">
 				<h1>Add a site</h1>
 				<p>Name: </p>
 				<input type="text" placeholder="Name" name="name">
-				<p>Stream link (m3u8)</p>
+				<p>Stream link (m3u8): </p>
 				<input type="url" name="stream-link">
 				<h2>Calibration Information</h2>
 				<p>Calibration lat coordinates: </p>
@@ -126,6 +127,7 @@ TODO: Same fields for sign up and log in email/password
 				<p>Calibration pixel y values: </p>
 				<input type="text" name="pixelY_vals">
 				<input type="text" id="user-token" name="user-token" hidden=true>
+				</b>
 				<button type="button" onclick="submitAddSite()">Submit</button>
 			</form>
 		</div>

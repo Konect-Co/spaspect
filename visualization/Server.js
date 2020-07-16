@@ -151,7 +151,7 @@ app.post('/environment', function(req, res) {
 	});
 });
 
-app.post('/newSite', function(req, res) {
+/*app.post('/newSite', function(req, res) {
 	var response = {"success":false, "error":null};
 
 	var form = new formidable.IncomingForm();
@@ -224,7 +224,7 @@ app.post('/newSite', function(req, res) {
 			});
 		});
 	});
-});
+});*/
 
 var PORT=3000;
 app.listen(PORT, function() {
