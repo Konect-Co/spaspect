@@ -1,5 +1,6 @@
 var first = true;
 
+
 function update(data) {
 	console.log(data);
 
@@ -14,13 +15,12 @@ function update(data) {
 
 	//TODO: Check if the data actually has an output section
 	dashboard = data["output"];
+
 	document.getElementById("statsTotal").innerHTML = dashboard['masked'].length;
 
 	var x_values = dashboard['X3D_vals'];
 	var y_values = dashboard['Y3D_vals'];
 	var z_values = dashboard['Z3D_vals'];
-	var currentObjName = dashboard['tracked']['name'];
-	var pastObjName = dashboard['tracked']['history'];
 
 	var color_values = [];
 	var text_values = [];
@@ -117,6 +117,18 @@ function update(data) {
 			size:8
 		}
 	}]
+	var lat_tracing = dashboard['tracked']['history']['latlonX'];
+    var lon_tracing = dashboard['tracked']['history']['latlonY'];
+    
+    var mapDataTracing = {
+		type:'scattermapbox',
+		lat:lat_tracing,
+		lon:lon_tracing,
+		mode:'lines',
+		line: {
+			size:1
+		}
+	};
 
 	var layout = {
 		autosize: true,
