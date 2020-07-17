@@ -1,64 +1,15 @@
 import os
 import sys
-import torch
 import PIL.Image as pil
-from torchvision import transforms
 import numpy as np
-import matplotlib as mpl
-import matplotlib.cm as cm
-
-#if running from same directory: import networks
-from cv_model import networks
-from cv_model.layers import disp_to_depth
-
-import torchvision.models as models
-import torch
+import tensorflow as tf
 
 import cv2
 import cv_model.detectMask as detectMask
 
-faster_rcnn = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
-faster_rcnn.eval()
-
-keypoint_rcnn = models.detection.keypointrcnn_resnet50_fpn(pretrained=True)
-keypoint_rcnn.eval()
-
-model_name = "mono+stereo_640x192"
 base_path = sys.path[1]#os.getcwd()
 paths = [os.path.join(base_path, "keywest.jpg")]
 output_directory = base_path
-
-if torch.cuda.is_available():
-    device = torch.device("cuda")
-else:
-    device = torch.device("cpu")
-
-model_path = os.path.join(base_path, "cv_model", "models", model_name)
-#encoder_path = os.path.join(model_path, "/cv_model/models/encoder.pth")
-encoder_path = "./cv_model/models/mono+stereo_640x192/encoder.pth"
-#depth_decoder_path = os.path.join(model_path, "depth.pth")
-depth_decoder_path = "./cv_model/models/mono+stereo_640x192/depth.pth"
-
-# LOADING PRETRAINED MODEL
-encoder = networks.ResnetEncoder(18, False)
-loaded_dict_enc = torch.load(encoder_path, map_location=device)
-
-# extract the height and width of image that this model was trained with
-feed_height = loaded_dict_enc['height']
-feed_width = loaded_dict_enc['width']
-filtered_dict_enc = {k: v for k, v in loaded_dict_enc.items() if k in encoder.state_dict()}
-encoder.load_state_dict(filtered_dict_enc)
-encoder.to(device)
-encoder.eval()
-
-depth_decoder = networks.DepthDecoder(
-    num_ch_enc=encoder.num_ch_enc, scales=range(4))
-
-loaded_dict = torch.load(depth_decoder_path, map_location=device)
-depth_decoder.load_state_dict(loaded_dict)
-
-depth_decoder.to(device)
-depth_decoder.eval()
 
 coco_labels = [
     '__background__', 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
@@ -75,49 +26,39 @@ coco_labels = [
     'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush'
 ]
 
+loaded = tf.saved_model.load("./cv_model/models/mobilenet-model")
+infer = loaded.signatures["serving_default"]
+
+
 def predict(image_path):
-	with torch.no_grad():
-		# Load image and preprocess
-		input_image_pil = pil.open(image_path).convert('RGB')
-		original_width, original_height = input_image_pil.size
-		input_image = input_image_pil.resize((feed_width, feed_height), pil.LANCZOS)
-		input_image = transforms.ToTensor()(input_image).unsqueeze(0)
+	new_width = 800
+	new_height = 800
 
-		# PREDICTION
-		input_image = input_image.to(device)
-		features = encoder(input_image)
+	"""
+	input_image_pil = pil.open(image_path).convert('RGB')
+	original_width, original_height = input_image_pil.size
+	input_image = input_image_pil.resize((new_width,new_height), pil.LANCZOS)
+	"""
 
-		outputs = depth_decoder(features)
+	# Load image and preprocess
+	input_image = cv2.imread(image_path)
+	original_width, original_height = input_image.shape[:-1]
+	input_image = cv2.resize(input_image, (new_width, new_height))
+	input_image = np.expand_dims(input_image, 0)
 
-		disp = outputs[("disp", 0)]
-		disp_resized = torch.nn.functional.interpolate(
-			disp, (original_height, original_width), mode="bilinear", align_corners=False)
+	output = infer(tf.constant(input_image))
 
-		_, depth = disp_to_depth(disp_resized, 0.1, 100)
-		depth = depth.numpy()
-		depth = np.reshape(depth, (original_height, original_width))
-
-		new_width, new_height = 800, 800
-		input_image = input_image_pil.resize((new_width, new_height), pil.LANCZOS)
-		input_image = transforms.ToTensor()(input_image).unsqueeze(0)
-		#output = faster_rcnn(input_image)[0]
-		output = keypoint_rcnn(input_image)[0]
+	output["detection_boxes"] = output["detection_boxes"].numpy()[0]
+	output["detection_scores"] = output["detection_scores"].numpy()[0]
+	output["detection_classes"] = output["detection_classes"].numpy()[0]
 
 	#TODO: Sort output so it includes only labels with highest probability predictions
 	#[top left x position, top left y position, width, height]
-	output["boxes"] = output["boxes"].numpy()
-	output["labels"] = output["labels"].numpy()
-	output["keypoints"] = output["keypoints"].numpy()
-	output["scores"] = output["scores"].numpy()
 
-	output["labels"] = [ coco_labels[label] for label in output["labels"] ]
-	output["boxes"][:,::2] *= original_width/new_width
-	output["boxes"][:,1::2] *= original_height/new_height
-	output["keypoints"][:,:,0] *= original_width/new_width
-	output["keypoints"][:,:,1] *= original_height/new_height
+	output["detection_classes"] = [ coco_labels[int(label)] for label in output["detection_classes"] ]
+	output["detection_boxes"][:,::2] *= original_width/new_width
+	output["detection_boxes"][:,1::2] *= original_height/new_height
 
 	output["masks"] = detectMask.genPredictions(image_path)
-
-	output["depth"] = depth
 
 	return output

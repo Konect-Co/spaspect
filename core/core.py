@@ -1,21 +1,21 @@
-import json
-import time
-import math
-import os
 import sys
 import utils
-import numpy as np
 import cv2
 
-import PixelMapper
 from cv_model import pred
+import PixelMapper
+import TrackedObject
+
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-import TrackedObject
 
-# Use a service account
-cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-8efff333dc.json')
+# Ravit Uncomment:
+cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
+
+# Santript Uncomment:
+#cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-8efff333dc.json')
+
 firebase_admin.initialize_app(cred)
 
 root_dir = "/home/santript/ImportantProjects/spaspect/visualization"
@@ -24,14 +24,16 @@ db = firestore.client()
 def main(dashboard):
 	dashboardDoc = db.collection(u'dashboards').document(dashboard)
 	dashboardInfo = dashboardDoc.get().to_dict()
-	#print("Dashboard Info: ",dashboardInfo)
-	#with open("/home/ravit/Konect-Code/spaspect-project/spaspect/visualization/output/0443639c-bfc1-11ea-b3de-0242ac130004.json", "r") as f:
-	#dashboardInfo = json.loads(f.read())
 
-
-	imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
 	#streamLink = dashboardInfo["streamlink"]
-	streamLink = "/home/santript/ImportantProjects/Files/TimesSquare2.mp4"
+
+	# Ravit Uncomment:
+	imagePath = "/home/ravit/Pictures/Frame.jpg"
+	streamLink = "/home/ravit/Downloads/TimesSquare.mp4"
+
+	# Santript Uncomment:
+	#imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
+	#streamLink = "/home/santript/ImportantProjects/Files/TimesSquare2.mp4"
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
@@ -65,10 +67,6 @@ def main(dashboard):
 		output = pred.predict(imagePath)
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
-
-		print("predOutput:",predOutput)
-		#print(predOutput["tracked"])
-
 		        
 		frame_index += 1
 
@@ -81,10 +79,9 @@ def main(dashboard):
 		dashboardOutput["distanced"] = predOutput["distanced"]
 		dashboardOutput["tracked"] = predOutput["tracked"]
         
-		print("New Dashboard: ",dashboardInfo)
-        
-		dashboardDoc.set(dashboardInfo)
-"""
+		dashboardDoc.set(dashboardInfo)	
+
+		"""
 		for tracked_obj in predOutput["tracked"].values():
 			id = float(tracked_obj["name"])
 			color = (int((id%1)*255), int((id*100%1)*255), int((id*10000%1)*255))
@@ -100,9 +97,10 @@ def main(dashboard):
 
 				image = cv2.line(image, midpoint_c, midpoint_n, color, 2)
 		cv2.imwrite("/home/santript/ImportantProjects/Frames/frame" + str(frame_index) + ".jpg", image)
+		"""
 
 	return 0
-"""
+
 
 if __name__ == "__main__":
 	dashboard = "0443639c-bfc1-11ea-b3de-0242ac130004"
