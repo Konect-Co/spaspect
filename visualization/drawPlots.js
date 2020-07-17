@@ -90,6 +90,8 @@ function update(data) {
 
 
 	//==========================
+	//console.log(lat_values);
+	//console.log(long_values);
 	var mapData = [{
 		type:'scattermapbox',
 		lat:lat_values,
@@ -99,7 +101,7 @@ function update(data) {
 			size:8
 		}
 	}]
-<<<<<<< HEAD
+
 	//var name = dashboard['tracked']['name']
 	//var name2 = data['currentTime']
 	//console.log(name2);
@@ -124,21 +126,22 @@ function update(data) {
                 
                 var mapDataTracing = {
             		type:'scattermapbox',
-            		lat:actualLat,
             		lon:actualLon,
+            		lat:actualLat,
             		mode:'lines',
             		line: {
-                		size:2,
-                		color:'blue'
+                		size:1,
+                		color:'black'
             		},
-            		opacity: 1
+            		opacity: 1,
+            		zoom:200
             	};
             }
             
             
         }
     }
-=======
+
 	//var lat_tracing = dashboard['tracked']['history']['latlonX'];
     //var lon_tracing = dashboard['tracked']['history']['latlonY'];
     
@@ -151,7 +154,6 @@ function update(data) {
 			size:1
 		}
 	};*/
->>>>>>> ec9703ff733b99c014954f298d6fa1b6ace5279d
 
 	var layout = {
 		autosize: true,
@@ -159,11 +161,11 @@ function update(data) {
 		mapbox: {
 			bearing:110,
 			center: {
-			lat:lat_values[0],
-			lon:long_values[0]
+    			lat:lat_values[0],
+    			lon:long_values[0]
 			},
 			pitch:0,
-			zoom:19
+			zoom:190
 		},
 		margin: {
 			l: 0,
