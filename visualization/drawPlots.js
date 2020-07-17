@@ -94,11 +94,51 @@ function update(data) {
 		type:'scattermapbox',
 		lat:lat_values,
 		lon:long_values,
-		mode:'markers',
+		mode:'marker',
 		marker: {
 			size:8
 		}
 	}]
+<<<<<<< HEAD
+	//var name = dashboard['tracked']['name']
+	//var name2 = data['currentTime']
+	//console.log(name2);
+	var tracked = dashboard['tracked'];
+    var trackedNamesLen = Object.values(tracked).length;
+    
+    for(name = 0 ; name < trackedNamesLen ; name++){
+    
+        var history = Object.values(tracked)[name]['history'];
+        var historyKeys = Object.keys(history);
+        var historyTimesLen = Object.keys(history).length;
+        for(time = 0 ; time < historyTimesLen ; time++){
+            var lat_tracing = history[historyKeys[time]]['latlonX'];
+            var lon_tracing = history[historyKeys[time]]['latlonY'];
+            var latlonLength = lat_tracing.length;
+            for(val = 0 ; val < latlonLength ; val++){
+                var actualLat = lat_tracing[val];
+                var actualLon = lon_tracing[val];
+                
+                console.log(actualLat);
+                console.log(actualLon);
+                
+                var mapDataTracing = {
+            		type:'scattermapbox',
+            		lat:actualLat,
+            		lon:actualLon,
+            		mode:'lines',
+            		line: {
+                		size:2,
+                		color:'blue'
+            		},
+            		opacity: 1
+            	};
+            }
+            
+            
+        }
+    }
+=======
 	//var lat_tracing = dashboard['tracked']['history']['latlonX'];
     //var lon_tracing = dashboard['tracked']['history']['latlonY'];
     
@@ -111,6 +151,7 @@ function update(data) {
 			size:1
 		}
 	};*/
+>>>>>>> ec9703ff733b99c014954f298d6fa1b6ace5279d
 
 	var layout = {
 		autosize: true,
@@ -130,7 +171,7 @@ function update(data) {
 			b: 0,
 			t: 0
 		}
-	}
+	};
 
 	Plotly.setPlotConfig({
 		mapboxAccessToken: "pk.eyJ1Ijoic3Jhdml0MSIsImEiOiJja2JzY3NpcHgwMGJnMnZzYTY5ZWsyeDR6In0.CIOWohypCmf_oCzed32xRA"
@@ -138,7 +179,7 @@ function update(data) {
 
 	if (first) {
 		Plotly.newPlot('plotDiv', scatterData, scatterLayout);
-		Plotly.newPlot('mapDiv', mapData, layout);
+		Plotly.newPlot('mapDiv', mapData, mapDataTracing, layout);
 		first = false;
 	} else {
 		Plotly.react('plotDiv', scatterData, scatterLayout);
