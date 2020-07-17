@@ -26,18 +26,17 @@ def main(dashboard):
 	dashboardInfo = dashboardDoc.get().to_dict()
 
 	#streamLink = dashboardInfo["streamlink"]
-<<<<<<< HEAD
+
 	streamLink = "/home/santript/ImportantProjects/Files/NewClearPeople.mp4"
-=======
+
 
 	# Ravit Uncomment:
-	imagePath = "/home/ravit/Pictures/Frame.jpg"
-	streamLink = "/home/ravit/Downloads/TimesSquare.mp4"
+	#imagePath = "/home/ravit/Pictures/Frame.jpg"
+	#streamLink = "/home/ravit/Downloads/TimesSquare.mp4"
 
 	# Santript Uncomment:
-	#imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
+	imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
 	#streamLink = "/home/santript/ImportantProjects/Files/TimesSquare2.mp4"
->>>>>>> 7822c017ab31282f2aadf565c55775f5ebe7b7cf
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
@@ -71,13 +70,10 @@ def main(dashboard):
 		output = pred.predict(imagePath)
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
-<<<<<<< HEAD
 
 		#print("predOutput:",predOutput)
 		#print(predOutput["tracked"])
 
-=======
->>>>>>> 7822c017ab31282f2aadf565c55775f5ebe7b7cf
 		        
 		frame_index += 1
 
