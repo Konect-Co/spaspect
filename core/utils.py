@@ -5,7 +5,7 @@ import math
 import cv_model.utils as cv_utils
 import TrackedObject
 
-def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=0.80):
+def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=0.60):
 	X3D_vals = []
 	Y3D_vals = []
 	Z3D_vals = []
@@ -15,11 +15,13 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 
 	masked = []
 	boxes = []
-	for i in range(len(CVOutput["boxes"])):
-		if (CVOutput["scores"][i] < score_threshold):
+	for i in range(len(CVOutput["detection_boxes"])):
+		if (CVOutput["detection_scores"][i] < score_threshold):
 			break
+		if (not CVOutput["detection_classes"][i] == "person"):
+			continue
 		
-		box = CVOutput["boxes"][i]
+		box = CVOutput["detection_boxes"][i]
 		boxes.append(box)
 
 		midpoint = [int((box[0]+box[2])/2), box[3]]
