@@ -31,7 +31,7 @@ def main(dashboard):
 
 	imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
 	#streamLink = dashboardInfo["streamlink"]
-	streamLink = "/home/santript/ImportantProjects/Files/TimesSquare2.mp4"
+	streamLink = "/home/santript/ImportantProjects/Files/NewClearPeople.mp4"
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
@@ -66,7 +66,7 @@ def main(dashboard):
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
 
-		print("predOutput:",predOutput)
+		#print("predOutput:",predOutput)
 		#print(predOutput["tracked"])
 
 		        
@@ -105,5 +105,5 @@ def main(dashboard):
 """
 
 if __name__ == "__main__":
-	dashboard = "0443639c-bfc1-11ea-b3de-0242ac130004"
+	dashboard = "d3c4fd41-8892-453b-bc00-64d1f494284b"
 	sys.exit(main(dashboard))
