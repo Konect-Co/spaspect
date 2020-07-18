@@ -101,10 +101,22 @@ function update(data) {
                 X_len = X_tracing.length;
             }
             console.log(X_len);
+            var actualX = 0;
+            var actualY = 0;
+            var actualZ = 0;
             for(val = 0 ; val < X_len ; val++){
-                var actualX = X_tracing[val];
-                var actualY = Y_tracing[val];
-                var actualZ = Z_tracing[val];
+                if(typeof X_tracing == 'number'){
+                    actualX = X_tracing;
+                    actualY = Y_tracing;
+                    actualZ = Z_tracing;
+                }
+                else{
+                    actualX = X_tracing[val];
+                    actualY = Y_tracing[val];
+                    actualZ = Z_tracing[val];
+                }
+                
+                console.log(actualX,actualY,actualZ);
                 
                 trackingX.push(actualX);
                 trackingY.push(actualY);
