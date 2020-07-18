@@ -13,7 +13,7 @@ class TrackedObject(object):
 	#all objects that are being tracked
 	objects = {}
 
-	def __init__(self, name, label, boundingBox, latlonX, latlonY):
+	def __init__(self, name, label, boundingBox, X3D, Y3D, Z3D):
 
 		#name of the tracked object
 		self.name = name
@@ -26,7 +26,7 @@ class TrackedObject(object):
 		#number of seconds since last detection of object
 		self.lastUpdate = type(self).currTime
 		#adding box
-		self.addBox(boundingBox, latlonX, latlonY)
+		self.addBox(boundingBox, X3D, Y3D, Z3D)
 		#adding self to objects
 		assert name not in type(self).objects.keys()
 		type(self).objects[name] = self
@@ -80,7 +80,7 @@ class TrackedObject(object):
 			return
 
 	@classmethod
-	def track(cls, boundingBoxes, latlonValsX, latlonValsY):
+	def track(cls, boundingBoxes, X3D_values, Y3D_values, Z3D_values):
 			#this method is the essence of the tracking algorithm
 			#it goes through the boundingBoxes in the new detection
 			#and updates the tracked objects' positions through the add function
@@ -161,7 +161,7 @@ class TrackedObject(object):
 					else:
 						boxKey = list(allIOUValues[maximumTracking])[0]
 						maximumTracking.addBox(
-							boundingBoxes[boxKey], latlonValsX[boxKey], latlonValsY[boxKey]
+							boundingBoxes[boxKey], X3D_values[boxKey], Y3D_values[boxKey], Y3D_values[boxKey]
 						)
 
 						#deleting the row and column of the maximum IoU
@@ -176,16 +176,16 @@ class TrackedObject(object):
 				label = "person"
 				boundingBox = boundingBoxes[newBoxIndex]
 				#print("PAUSE")
-				newObject = TrackedObject(name1,label,boundingBox, latlonValsX, latlonValsY)
+				newObject = TrackedObject(name1,label,boundingBox, X3D_values, Y3D_values, Z3D_values)
 			cls.prune()
 			return
 			
 
-	def addBox(self, bounding_box, latlonX, latlonY):
+	def addBox(self, bounding_box, X_3D, Y_3D, Z_3D):
 		#assigned : Ravit
 		if len(self.history.keys()) != 0:
 			assert self.lastUpdate != type(self).currTime
-		self.history[str(type(self).currTime)] = {"bounding_box": bounding_box.tolist(), "latlonX": latlonX, "latlonY": latlonY}
+		self.history[str(type(self).currTime)] = {"bounding_box": bounding_box.tolist(), "X3D": X_3D, "Y3D": Y_3D, "Z3D": Z_3D}
 		self.lastUpdate = type(self).currTime
 		self.updateVelocity()
 		#print("History keys1: ", self.history.keys()[-1])

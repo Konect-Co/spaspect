@@ -11,10 +11,10 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 
 # Ravit Uncomment:
-cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
+#cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
 
 # Santript Uncomment:
-#cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-8efff333dc.json')
+cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-8efff333dc.json')
 
 firebase_admin.initialize_app(cred)
 
@@ -85,6 +85,8 @@ def main(dashboard):
 		dashboardOutput["masked"] = predOutput["masked"]
 		dashboardOutput["distanced"] = predOutput["distanced"]
 		dashboardOutput["tracked"] = predOutput["tracked"]
+        
+		print("New Dashboard: ",dashboardInfo)
         
 		dashboardDoc.set(dashboardInfo)	
 

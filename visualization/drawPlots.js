@@ -73,12 +73,52 @@ function update(data) {
 		text:text_values
 	};
 	
+	var tracked = dashboard['tracked'];
+    var trackedNamesLen = Object.values(tracked).length;
+    
+    for(name = 0 ; name < trackedNamesLen ; name++){
+    
+        var history = Object.values(tracked)[name]['history'];
+        var historyKeys = Object.keys(history);
+        var historyTimesLen = Object.keys(history).length;
+        for(time = 0 ; time < historyTimesLen ; time++){
+            var X_tracing = history[historyKeys[time]]['X3D'];
+            var Y_tracing = history[historyKeys[time]]['Y3D'];
+            var Z_tracing = history[historyKeys[time]]['Z3D'];
+            var threeD_len = X_tracing.length;
+            for(val = 0 ; val < threeD_len ; val++){
+                var actualX = X_tracing[val];
+                var actualY = Y_tracing[val];
+                var actualZ = Z_tracing[val];
+                
+                console.log(actualX);
+                console.log(actualY);
+                console.log(actualZ);
+                
+                var mapDataTracing = {
+            		type:'scatter3d',
+            		x:actualX,
+            		y:actualY,
+            		z:actualZ,
+            		mode:'lines',
+            		marker: {
+                		size:1,
+                		color:'black'
+            		},
+            		opacity: 1,
+            	};
+            }
+            
+            
+        }
+    }
+	
 	//TODO: Add a separate trace for the history of each person
 	//	Fill the values of the trace with the appropriate line and
 	//	color for each person by reading from the data argument.
 	//  Add this trace to scatterData variable below
 
-	var scatterData = [trace];
+	var scatterData = [trace, mapDataTracing];
 	var scatterLayout = {
 		margin: {
 			l: 0,
@@ -105,42 +145,7 @@ function update(data) {
 	//var name = dashboard['tracked']['name']
 	//var name2 = data['currentTime']
 	//console.log(name2);
-	var tracked = dashboard['tracked'];
-    var trackedNamesLen = Object.values(tracked).length;
-    
-    for(name = 0 ; name < trackedNamesLen ; name++){
-    
-        var history = Object.values(tracked)[name]['history'];
-        var historyKeys = Object.keys(history);
-        var historyTimesLen = Object.keys(history).length;
-        for(time = 0 ; time < historyTimesLen ; time++){
-            var lat_tracing = history[historyKeys[time]]['latlonX'];
-            var lon_tracing = history[historyKeys[time]]['latlonY'];
-            var latlonLength = lat_tracing.length;
-            for(val = 0 ; val < latlonLength ; val++){
-                var actualLat = lat_tracing[val];
-                var actualLon = lon_tracing[val];
-                
-                console.log(actualLat);
-                console.log(actualLon);
-                
-                var mapDataTracing = {
-            		type:'scattermapbox',
-            		lon:actualLon,
-            		lat:actualLat,
-            		mode:'lines',
-            		line: {
-                		size:1,
-                		color:'black'
-            		},
-            		opacity: 1,
-            		zoom:200
-            	};
-            }
-            
-            
-        }
-    }
+	
 
 	//var lat_tracing = dashboard['tracked']['history']['latlonX'];
     //var lon_tracing = dashboard['tracked']['history']['latlonY'];
@@ -181,7 +186,7 @@ function update(data) {
 
 	if (first) {
 		Plotly.newPlot('plotDiv', scatterData, scatterLayout);
-		Plotly.newPlot('mapDiv', mapData, mapDataTracing, layout);
+		Plotly.newPlot('mapDiv', mapData, layout);
 		first = false;
 	} else {
 		Plotly.react('plotDiv', scatterData, scatterLayout);
