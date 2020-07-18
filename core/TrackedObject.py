@@ -161,7 +161,7 @@ class TrackedObject(object):
 					else:
 						boxKey = list(allIOUValues[maximumTracking])[0]
 						maximumTracking.addBox(
-							boundingBoxes[boxKey], X3D_values[boxKey], Y3D_values[boxKey], Y3D_values[boxKey]
+							boundingBoxes[boxKey], X3D_values[boxKey], Y3D_values[boxKey], Z3D_values[boxKey]
 						)
 
 						#deleting the row and column of the maximum IoU

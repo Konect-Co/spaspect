@@ -85,12 +85,23 @@ function update(data) {
         var historyKeys = Object.keys(history);
         var historyTimesLen = Object.keys(history).length;
         for(time = 0 ; time < historyTimesLen ; time++){
-        	console.log("HISTORY INFO", historyKeys[time], history[historyKeys[time]]);
+        	console.log(history[historyKeys[time]]);
         	var time_key = historyKeys[time];
             var X_tracing = history[time_key]['X3D'];
             var Y_tracing = history[time_key]['Y3D'];
             var Z_tracing = history[time_key]['Z3D'];
-            for(val = 0 ; val < X_tracing.length ; val++){
+            //console.log(Array(X_tracing));
+            
+            var X_len = 0;
+            
+            if(typeof X_tracing == 'number'){
+                X_len = 1;
+            }
+            else{
+                X_len = X_tracing.length;
+            }
+            console.log(X_len);
+            for(val = 0 ; val < X_len ; val++){
                 var actualX = X_tracing[val];
                 var actualY = Y_tracing[val];
                 var actualZ = Z_tracing[val];
@@ -107,12 +118,12 @@ function update(data) {
 		x:trackingX,
 		y:trackingY,
 		z:trackingZ,
+		name:'traced line',
 		mode:'lines',
-		marker: {
-			size:1,
+		line: {
 			color:'black'
 		},
-		opacity: 1
+		opacity: 0.8
 	};
 
 	console.log("Dots", trace);
@@ -135,8 +146,6 @@ function update(data) {
 
 
 	//==========================
-	//console.log(lat_values);
-	//console.log(long_values);
 	var mapData = [{
 		type:'scattermapbox',
 		lat:lat_values,
@@ -175,7 +184,7 @@ function update(data) {
     			lon:long_values[0]
 			},
 			pitch:0,
-			zoom:190
+			zoom:19
 		},
 		margin: {
 			l: 0,
