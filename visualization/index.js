@@ -173,4 +173,4 @@ function submitAddSite() {
   }).catch(function(error) { console.error(error); });
 }
 
-setInterval(function(){updateDashboard()}, 1000);
+//setInterval(function(){updateDashboard()}, 1000);

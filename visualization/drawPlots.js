@@ -56,6 +56,7 @@ function update(data) {
 	//==========================
 	
 	var trace = {
+		type: 'scatter3d',
 		x: x_values,
 		y: y_values,
 		z: z_values,
@@ -69,49 +70,53 @@ function update(data) {
 			},
 			opacity: 0.8
 		},
-		type: 'scatter3d',
 		text:text_values
 	};
 	
 	var tracked = dashboard['tracked'];
     var trackedNamesLen = Object.values(tracked).length;
     
+    trackingX = [];
+    trackingY = [];
+    trackingZ = [];
+
     for(name = 0 ; name < trackedNamesLen ; name++){
-    
         var history = Object.values(tracked)[name]['history'];
         var historyKeys = Object.keys(history);
         var historyTimesLen = Object.keys(history).length;
         for(time = 0 ; time < historyTimesLen ; time++){
-            var X_tracing = history[historyKeys[time]]['X3D'];
-            var Y_tracing = history[historyKeys[time]]['Y3D'];
-            var Z_tracing = history[historyKeys[time]]['Z3D'];
-            var threeD_len = X_tracing.length;
-            for(val = 0 ; val < threeD_len ; val++){
+        	console.log("HISTORY INFO", historyKeys[time], history[historyKeys[time]]);
+        	var time_key = historyKeys[time];
+            var X_tracing = history[time_key]['X3D'];
+            var Y_tracing = history[time_key]['Y3D'];
+            var Z_tracing = history[time_key]['Z3D'];
+            for(val = 0 ; val < X_tracing.length ; val++){
                 var actualX = X_tracing[val];
                 var actualY = Y_tracing[val];
                 var actualZ = Z_tracing[val];
                 
-                console.log(actualX);
-                console.log(actualY);
-                console.log(actualZ);
-                
-                var mapDataTracing = {
-            		type:'scatter3d',
-            		x:actualX,
-            		y:actualY,
-            		z:actualZ,
-            		mode:'lines',
-            		marker: {
-                		size:1,
-                		color:'black'
-            		},
-            		opacity: 1,
-            	};
+                trackingX.push(actualX);
+                trackingY.push(actualY);
+                trackingZ.push(actualZ);
             }
-            
-            
         }
     }
+
+	var mapDataTracing = {
+		type:'scatter3d',
+		x:trackingX,
+		y:trackingY,
+		z:trackingZ,
+		mode:'lines',
+		marker: {
+			size:1,
+			color:'black'
+		},
+		opacity: 1
+	};
+
+	console.log("Dots", trace);
+	console.log("Lines", mapDataTracing);
 	
 	//TODO: Add a separate trace for the history of each person
 	//	Fill the values of the trace with the appropriate line and
