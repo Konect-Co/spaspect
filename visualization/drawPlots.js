@@ -81,7 +81,6 @@ function update(data) {
         var historyKeys = Object.keys(history);
         var historyTimesLen = Object.keys(history).length;
         for(time = 0 ; time < historyTimesLen ; time++){
-        	console.log(history[historyKeys[time]]);
         	var time_key = historyKeys[time];
             var X_tracing = history[time_key]['X3D'];
             var Y_tracing = history[time_key]['Y3D'];
@@ -96,11 +95,13 @@ function update(data) {
             else{
                 X_len = X_tracing.length;
             }
-            console.log(X_len);
             var actualX = 0;
             var actualY = 0;
             var actualZ = 0;
+            var id = historyKeys[time];
             for(val = 0 ; val < X_len ; val++){
+                var colorTracing = (parseInt((id % 1)*255), parseInt((id*100%1)*255), parseInt((id*10000%1)*255));
+                console.log(colorTracing);
                 if(typeof X_tracing == 'number'){
                     actualX = X_tracing;
                     actualY = Y_tracing;
@@ -127,7 +128,7 @@ function update(data) {
 		name: 'history',
 		mode: 'lines',
 		marker: {
-			color: color_values,
+			color: colorTracing,
 			size: 8,
 			line: {
 				width: 0.5
@@ -137,8 +138,8 @@ function update(data) {
 		type: 'scatter3d',
 		text: text_values
 	};
-	console.log("Dots", trace);
-	//console.log("Lines", mapDataTracing);
+	//console.log("Dots", trace);
+	//console.log("Lines", mapDataTrace);
 
     
 	
