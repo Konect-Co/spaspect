@@ -21,7 +21,6 @@ function dashboardPage() {
   document.getElementById("dashboardPage").style.display = "block";
 }
 function addSitePage() {
-  console.log("add site page");
   showNone();
   //document.getElementById("add-site-btn").style.display = "none";
   document.getElementById("dashboard-return-btn").style.display = "inline";
@@ -127,7 +126,7 @@ function updateDashboardArgs(dashboardID) {
       return;
     }
 
-    console.log("Success in getting response from Post request to get environment file", xhr.responseText);
+    //console.log("Success in getting response from Post request to get environment file", xhr.responseText);
     var config = JSON.parse(xhr.responseText);
     
     if (config["authorized"] && !config["toDate"]) {
@@ -147,7 +146,7 @@ function updateDashboard(forceUpdate=false) {
     if (forceUpdate)
       lastUpdate = 0;
     var dashboardID = selectObj.options[selectObj.selectedIndex].value;
-    console.log("Currently selected dashboard", dashboardID);
+    //console.log("Currently selected dashboard", dashboardID);
     updateDashboardArgs(dashboardID);
   }
 }

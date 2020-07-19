@@ -2,9 +2,6 @@ var first = true;
 
 
 function update(data) {
-	console.log(data);
-
-	console.log("setting video link to", data["streamlink"])
 	//document.getElementById("video-src").setAttribute("src", data["streamlink"]);
 	//TODO: Seems like this doesn't update the video successfully
 	var player = videojs('video');
@@ -68,16 +65,16 @@ function update(data) {
 			opacity: 0.8
 		},
 		type: 'scatter3d',
-		text:text_values
+		text: text_values
 	};
 	
-    
+
     var tracked = dashboard['tracked'];
     var trackedNamesLen = Object.values(tracked).length;
     
-    trackingX = [];
-    trackingY = [];
-    trackingZ = [];
+    var trackingX = [];
+    var trackingY = [];
+    var trackingZ = [];
 
     for(name = 0 ; name < trackedNamesLen ; name++){
         var history = Object.values(tracked)[name]['history'];
@@ -108,14 +105,13 @@ function update(data) {
                     actualX = X_tracing;
                     actualY = Y_tracing;
                     actualZ = Z_tracing;
+                    break;
                 }
                 else{
                     actualX = X_tracing[val];
                     actualY = Y_tracing[val];
                     actualZ = Z_tracing[val];
                 }
-                
-                console.log(actualX,actualY,actualZ);
                 
                 trackingX.push(actualX);
                 trackingY.push(actualY);
@@ -124,21 +120,25 @@ function update(data) {
         }
     }
 
-	var mapDataTracing = {
-		type:'scatter3d',
-		x:trackingX,
-		y:trackingY,
-		z:trackingZ,
-		name:'Tracking',
-		mode:'lines',
-		line: {
-			color:'black'
+	var mapDataTrace = {
+		x: trackingX,
+		y: trackingY,
+		z: trackingZ,
+		name: 'history',
+		mode: 'lines',
+		marker: {
+			color: color_values,
+			size: 8,
+			line: {
+				width: 0.5
+			},
+			opacity: 0.8
 		},
-		opacity: 0.8
+		type: 'scatter3d',
+		text: text_values
 	};
-
 	console.log("Dots", trace);
-	console.log("Lines", mapDataTracing);
+	//console.log("Lines", mapDataTracing);
 
     
 	
@@ -147,7 +147,7 @@ function update(data) {
 	//	color for each person by reading from the data argument.
 	//  Add this trace to scatterData variable below
 
-	var scatterData = [trace,mapDataTracing]
+	var scatterData = [trace, mapDataTrace];
 	var scatterLayout = {
 		margin: {
 			l: 0,
@@ -192,7 +192,7 @@ function update(data) {
 		}
 	};*/
 
-	var layout = {
+	var mapLayout = {
 		autosize: true,
 		hovermode:'closest',
 		mapbox: {
@@ -218,10 +218,10 @@ function update(data) {
 
 	if (first) {
 		Plotly.newPlot('plotDiv', scatterData, scatterLayout);
-		Plotly.newPlot('mapDiv', mapData, layout);
+		Plotly.newPlot('mapDiv', mapData, mapLayout);
 		first = false;
 	} else {
 		Plotly.react('plotDiv', scatterData, scatterLayout);
-		Plotly.react('mapDiv', mapData, layout);
+		Plotly.react('mapDiv', mapData, mapLayout);
 	}
 }
