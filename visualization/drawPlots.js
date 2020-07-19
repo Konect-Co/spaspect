@@ -50,13 +50,10 @@ function update(data) {
 	document.getElementById("statsUndistanced").innerHTML = undistancedCount;
 	document.getElementById("statsUnmasked").innerHTML = unmaskedCount;
 
-	var lat_values = dashboard['lat_vals'];
-	var long_values = dashboard['lon_vals'];
 
 	//==========================
 	
 	var trace = {
-		type: 'scatter3d',
 		x: x_values,
 		y: y_values,
 		z: z_values,
@@ -70,10 +67,12 @@ function update(data) {
 			},
 			opacity: 0.8
 		},
+		type: 'scatter3d',
 		text:text_values
 	};
 	
-	var tracked = dashboard['tracked'];
+    
+    var tracked = dashboard['tracked'];
     var trackedNamesLen = Object.values(tracked).length;
     
     trackingX = [];
@@ -130,7 +129,7 @@ function update(data) {
 		x:trackingX,
 		y:trackingY,
 		z:trackingZ,
-		name:'traced line',
+		name:'Tracking',
 		mode:'lines',
 		line: {
 			color:'black'
@@ -140,13 +139,15 @@ function update(data) {
 
 	console.log("Dots", trace);
 	console.log("Lines", mapDataTracing);
+
+    
 	
 	//TODO: Add a separate trace for the history of each person
 	//	Fill the values of the trace with the appropriate line and
 	//	color for each person by reading from the data argument.
 	//  Add this trace to scatterData variable below
 
-	var scatterData = [trace, mapDataTracing];
+	var scatterData = [trace,mapDataTracing]
 	var scatterLayout = {
 		margin: {
 			l: 0,
@@ -158,6 +159,11 @@ function update(data) {
 
 
 	//==========================
+	
+	var lat_values = dashboard['lat_vals'];
+	var long_values = dashboard['lon_vals'];
+	
+	
 	var mapData = [{
 		type:'scattermapbox',
 		lat:lat_values,
