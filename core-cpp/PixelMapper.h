@@ -1,5 +1,10 @@
 #pragma once
+#include <string>
+using namespace std;
 
-std::string test_function() {
-	return "Hello World!\n";
+class PixelMapper(object){
+    public:
+        void init(){
+            
+        }
 }
