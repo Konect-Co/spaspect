@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 //add to opencv2
-#include <opencv2>
+#include <opencv2/opencv.hpp>
 using namespace std;
 
 map<string, int>
