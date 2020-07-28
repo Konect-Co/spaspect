@@ -12,7 +12,6 @@
 #include <string>
 #include <cmath>
 #include <opencv2/opencv.hpp>
-#include "TrackedObject.h"
 
 using namespace std;
 
