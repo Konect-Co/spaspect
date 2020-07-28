@@ -13,6 +13,7 @@
 #include <cmath>
 #include <opencv2/opencv.hpp>
 #include "TrackedObject.h"
+#inlcude "tensorflow/tensorflow/cc/saved_model/loader.h"
 
 using namespace std;
 
@@ -125,9 +126,17 @@ namespace CVOutput {
 			return 0;
 		}
 	} //namespace utils
-
+    
 	void predict(cv::Mat &image, dashboard &dash) {
 		//Running image through cv model --> person_boxes, scores, classes
+		    
+        string model_dir = "/home/santript/ImportantProjects/spaspect/core/cv_model/models/mobilenet-model";
+        tensorflow::SavedModelBundle model;
+        auto status = tensorflow::LoadSavedModel(session_options, run_options, model_dir, {tensorflow::kSavedModelTagServe}, &model);
+        if (!status.ok()) {
+            cerr << "Failed: " << status;
+            return;
+        }
 		//Running image through mask detector --> face_boxes, masked
 		float detection_scores[];
 		string detection_classes[];
