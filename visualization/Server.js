@@ -36,9 +36,11 @@ app.get('/drawPlots.js', function (req, res){
 	res.sendFile(__dirname + '/drawPlots.js');
 });
 
-app.get('/styles.css', function (req, res){
-	res.sendFile(__dirname + '/styles.css');
+app.get('/css/styles.css', function (req, res){
+	res.sendFile(__dirname + '/css/styles.css');
 });
+
+app.use('/node_modules', express.static(__dirname + '/node_modules'));
 
 app.post('/dashboards', function(req, res) {
 	var body = "";
