@@ -12,8 +12,11 @@
 #include <string>
 #include <cmath>
 #include <opencv2/opencv.hpp>
+<<<<<<< HEAD
 #include "TrackedObject.h"
 #inlcude "tensorflow/tensorflow/cc/saved_model/loader.h"
+=======
+>>>>>>> 37204ee0f1f1321bce7a3c2670c661623e867ca2
 
 using namespace std;
 
