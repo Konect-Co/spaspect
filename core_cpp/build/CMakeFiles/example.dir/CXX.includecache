@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ravit/Konect-Code/spaspect-project/spaspect/core_cpp/test.cpp
+numeric
+-
+cppflow/include/Model.h
+/home/ravit/Konect-Code/spaspect-project/spaspect/core_cpp/cppflow/include/Model.h
+cppflow/include/Tensor.h
+/home/ravit/Konect-Code/spaspect-project/spaspect/core_cpp/cppflow/include/Tensor.h
+string
+-
+iomanip
+-
+
+/usr/local/include/cppflow/src/Model.cpp
+cppflow/include/Model.h
+/usr/local/include/cppflow/src/cppflow/include/Model.h
+
+/usr/local/include/cppflow/src/Tensor.cpp
+cppflow/include/Tensor.h
+/usr/local/include/cppflow/src/cppflow/include/Tensor.h
+utility
+-
+
