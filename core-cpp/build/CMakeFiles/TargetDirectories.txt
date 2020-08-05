@@ -1,3 +1,0 @@
-/home/santript/ImportantProjects/spaspect/core-cpp/build/CMakeFiles/rebuild_cache.dir
-/home/santript/ImportantProjects/spaspect/core-cpp/build/CMakeFiles/example.dir
-/home/santript/ImportantProjects/spaspect/core-cpp/build/CMakeFiles/edit_cache.dir
