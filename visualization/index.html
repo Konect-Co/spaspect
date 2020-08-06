@@ -223,6 +223,24 @@
     <script type="text/javascript " src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js "></script>
     <script type="text/javascript " src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js "></script>
     <script type="text/javascript " src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js "></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyD6Cm1InAFK-ecUq-F6ku8EQL_4oE_WTF0",
+            authDomain: "spaspect-dashboard.firebaseapp.com",
+            databaseURL: "https://spaspect-dashboard.firebaseio.com",
+            projectId: "spaspect-dashboard",
+            storageBucket: "spaspect-dashboard.appspot.com",
+            messagingSenderId: "270336614615",
+            appId: "1:270336614615:web:f4f64e4b5624fa8ca8d092",
+            measurementId: "G-D03KWN0SXS"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+    
     <script type="text/javascript " src="index.js "></script>
     <script type="text/javascript " type="text/javascript " src="https://cdn.plot.ly/plotly-latest.min.js "></script>
     <script type="text/javascript " src="https://unpkg.com/video.js/dist/video.js "></script>
@@ -232,22 +250,6 @@
         window.onload = function() {
             $("#loginModal ").modal('show');
         };
-    </script>
-    <script>
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyD6Cm1InAFK-ecUq-F6ku8EQL_4oE_WTF0 ",
-            authDomain: "spaspect-dashboard.firebaseapp.com ",
-            databaseURL: "https://spaspect-dashboard.firebaseio.com ",
-            projectId: "spaspect-dashboard ",
-            storageBucket: "spaspect-dashboard.appspot.com ",
-            messagingSenderId: "270336614615 ",
-            appId: "1:270336614615:web:f4f64e4b5624fa8ca8d092 ",
-            measurementId: "G-D03KWN0SXS "
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
     </script>
 
 

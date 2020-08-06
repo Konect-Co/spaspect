@@ -69,6 +69,7 @@ function loginGoogle(){
     var email = error.email;
     var credential = error.credential;
   });
+
 }
 function signup(){
   //TODO: Add more features to sign up page
