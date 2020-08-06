@@ -193,7 +193,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
 
-    <script>
+    <script type="text/javascript">
         // Your web app's Firebase configuration
         var firebaseConfig = {
             apiKey: "AIzaSyD6Cm1InAFK-ecUq-F6ku8EQL_4oE_WTF0",
@@ -205,28 +205,26 @@
             appId: "1:270336614615:web:f4f64e4b5624fa8ca8d092",
             measurementId: "G-D03KWN0SXS"
         };
+
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
-    </script>
-    <script type="text/javascript">
+
         window.onload = function() {
-            $("#loginModal").modal({
-                backdrop: 'static',
-                keyboard: false
-            });
+            if (firebase.auth().currentUser) {
+               $("#loginModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });             
+           }
         };
-    </script>
-    <script>
         $("#login_password_field").keyup(function(event) {
             if (event.keyCode === 13) {
                 $("#loginButton").click();
             }
         });
 
-        $("#loginButton").click(function() {
-            console.log("Logged in");
-        });
+        $("#loginButton").click(function() {});
     </script>
     <script type="text/javascript" src="index.js"></script>
     <script type="text/javascript" type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
