@@ -15,6 +15,37 @@
 
 using namespace std;
 
+namespace Track {
+	class TrackedEntity {
+	public:
+		float lastUpdate;
+		float velocity[2];
+		std::map<int, locationInfo> history;
+		void addNext(float time, locationInfo &newLocationInfo) {
+			history[time] = newLocationInfo;
+			// TODO: Update velocity
+		}
+		//Computes the prediction of the next bounding box using velocity and current position
+		int[4] estimateBB() {
+			//TODO
+		}
+	};
+
+	float time;
+
+	void updateTime() {
+		//TODO
+	}
+
+	void track(dashboard &dash, std::vector<DashboardInfo::locationInfo*>) {
+		//TODO
+	}
+
+	void prune(dashboard &dash) {
+		//TODO
+	}
+} //namespace Track
+
 namespace DashboardInfo {
 	//Data structure that stores information about the object
 	class locationInfo {
@@ -24,7 +55,7 @@ namespace DashboardInfo {
 		float latlon[2];
 		bool distanced;
 		bool masked;
-	}
+	};
 
 	//Data structure that represents the dashboard
 	class dashboard {
@@ -58,7 +89,7 @@ namespace DashboardInfo {
 			}
 			return false;
 		}
-	}
+	};
 
 } //namespace DashboardInfo
 
@@ -95,6 +126,7 @@ int[][2] pixel_to_lonlat(PixelMapperConfig &config, int[][2] pixel_coordinates) 
 		pixel_matrix_transpose[2][i] = 1;
 	}
 
+	// https://xtensor-blas.readthedocs.io/en/latest/reference.html#_CPPv4I00EN2xt6linalg3dotEDaRK11xexpressionI1TERK11xexpressionI1OE
 	int lonlat_matrix_transpose[3][N] = matmul(config.M, pixel_matrix_transpose); //TODO: Matmul implementation
 	int lonlat_coordinates[N][2];
 
@@ -118,6 +150,7 @@ int[][2] lonlat_to_pixel(PixelMapperConfig &config, int[][2] lonlat_coordinates)
 		lonlat_matrix_transpose[2][i] = 1;
 	}
 
+	// https://xtensor-blas.readthedocs.io/en/latest/reference.html#_CPPv4I00EN2xt6linalg3dotEDaRK11xexpressionI1TERK11xexpressionI1OE
 	int pixel_matrix_transpose[3][N] = matmul(config.invM, lonlat_matrix_transpose); //TODO: Matmul implementation
 	int pixel_coordinates[N][2];
 
@@ -268,34 +301,3 @@ namespace CVOutput {
 		return;
 	}
 }
-
-namespace Track {
-	class TrackedEntity {
-	public:
-		float lastUpdate;
-		float velocity[2];
-		std::map<int, locationInfo> history;
-		void addNext(float time, locationInfo &newLocationInfo) {
-			history[time] = newLocationInfo;
-			// TODO: Update velocity
-		}
-		//Computes the prediction of the next bounding box using velocity and current position
-		int[4] estimateBB() {
-			//TODO
-		}
-	};
-
-	float time;
-
-	void updateTime() {
-		//TODO
-	}
-
-	void track(dashboard &dash, std::vector<DashboardInfo::locationInfo*>) {
-		//TODO
-	}
-
-	void prune(dashboard &dash) {
-		//TODO
-	}
-} //namespace Track
