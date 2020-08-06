@@ -1,6 +1,5 @@
 import os
 import sys
-import PIL.Image as pil
 import numpy as np
 import tensorflow as tf
 
@@ -26,19 +25,13 @@ coco_labels = [
     'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush'
 ]
 
-loaded = tf.saved_model.load("./cv_model/models/mobilenet-model")
+loaded = tf.saved_model.load("./cv_model/models/mobilenet_model")
 infer = loaded.signatures["serving_default"]
 
 
 def predict(image_path):
 	new_width = 800
 	new_height = 800
-
-	"""
-	input_image_pil = pil.open(image_path).convert('RGB')
-	original_width, original_height = input_image_pil.size
-	input_image = input_image_pil.resize((new_width,new_height), pil.LANCZOS)
-	"""
 
 	# Load image and preprocess
 	input_image = cv2.imread(image_path)
