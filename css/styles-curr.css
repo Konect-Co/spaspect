@@ -1,0 +1,333 @@
+.myButton {
+	box-shadow: 3px 4px 0px 0px #8a2a21;
+	background:linear-gradient(to bottom, #c62d1f 5%, #f24437 100%);
+	background-color:#c62d1f;
+	border-radius:18px;
+	border:1px solid #d02718;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:5.5px 25px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #810e05;
+}
+.myButton:hover {
+	background:linear-gradient(to bottom, #f24437 5%, #c62d1f 100%);
+	background-color:#f24437;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+
+
+button {
+	margin-bottom: 20px;
+	cursor: pointer;
+}
+
+input, button {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+}
+
+
+.main-div, .loggedin-div {
+  width: 20%;
+  margin: 0px auto;
+  margin-top: 25px;
+}
+
+.login-signup-wrapper {
+  padding: 20px;
+  display: block;
+  background-color: #343E6E;
+}
+
+.btn{
+   float:left;
+}
+
+.main-div input {
+  border: 1px solid #ccc;
+  border-radius: 0px;
+  background: #fff;
+  padding: 10px;
+  outline: none;
+  width: 100%;
+  margin-bottom: 20px;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  align-items: left;
+}
+
+.main-div input:focus {
+  border: 1px solid #777;
+}
+
+#align-checkbox{
+    margin-left:-115px;
+}
+
+#align-checkbox-text{
+    margin-left:-110px;
+}
+
+.main-div button, .loggedin-div button {
+  background: #C67C12;
+  color: #fff;
+  border: 1.5px solid orange;
+  border-radius: 5px;
+  padding: 12px;
+  display: block;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  width: 100%;
+  margin: 10px;
+  margin-left:0px;
+}
+
+.main-div button:hover, .loggedin-div button:hover {
+  background: #fff;
+  color: #5d8ffc;
+  border: 1px solid #5d8ffc;
+  cursor: pointer;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.error-msg {
+	font-family: 'Nunito', sans-serif;
+	color: red;
+	display: none;
+}
+
+.inner {
+    display: inline-block;
+}
+
+.input-container {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.icon {
+  padding: 10px;
+  background: dodgerblue;
+  color: white;
+  min-width: 25px;
+  text-align: center;
+  height:17.5px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  outline: none;
+}
+
+.input-field:focus {
+  border: 2px solid dodgerblue;
+}
+
+/* Set a style for the submit button */
+.btn {
+  background-color: dodgerblue;
+  color: white;
+  padding: 15px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+.btn:hover {
+  opacity: 1;
+}
+
+#main-space{
+    top: 70px;
+    padding: 30px;
+    background-color: #343E6E;
+}
+
+#dashboardPage {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	background-color: #fff;
+}
+
+#header {
+	position: absolute;
+	height:15%;
+	width:100%;
+	text-align: center;
+	font-family: Arial;
+	background-color:transparent;
+}
+
+#dashboard-nav-bar {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+#dashboard-nav-bar button{
+    background-color:#D42C2C;
+    color:#fff;
+    border: 2px solid red;
+    border-radius:5px
+}
+
+#dashboard-nav-bar button:hover{
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+#nav-bar {
+	position: relative;
+	border-bottom: 4px solid orange;
+	background-color: #60514E;
+}
+
+#nav-buttons {
+	position: absolute;
+	right: 0;
+	top: 0;
+	overflow: hidden;
+}
+
+#universal-nav-buttons {
+	float: left;
+}
+
+#dashboard-nav-buttons {
+	overflow: hidden;
+}
+
+.nav-btn {
+  font-weight:bold;
+	background-color: #ddd;
+	border-radius: 5px;
+	color: #000;
+	padding: 0.25rem;
+	margin: 0 1rem;
+	font-family: Arial;
+}
+
+.nav-btn:hover {
+  background: #ffbc00;
+}
+
+#nav-logo {
+
+}
+
+#logo {
+	height:50px;
+}
+
+#main-content {
+	position: relative;
+	top:0%;
+	height:100%;
+}
+
+#videoDiv {
+	position: absolute;
+	top: 0%;
+	right: 50%;
+	bottom: 50%;
+	left: 0%;
+	border: 15px ridge #7B7B7B;
+}
+
+#video {
+  /*vertical-align: middle;*/
+}
+
+#mapDiv {
+	position: absolute;
+	top: 50%;
+	right: 50%;
+	bottom: 0%;
+	left: 0%;
+	border: 15px ridge #7B7B7B;
+}
+
+#statsDiv {
+	font-family: Arial;
+	position: absolute;
+	top: 0%;
+	right: 0%;
+	bottom: 50%;
+	left: 50%;
+	border: 15px ridge #7B7B7B;
+}
+
+#stats-header {
+	text-align: center;
+	top:25%;
+}
+
+#stats {
+	height:100%;
+	width:100%;
+	position: absolute;
+	text-align: center;
+}
+
+#plotDiv {
+	position: absolute;
+	top: 50%;
+	right: 0%;
+	bottom: -5px;
+	left: 50%;
+	border: 15px ridge #7B7B7B;
+}
+
+#addSite {
+	position: relative;
+	height: 90%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#add-site-form {
+	margin: auto;
+	padding: 20px;
+  background-color: #343E6E;
+}
+
+.fa-google {
+  background: #dd4b39;
+  color: white;
+  text-align:center;
+}
+
+.fa-sign-in{
+    text-align:center;
+}
+
+.fa-sign-out{
+    text-align:center;
+}
+
+.fa-refresh{
+    text-align:center;
+}
+
+.fa-home{
+    color:white;
+    text-align:center;
+}
+
+
