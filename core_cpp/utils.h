@@ -11,19 +11,63 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include <opencv2/opencv.hpp>
-#include "TrackedObject.h"
-#inlcude "tensorflow/tensorflow/cc/saved_model/loader.h"
-#include cassert
+//#include <opencv2/opencv.hpp>
+//#include <opencv4/opencv2/opencv.hpp>
+//#include "tensorflow/tensorflow/cc/saved_model/loader.h"
+#include <cassert>
 #include <array>
 #include <algorithm>
-#include <cv.h>
+//#include <cv.h>
 #include "xtensor/xarray.hpp"
 #include "xtensor/xio.hpp"
-#include "xtensor-blas/xlinalg.hpp"
+#include <vector>
+#include "NumCpp.hpp"
 
 
 using namespace std;
+/*
+namespace Track {
+    
+    struct locationInfo {
+        int boundingBox[4];
+        int _3DCoordinate[3];
+        int lonlatCoordinate[2];
+    };
+	class TrackedEntity {
+	public:
+		float lastUpdate;
+		float velocity[2];
+		map<int, locationInfo> history;
+		void addNext(float time, locationInfo &newLocationInfo) {
+			history[time] = newLocationInfo;
+			// TODO: Update velocity
+		}
+		//Computes the prediction of the next bounding box using velocity and current position
+		int * estimateBB() {
+			//TODO
+		}
+	};
+    
+    struct dashboard {
+        
+    };
+    struct DashboardInfo {
+    };
+    
+	float time;
+
+	void updateTime() {
+		//TODO
+	}
+
+	void track(vector<DashboardInfo::locationInfo*> vec, dashboard &dash) { //ERR HERE --> the vector param is wrong
+		//TODO
+	}
+
+	void prune(dashboard &dash) {
+		//TODO
+	}
+} //namespace Track
 
 namespace DashboardInfo {
 	//Data structure that stores information about the object
@@ -34,7 +78,7 @@ namespace DashboardInfo {
 		float latlon[2];
 		bool distanced;
 		bool masked;
-	}
+	};
 
 	//Data structure that represents the dashboard
 	class dashboard {
@@ -43,7 +87,7 @@ namespace DashboardInfo {
 	
 		string streamlink;
 		string name;
-		std::vector<Track::TrackedEntity*> objects;
+		vector<Track::TrackedEntity*> objects;
 
 		class {
 		public:
@@ -61,17 +105,18 @@ namespace DashboardInfo {
 		}
 
 		bool removeTrackedObject(Track::TrackedEntity* object) {
-			int obj_pos = std::find(objects.begin(), objects.end(), object) - objects.begin();
-			if (obj_pos != objects.end()) {
+			int obj_pos = find(begin(objects), end(objects), object) - begin(objects);
+			//cout<<obj_pos<<endl;
+			if (obj_pos != end(objects)) {
 				objects.erase(obj_pos);
 				return true;
 			}
 			return false;
 		}
-	}
+	};
 
 } //namespace DashboardInfo
-
+*/
 namespace PixelMapper {
 class PixelMapperConfig {
 public:
@@ -86,26 +131,27 @@ public:
   cv::Mat M = getPerspectiveTransform(pixel_array, lonlat_array);
   cv::Mat invM = getPerspectiveTransform(lonlat_array, pixel_array);
 
-  PixelMapperConfig(int &pixel_array[4][2], int &lonlat_array[4][2],
-                    int &lonlat_origin[2])
-      : pixel_array(pixel_array), lonlat_array(lonlat_array),
-        lonlat_origin(lonlat_origin) {
-    lon_const = 40075000 * cos(lonlat_origin[0] * M_PI / 180) / 360;
-  }
-}
+  PixelMapperConfig(int (&pixel_array)[4][2], int (&lonlat_array)[4][2], int (&lonlat_origin)[2])
+      : pixel_array(pixel_array), lonlat_array(lonlat_array) {
+            lon_const = 40075000 * cos(lonlat_origin[0] * M_PI / 180) / 360;
+        }
+};
 
 // Convert a set of pixel coordinates to lon-lat coordinates
-int[][2] pixel_to_lonlat(PixelMapperConfig &config, int[][2] pixel_coordinates) {
+int * pixel_to_lonlat(PixelMapperConfig &config, int pixel_coordinates[][2]) {
 	int N = *(&pixel_coordinates + 1) - pixel_coordinates;
 
 	int pixel_matrix_transpose[3][N];
 	for (int i = 0; i < N; ++i) {
-		pixel_matrix_transpose[0][i] = pixel_coordinates[0];
-		pixel_matrix_transpose[1][i] = pixel_coordinates[1];
+		pixel_matrix_transpose[0][i] = *pixel_coordinates[0];
+		pixel_matrix_transpose[1][i] = *pixel_coordinates[1];
 		pixel_matrix_transpose[2][i] = 1;
 	}
 
-	int lonlat_matrix_transpose[3][N] = matmul(config.M, pixel_matrix_transpose); //TODO: Matmul implementation
+	// https://xtensor-blas.readthedocs.io/en/latest/reference.html#_CPPv4I00EN2xt6linalg3dotEDaRK11xexpressionI1TERK11xexpressionI1OE
+	//nc::NdArray<double> cm = {config.M};
+	
+	int lonlat_matrix_transpose[3][N] = nc::dot(*config.M, pixel_matrix_transpose); //matmul(config.M, pixel_matrix_transpose); //TODO: Matmul implementation
 	int lonlat_coordinates[N][2];
 
 	for (int i = 0; i < N; ++i) {
@@ -114,22 +160,24 @@ int[][2] pixel_to_lonlat(PixelMapperConfig &config, int[][2] pixel_coordinates) 
 		lonlat_coordinates[i][1] = lonlat_matrix_transpose[1][i] / scale_factor;
 	}
 
-	return lonlat_coordinates;
+	return *lonlat_coordinates;
 }
 
 // Convert a set of lon-lat coordinates to pixel coordinates
-int[][2] lonlat_to_pixel(PixelMapperConfig &config, int[][2] lonlat_coordinates) {
+int * lonlat_to_pixel(PixelMapperConfig &config, int lonlat_coordinates[][2]) {
 	int N = *(&lonlat_coordinates + 1) - lonlat_coordinates;
 
 	int lonlat_matrix_transpose[3][N];
 	for (int i = 0; i < N; ++i) {
-		lonlat_matrix_transpose[0][i] = lonlat_coordinates[0];
-		lonlat_matrix_transpose[1][i] = lonlat_coordinates[1];
+		lonlat_matrix_transpose[0][i] = *lonlat_coordinates[0];
+		lonlat_matrix_transpose[1][i] = *lonlat_coordinates[1];
 		lonlat_matrix_transpose[2][i] = 1;
 	}
 
+	// https://xtensor-blas.readthedocs.io/en/latest/reference.html#_CPPv4I00EN2xt6linalg3dotEDaRK11xexpressionI1TERK11xexpressionI1OE
+	//nc::NdArray<double> cmv = {config.invM};
+	int pixel_matrix_transpose[3][N] = nc::dot(*config.invM, lonlat_matrix_transpose);
 	//int pixel_matrix_transpose[3][N] = matmul(config.invM, lonlat_matrix_transpose); //TODO: Matmul implementation
-	int pixel_matrix_transpose[3][N] = xt::linalg::dot(config.invM, lonlat_matrix_transpose);
 	int pixel_coordinates[N][2];
 
 	for (int i = 0; i < N; ++i) {
@@ -138,27 +186,28 @@ int[][2] lonlat_to_pixel(PixelMapperConfig &config, int[][2] lonlat_coordinates)
 		pixel_coordinates[i][1] = pixel_matrix_transpose[1][i] / scale_factor;
 	}
 
-	return pixel_coordinates;
+	return *pixel_coordinates;
 }
 
 // Convert a set of lon-lat coordinates to 3D coordinates
-int[][3] lonlat_to_3D(PixelMapperConfig &config, int[][2] lonlat_coordinates) {
+int * lonlat_to_3D(PixelMapperConfig &config, int lonlat_coordinates[][2]) {
   // TODO
 
-  float lon_d = lonlat_coordinates[0] - config.lonlat_origin[0];
-  float lat_d = lonlat_coordinates[1] - config.lonlat_origin[1];
+  float lon_d = *lonlat_coordinates[0] - config.lonlat_origin[0];
+  float lat_d = *lonlat_coordinates[1] - config.lonlat_origin[1];
 
   float lon_m = lon_d * config.lon_const;
   float lat_m = lat_d * config.lat_const;
 
-  float 3D[3] = {lat_m, lon_m, 0};
-  return 3D;
+  int threeD[3] = {lat_m, lon_m, 0};
+  
+  return threeD;
 }
 
 // Convert a set of 3D coordinates to lon-lat coordinates
-int[][2] _3D_to_lonlat(PixelMapperConfig &config, int[][3] _3D_coordinates) {
-  float lon_m = _3D_coordinates[1];
-  float lat_m = _3D_coordinates[0];
+int * _3D_to_lonlat(PixelMapperConfig &config, int _3D_coordinates[][3]) {
+  float lon_m = *_3D_coordinates[1];
+  float lat_m = *_3D_coordinates[0];
 
   float lon_d = lon_m / config.lon_const;
   float lat_d = lat_m / config.lat_const;
@@ -166,12 +215,12 @@ int[][2] _3D_to_lonlat(PixelMapperConfig &config, int[][3] _3D_coordinates) {
   float lon_coord = lat_d + config.lonlat_origin[0];
   float lat_coord = lon_d + config.lonlat_origin[1];
 
-  float lonlat[2] = {lon_d, lat_d};
+  int lonlat[2] = {lon_d, lat_d};
   return lonlat;
 }
 
 } // namespace PixelMapper
-
+/*
 namespace CVOutput {
 	namespace utils {
 		int computeArea(int box[4]) {
@@ -194,14 +243,6 @@ namespace CVOutput {
     
 	void predict(cv::Mat &image, dashboard &dash) {
 		//Running image through cv model --> person_boxes, scores, classes
-		    
-        string model_dir = "/home/santript/ImportantProjects/spaspect/core/cv_model/models/mobilenet-model";
-        tensorflow::SavedModelBundle model;
-        auto status = tensorflow::LoadSavedModel(session_options, run_options, model_dir, {tensorflow::kSavedModelTagServe}, &model);
-        if (!status.ok()) {
-            cerr << "Failed: " << status;
-            return;
-        }
 		//Running image through mask detector --> face_boxes, masked
 		float detection_scores[];
 		string detection_classes[];
@@ -284,37 +325,9 @@ namespace CVOutput {
 		"lat_vals":lat_vals, "lon_vals":lon_vals, "masked":masked, "distanced":distanced,
 		"tracked":trackedObjectsDict};
 		*/
-		return;
+		//return;
+/*
 	}
+
 }
-
-namespace Track {
-	class TrackedEntity {
-	public:
-		float lastUpdate;
-		float velocity[2];
-		std::map<int, locationInfo> history;
-		void addNext(float time, locationInfo &newLocationInfo) {
-			history[time] = newLocationInfo;
-			// TODO: Update velocity
-		}
-		//Computes the prediction of the next bounding box using velocity and current position
-		int[4] estimateBB() {
-			//TODO
-		}
-	};
-
-	float time;
-
-	void updateTime() {
-		//TODO
-	}
-
-	void track(dashboard &dash, std::vector<DashboardInfo::locationInfo*>) {
-		//TODO
-	}
-
-	void prune(dashboard &dash) {
-		//TODO
-	}
-} //namespace Track
+*/

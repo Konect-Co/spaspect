@@ -1,3 +1,0 @@
-/home/ravit/Konect-Code/spaspect-project/spaspect/core_cpp/build/CMakeFiles/rebuild_cache.dir
-/home/ravit/Konect-Code/spaspect-project/spaspect/core_cpp/build/CMakeFiles/example.dir
-/home/ravit/Konect-Code/spaspect-project/spaspect/core_cpp/build/CMakeFiles/edit_cache.dir

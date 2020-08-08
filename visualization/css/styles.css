@@ -212,7 +212,7 @@
     }
     
     #dashboard-nav-buttons {
-        overflow: hidden;
+        z-index: 999;
     }
     
     .nav-btn {

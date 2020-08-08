@@ -9,17 +9,16 @@
     <title>SpaSpect Dashboard Demo</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
     <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="node_modules/bootstrap-social/bootstrap-social.css">
     <link rel="stylesheet" type="text/css" href="node_modules/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/video.js/dist/video-js.css">
+    <link rel="stylesheet" type="text/css" <link href="https://unpkg.com/video.js@7/dist/video-js.min.css" rel="stylesheet" />
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-expand-lg navbar-light" id="dashboard-nav-buttons">
+        <button class="navbar-toggler" type="button" onclick="initializeDashboard()" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
         <a class="navbar-brand" href="https://sites.google.com/view/konect-co/home"><img id="logo" src="Pictures/Logo.png" alt="Konect"></a>
@@ -30,25 +29,22 @@
                     <a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact Us </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><span class="fa fa-refresh fa-lg"></span> Refersh Options</a>
+                    <a class="nav-link" href="#" onclick="initializeDashboard()"><span class="fa fa-refresh fa-lg"></span> Refersh Options</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#addsite"><span class="fa fa-plus-square fa-lg"></span> Add Site</a>
+                    <a class="nav-link" data-toggle="modal" data-target="#addsite" onclick="addSitePage()"><span class="fa fa-plus-square fa-lg"></span> Add Site</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="fa fa- fa-lg"></span>Toggle Location
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      Toggle Location: 
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="dashboard-select" onchange="updateDashboard(true)">
                     </div>
                 </li>
 
             </ul>
         </div>
-        <button class='col-sm-2 btn btn-info pull-right' type="button" onclick="logout()"> <span class="fa fa-sign-out"></span>
+        <button class='col-sm-2 btn btn-info pull-right' type="button" data-toggle="modal" data-target="#loginModal" onclick="logout()"> <span class="fa fa-sign-out"></span>
             Logout
               </button>
     </nav>
@@ -59,7 +55,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Add a site</h4>
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" id="dashboard-return-btn" class="close" data-dismiss="modal">
                         &times;
                     </button>
                 </div>
@@ -98,11 +94,9 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="loginModalTitle">SpaSpect Login</h5>
                     <p id="login-error-msg" class="error-msg">Template error msg</p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
                 </div>
                 <div class="modal-body">
+
                     <form>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
@@ -116,97 +110,71 @@
                             <input type="password" class="form-control" id="login_password_field" name="psw" placeholder="Password">
                         </div>
 
-                        <button type="submit" class="btn btn-primary fa fa-sign-in fa-lg" onclick="login()"> Login</button>
+                        <button type="submit" class="btn btn-primary fa fa-sign-in fa-lg" id="loginButton" onclick="login()"> Login</button>
                     </form>
                 </div>
                 <div class=" modal-footer ">
-                    <button type="button " class="btn btn-secondary fa fa-google " onclick="loginGoogle() "> Sign in with Google</button>
-                    <button type="button " class="btn btn-secondary fa fa-sign-in " data-toggle="modal" data-target="#signUpModal"> Sign up for an account</button>
+                    <button type="button " class="btn btn-secondary fa fa-google " onclick="loginGoogle()"> Sign in with Google</button>
+                    <button type="button " class="btn btn-secondary fa fa-sign-in " data-toggle="modal" data-target="#signUpModal " data-backdrop="static" data-keyboard="false"> Sign up for an account</button>
 
                 </div>
             </div>
         </div>
     </div>
     <!--Sign Up Modal -->
-    <div class="modal fade" id="signUpModal" tabindex="-1 " role="dialog" aria-labelledby="signUpModalTitle" aria-hidden="true">
+    <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content ">
-                <div class="modal-header ">
-                    <h5 class="modal-title " id="signUpModalTitle ">Sign up with a Konect account</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true ">&times;</span>
-          </button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signUpModalTitle">Sign up with a Konect account</h5>
+                    <button type="button" id="dashboard-return-btn" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
                 </div>
-                <div class="modal-body ">
+                <div class="modal-body">
                     <form>
-                        <div class="form-group ">
-                            <label for="exampleInputEmail1 ">Email address</label>
-                            <input type="email " class="form-control " id="signup_email_field" aria-describedby="emailHelp " placeholder="Enter email " name="Email">
-                            <small id="emailHelp " class="form-text text-muted ">We'll never share your email with anyone else.</small>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control" id="signup_email_field" aria-describedby="emailHelp" placeholder="Enter email" name="Email">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                         </div>
-                        <div class="form-group ">
-                            <label for="exampleInputPassword1 ">Password</label>
-                            <input type="password " class="form-control " id="signup_password_field" placeholder="Password " name="psw">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="signup_password_field" placeholder="Password" name="psw">
                         </div>
-                        <div class="form-group ">
-                            <label for="exampleInputPassword1 ">Confirm Password</label>
-                            <input type="password " class="form-control " id="signup_check_password_field" placeholder="Password " name="check_psw">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Confirm Password</label>
+                            <input type="password" class="form-control" id="signup_check_password_field" placeholder="Password" name="check_psw">
                         </div>
-                        <button type="submit " class="btn btn-primary fa fa-user-plus " onclick="signup() "> Create Account</button>
+                        <button type="submit" class="btn btn-primary fa fa-user-plus" onclick="signup()" data-dismiss="modal"> Create Account</button>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-sm fa fa-arrow-left" data-dismiss="modal"> Back to Login</button>
+                    <button type="button" class="btn btn-sm fa fa-arrow-left" data-toggle="modal" data-dismiss="modal"> Back to Login</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!--Forgot Your Password Modal 
-    <div class="modal fade " id="forgotPassModal " tabindex="-1 " role="dialog " aria-labelledby="fgtModalLabel " aria-hidden="true ">
-        <div class="modal-dialog modal-dialog-centered modal-lg " role="document ">
-            <div class="modal-content ">
-                <div class="modal-header ">
-                    <h5 class="modal-title " id="fgtModalLabel ">Modal title</h5>
-                    <button type="button " class="close " data-dismiss="modal " aria-label="Close ">
-            <span aria-hidden="true ">&times;</span>
-          </button>
-                </div>
-                <div class="modal-body ">
-                    <div class="form-group ">
-                        <label for="exampleInputEmail1 ">Email address</label>
-                        <input type="email " class="form-control " id="exampleInputEmail1 " aria-describedby="fgtEmailHelp " placeholder="Enter email ">
-                        <small id="fgtEmailHelp " class="form-text text-muted ">We'll send you an email. Please check your junk folder.</small>
-                        </form>
-                    </div>
-                    <div class="modal-footer ">
-                        <button type="button " class="btn btn-secondary " data-dismiss="modal ">Close</button>
-                        <button type="button " class="btn btn-primary ">Submit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    -->
-    <div class="container-fluid ">
-        <div class="row ">
-            <div class="col-sm-6 border border-primary p-2 ">
+    <div class="container-fluid px-3 " id="dashboardPage">
+        <div class="row no-gutters ">
+            <div class="col-sm-6 border border-primary p-2 col-md-offset-2 embed-responsive embed-responsive-4by3" id="videoDiv">
                 <!--<iframe width="100% " height="100% " src="https://www.myearthcam.com/bioshop?embed " frameborder="0 " allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture " allowfullscreen></iframe>-->
-                <video id="video " class="video-js " data-setup=' { "fluid ": true} ' aria-label="live-cam " controls>
-                    <source id="video-src " src="https://590804fbbbc47.streamlock.net:444/westland/westland.stream/playlist.m3u8 ">
+                <video id="video" class="video-js embed-responsive-item" data-setup=' { "fluid ": true} ' aria-label="live-cam" controls>
+                    <source id="video-src" src="https://590804fbbbc47.streamlock.net:444/westland/westland.stream/playlist.m3u8">
                 </video>
             </div>
-            <div class="col-sm-6 border border-secondary order-last ">
-                <div id="stats-header ">
+            <div class="col-sm-6 border border-secondary order-last no-gutters" id="statsDiv">
+                <div id="stats-header">
                     <h2>Statistics</h2>
                 </div>
-                <div id="stats ">
-                    <h3>Total count: <span id="statsTotal "></span></h3>
-                    <h3>Undistanced count: <span id="statsUndistanced "></span></h3>
-                    <h3>Unmasked count: <span id="statsUnmasked "></span></h3>
+                <div id="stats">
+                    <h3>Total count: <span id="statsTotal"></span></h3>
+                    <h3>Undistanced count: <span id="statsUndistanced"></span></h3>
+                    <h3>Unmasked count: <span id="statsUnmasked"></span></h3>
                 </div>
             </div>
-            <div class="col-sm-6 border border-secondary " id="mapDiv ">MAP DIV</div>
-            <div class="col-sm-6 border border-secondary " id="plotDiv ">PLOT DIV</div>
+            <div class="col-sm-6 border border-secondary no-gutters" id="mapDiv"></div>
+            <div class="col-sm-6 border border-secondary no-gutters" id="plotDiv"></div>
         </div>
     </div>
     </div>
@@ -220,35 +188,50 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
-    <script type="text/javascript " src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js "></script>
-    <script type="text/javascript " src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js "></script>
-    <script type="text/javascript " src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js "></script>
-    <script type="text/javascript " src="index.js "></script>
-    <script type="text/javascript " type="text/javascript " src="https://cdn.plot.ly/plotly-latest.min.js "></script>
-    <script type="text/javascript " src="https://unpkg.com/video.js/dist/video.js "></script>
-    <script type="text/javascript " src="https://unpkg.com/videojs-contrib-hls/dist/videojs-contrib-hls.js "></script>
-    <script type="text/javascript " type="text/javascript " src="drawPlots.js "></script>
-    <script type="text/javascript ">
-        window.onload = function() {
-            $("#loginModal ").modal('show');
-        };
-    </script>
-    <script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+
+    <script type="text/javascript">
         // Your web app's Firebase configuration
         var firebaseConfig = {
-            apiKey: "AIzaSyD6Cm1InAFK-ecUq-F6ku8EQL_4oE_WTF0 ",
-            authDomain: "spaspect-dashboard.firebaseapp.com ",
-            databaseURL: "https://spaspect-dashboard.firebaseio.com ",
-            projectId: "spaspect-dashboard ",
-            storageBucket: "spaspect-dashboard.appspot.com ",
-            messagingSenderId: "270336614615 ",
-            appId: "1:270336614615:web:f4f64e4b5624fa8ca8d092 ",
-            measurementId: "G-D03KWN0SXS "
+            apiKey: "AIzaSyD6Cm1InAFK-ecUq-F6ku8EQL_4oE_WTF0",
+            authDomain: "spaspect-dashboard.firebaseapp.com",
+            databaseURL: "https://spaspect-dashboard.firebaseio.com",
+            projectId: "spaspect-dashboard",
+            storageBucket: "spaspect-dashboard.appspot.com",
+            messagingSenderId: "270336614615",
+            appId: "1:270336614615:web:f4f64e4b5624fa8ca8d092",
+            measurementId: "G-D03KWN0SXS"
         };
+
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
+
+        window.onload = function() {
+            if (firebase.auth().currentUser) {
+               $("#loginModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });             
+           }
+        };
+        $("#login_password_field").keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#loginButton").click();
+            }
+        });
+
+        $("#loginButton").click(function() {});
     </script>
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/video.js/dist/video.js"></script>
+    <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
+
+    <script type="text/javascript" type="text/javascript" src="drawPlots.js"></script>
 
 
 </body>
