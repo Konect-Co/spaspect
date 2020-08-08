@@ -34,12 +34,10 @@
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="modal" data-target="#addsite" onclick="addSitePage()"><span class="fa fa-plus-square fa-lg"></span> Add Site</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                      Toggle Location: 
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="dashboard-select" onchange="updateDashboard(true)">
-                    </div>
+                <li>
+                    <select class="browser-default custom-select" id="dashboard-select" onchange="updateDashboard(true)">
+                        <option selected>Toggle Location</option>
+                    </select>
                 </li>
 
             </ul>
@@ -163,6 +161,9 @@
                     <source id="video-src" src="https://590804fbbbc47.streamlock.net:444/westland/westland.stream/playlist.m3u8">
                 </video>
             </div>
+            <div class="col-sm-6 border border-secondary no-gutters" id="plotDiv"></div>
+            
+            <div class="col-sm-6 border border-secondary no-gutters" id="mapDiv"></div>
             <div class="col-sm-6 border border-secondary order-last no-gutters" id="statsDiv">
                 <div id="stats-header">
                     <h2>Statistics</h2>
@@ -173,8 +174,6 @@
                     <h3>Unmasked count: <span id="statsUnmasked"></span></h3>
                 </div>
             </div>
-            <div class="col-sm-6 border border-secondary no-gutters" id="mapDiv"></div>
-            <div class="col-sm-6 border border-secondary no-gutters" id="plotDiv"></div>
         </div>
     </div>
     </div>
@@ -209,6 +208,7 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
+<<<<<<< HEAD
 
         window.onload = function() {
             if (firebase.auth().currentUser) {
@@ -218,6 +218,17 @@
                 });             
            }
         };
+=======
+    </script>
+    <script type="text/javascript ">
+        window.onload = function() {
+            $("#loginModal ").modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        };
+
+>>>>>>> c03f59cba9860e9a1e50144958012f434a3f293c
         $("#login_password_field").keyup(function(event) {
             if (event.keyCode === 13) {
                 $("#loginButton").click();

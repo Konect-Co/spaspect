@@ -107,8 +107,7 @@ function initializeDashboard() {
         Object.keys(accessibleEnvironments).forEach(function(key) {
             //TODO: use name specified in dashboard configuration rather than the one in accessibleEnvironments
             var txt = accessibleEnvironments[key];
-            var opt = document.createElement('a');
-            opt.className = "dropdown-item";
+            var opt = document.createElement('option');
             opt.appendChild(document.createTextNode(txt));
             opt.value = key;
 

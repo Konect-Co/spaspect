@@ -23,18 +23,17 @@ protected:
   int test_lonlat_array[4][2] = { 0, 0, 0, 0, 0, 0, 0, 0 };
   int test_lonlat_origin[2] = { 0, 0 };
 
-  PixelMapperConfig test_config = NULL;
+  PixelMapperConfig *test_config = NULL;
 
 public:
   void setUp() {
-    test_config = PixelMapperConfig(test_pixel_array, 
-      test_lonlat_array, test_lonlat_origin);
+    test_config = PixelMapperConfig(*test_pixel_array, *test_lonlat_array, test_lonlat_origin);
   };
 
 protected:
   void test_pixel_to_lonlat(){
     int pixel_coordinates[][2] = { 0, 0 };
-    int lonlat_coordinates[][2] = pixel_to_lonlat(test_config, pixel_coordinates);
+    int lonlat_coordinates[][2] = pixel_to_lonlat(*test_config, *pixel_coordinates);
     cout << "lonlat_coordinates value" << lonlat_coordinates[0][0] << endl;
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 1.0, 1.1, 0.05 );
     CPPUNIT_ASSERT( 1 == 0 );
