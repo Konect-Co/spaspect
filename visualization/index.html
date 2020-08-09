@@ -208,8 +208,6 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
-<<<<<<< HEAD
-
         window.onload = function() {
             if (firebase.auth().currentUser) {
                $("#loginModal").modal({
@@ -218,17 +216,6 @@
                 });             
            }
         };
-=======
-    </script>
-    <script type="text/javascript ">
-        window.onload = function() {
-            $("#loginModal ").modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-        };
-
->>>>>>> c03f59cba9860e9a1e50144958012f434a3f293c
         $("#login_password_field").keyup(function(event) {
             if (event.keyCode === 13) {
                 $("#loginButton").click();
