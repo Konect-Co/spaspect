@@ -208,15 +208,14 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
-    </script>
-    <script type="text/javascript ">
         window.onload = function() {
-            $("#loginModal ").modal({
-                backdrop: 'static',
-                keyboard: false
-            });
+            if (firebase.auth().currentUser) {
+               $("#loginModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });             
+           }
         };
-
         $("#login_password_field").keyup(function(event) {
             if (event.keyCode === 13) {
                 $("#loginButton").click();

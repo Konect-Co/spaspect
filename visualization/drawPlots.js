@@ -68,7 +68,7 @@ function update(data) {
 		text: text_values
 	};
 	
-
+/*
     var tracked = dashboard['tracked'];
     var trackedNamesLen = Object.values(tracked).length;
     
@@ -140,7 +140,7 @@ function update(data) {
 	};
 	//console.log("Dots", trace);
 	//console.log("Lines", mapDataTrace);
-
+*/
     
 	
 	//TODO: Add a separate trace for the history of each person
@@ -148,7 +148,7 @@ function update(data) {
 	//	color for each person by reading from the data argument.
 	//  Add this trace to scatterData variable below
 
-	var scatterData = [trace, mapDataTrace];
+	var scatterData = [trace]//, mapDataTrace];
 	var scatterLayout = {
 		margin: {
 			l: 0,

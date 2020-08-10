@@ -28,46 +28,53 @@ using namespace std;
 using namespace cv;
 /*
 namespace Track {
-    
-    struct locationInfo {
-        int boundingBox[4];
-        int _3DCoordinate[3];
-        int lonlatCoordinate[2];
-    };
+	struct locationInfo {
+		int boundingBox[4];
+		int _3DCoordinate[3];
+		int lonlatCoordinate[2];
+	}
 	class TrackedEntity {
 	public:
-		float lastUpdate;
+		static unsigned float currTime = 0;
+
+		unsigned float lastUpdate;
 		float velocity[2];
 		map<int, locationInfo> history;
+
+		TrackedEntity():lastUpdate(currTime), velocity({0, 0}, history(std::map<int, locationInfo>())) {}
 		void addNext(float time, locationInfo &newLocationInfo) {
 			history[time] = newLocationInfo;
-			// TODO: Update velocity
+
+			//update velocity
+			int newBoxCenter[2] = {static_cast<int>(newLocationInfo.boundingBox[0] + newLocationInfo.boundingBox[2]/2.), 
+				static_cast<int>(newLocationInfo.boundingBox[1] + newLocationInfo.boundingBox[3]/2.)};
+			int currBoxCenter[2] = {static_cast<int>(boundingBox[0] + boundingBox[2]/2.), 
+				static_cast<int>(boundingBox[1] + boundingBox[3]/2.)};
+			velocity = {static_cast<int>((newBoxCenter[0]-currBoxCenter[0]*1.) / (currTime-lastUpdate)), 
+				static_cast<int>((newBoxCenter[1]-currBoxCenter[1]*1.) / (currTime-lastUpdate))};
 		}
 		//Computes the prediction of the next bounding box using velocity and current position
-		int * estimateBB() {
+
+		int[4] estimateBB() {
+			float timeDiff = currTime - lastUpdate;
+			float deltaX = velocity[0]*timeDiff;
+			float deltaY = velocity[1]*timeDiff;
+
+			int currBB[4] = history[history.end()-1].boundingBox;
+			int newBB[4] = {currBB[0]+deltaX, currBB[1]+deltaY, currBB[2]+deltaX, currBB[3]+deltaY};
+			return newBB;
+		}
+		static void updateTime() {
+			currTime = std::time(0);
+		}
+		static void track(dashboard &dash, std::vector<DashboardInfo::locationInfo*>) {
+			//TODO
+		}
+
+		static void prune(dashboard &dash) {
 			//TODO
 		}
 	};
-    
-    struct dashboard {
-        
-    };
-    struct DashboardInfo {
-    };
-    
-	float time;
-
-	void updateTime() {
-		//TODO
-	}
-
-	void track(vector<DashboardInfo::locationInfo*> vec, dashboard &dash) { //ERR HERE --> the vector param is wrong
-		//TODO
-	}
-
-	void prune(dashboard &dash) {
-		//TODO
-	}
 } //namespace Track
 
 namespace DashboardInfo {
@@ -84,8 +91,6 @@ namespace DashboardInfo {
 	//Data structure that represents the dashboard
 	class dashboard {
 	public:
-
-	
 		string streamlink;
 		string name;
 		vector<Track::TrackedEntity*> objects;
