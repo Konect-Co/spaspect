@@ -11,15 +11,12 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-//#include <opencv2/opencv.hpp>
-//#include <opencv4/opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 //#include "tensorflow/tensorflow/cc/saved_model/loader.h"
 #include <cassert>
 #include <array>
 #include <algorithm>
 //#include <cv.h>
-#include "xtensor/xarray.hpp"
-#include "xtensor/xio.hpp"
 #include <vector>
 #include "NumCpp.hpp"
 
@@ -133,8 +130,8 @@ public:
   float lon_const;
   float lat_const = 111320;
 
-  cv::Mat M = getPerspectiveTransform(pixel_array, lonlat_array);
-  cv::Mat invM = getPerspectiveTransform(lonlat_array, pixel_array);
+  cv::Mat M = cv::getPerspectiveTransform(pixel_array, lonlat_array);
+  cv::Mat invM = cv::getPerspectiveTransform(lonlat_array, pixel_array);
 
   PixelMapperConfig(int (&pixel_array)[4][2], int (&lonlat_array)[4][2], int (&lonlat_origin)[2])
       : pixel_array(pixel_array), lonlat_array(lonlat_array) {
@@ -143,8 +140,8 @@ public:
 };
 
 // Convert a set of pixel coordinates to lon-lat coordinates
-int * pixel_to_lonlat(PixelMapperConfig &config, int pixel_coordinates[][2]) {
-	int N = *(&pixel_coordinates + 1) - pixel_coordinates;
+std::vector<int[2]>* pixel_to_lonlat(PixelMapperConfig &config, std::vector<int[2]> pixel_coordinates) {
+	int N = pixel_coordinates.size();
 
 	int pixel_matrix_transpose[3][N];
 	for (int i = 0; i < N; ++i) {
@@ -152,25 +149,24 @@ int * pixel_to_lonlat(PixelMapperConfig &config, int pixel_coordinates[][2]) {
 		pixel_matrix_transpose[1][i] = *pixel_coordinates[1];
 		pixel_matrix_transpose[2][i] = 1;
 	}
-
-	// https://xtensor-blas.readthedocs.io/en/latest/reference.html#_CPPv4I00EN2xt6linalg3dotEDaRK11xexpressionI1TERK11xexpressionI1OE
-	//nc::NdArray<double> cm = {config.M};
 	
-	int lonlat_matrix_transpose[3][N] = nc::dot(*config.M, pixel_matrix_transpose); //matmul(config.M, pixel_matrix_transpose); //TODO: Matmul implementation
-	int lonlat_coordinates[N][2];
+	float lonlat_matrix_transpose[3][N] = nc::dot(config.M, pixel_matrix_transpose);
+	std::vector<float[3]>* lonlat_matrix_transpose = new std::vector<float[3]>(sizeof(float[3]), N);
+	float (*lonlat_coordinates_val)[2] = new float[N][2];
 
 	for (int i = 0; i < N; ++i) {
 		int scale_factor = lonlat_matrix_transpose[3][i];
-		lonlat_coordinates[i][0] = lonlat_matrix_transpose[0][i] / scale_factor;
-		lonlat_coordinates[i][1] = lonlat_matrix_transpose[1][i] / scale_factor;
+		lonlat_coordinates_val[i][0] = lonlat_matrix_transpose[0][i] / scale_factor;
+		lonlat_coordinates_val[i][1] = lonlat_matrix_transpose[1][i] / scale_factor;
 	}
 
-	return *lonlat_coordinates;
+	latlon_coordinates = lonlat_coordinates_val;
+	return;
 }
 
 // Convert a set of lon-lat coordinates to pixel coordinates
-int * lonlat_to_pixel(PixelMapperConfig &config, int lonlat_coordinates[][2]) {
-	int N = *(&lonlat_coordinates + 1) - lonlat_coordinates;
+void lonlat_to_pixel(PixelMapperConfig &config, int (&lonlat_coordinates)[][2], int (&pixel_coordinates)[][2]) {
+	int N = *(lonlat_coordinates + 1) - lonlat_coordinates;
 
 	int lonlat_matrix_transpose[3][N];
 	for (int i = 0; i < N; ++i) {
@@ -179,49 +175,61 @@ int * lonlat_to_pixel(PixelMapperConfig &config, int lonlat_coordinates[][2]) {
 		lonlat_matrix_transpose[2][i] = 1;
 	}
 
-	// https://xtensor-blas.readthedocs.io/en/latest/reference.html#_CPPv4I00EN2xt6linalg3dotEDaRK11xexpressionI1TERK11xexpressionI1OE
-	//nc::NdArray<double> cmv = {config.invM};
-	int pixel_matrix_transpose[3][N] = nc::dot(*config.invM, lonlat_matrix_transpose);
-	//int pixel_matrix_transpose[3][N] = matmul(config.invM, lonlat_matrix_transpose); //TODO: Matmul implementation
-	int pixel_coordinates[N][2];
+	float pixel_matrix_transpose[3][N] = nc::dot(config.invM, lonlat_matrix_transpose);
+	float (*pixel_coordinates_val)[2] = new float[N][2];
 
 	for (int i = 0; i < N; ++i) {
 		int scale_factor = pixel_matrix_transpose[3][i];
-		pixel_coordinates[i][0] = pixel_matrix_transpose[0][i] / scale_factor;
-		pixel_coordinates[i][1] = pixel_matrix_transpose[1][i] / scale_factor;
+		pixel_coordinates_val[i][0] = pixel_matrix_transpose[0][i] / scale_factor;
+		pixel_coordinates_val[i][1] = pixel_matrix_transpose[1][i] / scale_factor;
 	}
 
-	return *pixel_coordinates;
+	pixel_coordinates = pixel_coordinates_val;
+	return;
 }
 
 // Convert a set of lon-lat coordinates to 3D coordinates
-int * lonlat_to_3D(PixelMapperConfig &config, int lonlat_coordinates[][2]) {
-  // TODO
+void lonlat_to_3D(PixelMapperConfig &config, int (&lonlat_coordinates)[][2], float (&threeD)[][3]) {
+  int N = *(lonlat_coordinates + 1) - lonlat_coordinates;
+  float (*threeD_val)[3] = new float[N][3];
 
-  float lon_d = *lonlat_coordinates[0] - config.lonlat_origin[0];
-  float lat_d = *lonlat_coordinates[1] - config.lonlat_origin[1];
+  for (int i = 0; i < N; ++i) {
+	  float lon_d = lonlat_coordinates[i][0] - config.lonlat_origin[i][0];
+	  float lat_d = lonlat_coordinates[i][1] - config.lonlat_origin[i][1];
 
-  float lon_m = lon_d * config.lon_const;
-  float lat_m = lat_d * config.lat_const;
+	  float lon_m = lon_d * config.lon_const;
+	  float lat_m = lat_d * config.lat_const;
 
-  int threeD[3] = {lat_m, lon_m, 0};
+	  threeD_val[i][0] = lat_m
+	  threeD_val[i][1] = lon_m
+	  threeD_val[i][2] = 0;
+  }
   
-  return threeD;
+  threeD = threeD_val;
+  return;
 }
 
 // Convert a set of 3D coordinates to lon-lat coordinates
-int * _3D_to_lonlat(PixelMapperConfig &config, int _3D_coordinates[][3]) {
-  float lon_m = *_3D_coordinates[1];
-  float lat_m = *_3D_coordinates[0];
+float * _3D_to_lonlat(PixelMapperConfig &config, int (&_3D_coordinates)[][3], float (&lonlat_coordinates)[][2]) {
+  int N = *(_3D_coordinates + 1) - _3D_coordinates;
+  float (*lonlat_coordinates_val)[2] = new float[N][2];
 
-  float lon_d = lon_m / config.lon_const;
-  float lat_d = lat_m / config.lat_const;
+  for (int i = 0; i < N; ++i) {
+	  float lon_m = *_3D_coordinates[i][1];
+	  float lat_m = *_3D_coordinates[i][0];
 
-  float lon_coord = lat_d + config.lonlat_origin[0];
-  float lat_coord = lon_d + config.lonlat_origin[1];
+	  float lon_d = lon_m / config.lon_const;
+	  float lat_d = lat_m / config.lat_const;
 
-  int lonlat[2] = {lon_d, lat_d};
-  return lonlat;
+	  float lon_coord = lat_d + config.lonlat_origin[0];
+	  float lat_coord = lon_d + config.lonlat_origin[1];
+
+	  lonlat_coordinates_val[i][0] = lon_d;
+	  lonlat_coordinates_val[i][1] = lat_d;
+  }
+
+  lonlat_coordinates = lonlat_coordinates_val;
+  return;
 }
 
 } // namespace PixelMapper
