@@ -11,8 +11,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-//#include <opencv2/opencv.hpp>
-//#include <opencv4/opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 //#include "tensorflow/tensorflow/cc/saved_model/loader.h"
 #include <cassert>
 #include <array>
@@ -22,9 +21,11 @@
 #include "xtensor/xio.hpp"
 #include <vector>
 #include "NumCpp.hpp"
+#include <opencv2/core/types.hpp>
 
 
 using namespace std;
+using namespace cv;
 /*
 namespace Track {
     
@@ -120,27 +121,44 @@ namespace DashboardInfo {
 namespace PixelMapper {
 class PixelMapperConfig {
 public:
-  int pixel_array[4][2];
-  int lonlat_array[4][2];
+  Point2f pixel_array[4];
+  Point2f lonlat_array[4];
+  //int pixel_array[4][2];
+  //int lonlat_array[4][2];
 
   int lonlat_origin[2];
 
-  float lon_const;
   float lat_const = 111320;
 
-  cv::Mat M = getPerspectiveTransform(pixel_array, lonlat_array);
-  cv::Mat invM = getPerspectiveTransform(lonlat_array, pixel_array);
-
+  Mat M = getPerspectiveTransform(pixel_array, lonlat_array);
+  Mat invM = getPerspectiveTransform(lonlat_array, pixel_array);
+  
+  void setPA(Point2f (&pixel_array)[4]){
+      std::copy(begin(this->pixel_array), end(this->pixel_array), begin(pixel_array));
+  }
+  void setLA(Point2f (&lonlat_array)[4]){
+      std::copy(begin(this->lonlat_array), end(this->lonlat_array), begin(lonlat_array));
+  }
+  void setLO(int (&lonlat_origin)[2]){
+      std::copy(begin(this->lonlat_origin), end(this->lonlat_origin), begin(lonlat_origin));
+  }
+  
+  float lon_const = 40075000 * cos(lonlat_origin[0] * M_PI / 180) / 360;
+  
+/*
   PixelMapperConfig(int (&pixel_array)[4][2], int (&lonlat_array)[4][2], int (&lonlat_origin)[2])
-      : pixel_array(pixel_array), lonlat_array(lonlat_array) {
+      : std::copy(begin(this->pixel_array), end(this->pixel_array), begin(pixel_array)), 
+        std::copy(begin(this->lonlat_array), end(this->lonlat_array), begin(lonlat_array)),
+        std::copy(begin(this->lonlat_origin), end(this->lonlat_origin), begin(lonlat_origin)) {
             lon_const = 40075000 * cos(lonlat_origin[0] * M_PI / 180) / 360;
         }
+*/
 };
 
 // Convert a set of pixel coordinates to lon-lat coordinates
 int * pixel_to_lonlat(PixelMapperConfig &config, int pixel_coordinates[][2]) {
 	int N = *(&pixel_coordinates + 1) - pixel_coordinates;
-
+    
 	int pixel_matrix_transpose[3][N];
 	for (int i = 0; i < N; ++i) {
 		pixel_matrix_transpose[0][i] = *pixel_coordinates[0];
@@ -150,14 +168,17 @@ int * pixel_to_lonlat(PixelMapperConfig &config, int pixel_coordinates[][2]) {
 
 	// https://xtensor-blas.readthedocs.io/en/latest/reference.html#_CPPv4I00EN2xt6linalg3dotEDaRK11xexpressionI1TERK11xexpressionI1OE
 	//nc::NdArray<double> cm = {config.M};
+	Mat pixel_matrix_transpose_converted = Mat(3, N, CV_32F, pixel_matrix_transpose);
+    Mat configM = config.M;
 	
-	int lonlat_matrix_transpose[3][N] = nc::dot(*config.M, pixel_matrix_transpose); //matmul(config.M, pixel_matrix_transpose); //TODO: Matmul implementation
+	Mat lonlat_matrix_transpose = configM * pixel_matrix_transpose_converted;
+	//int lonlat_matrix_transpose[3][N] = cv::hal_ni_gemm32f(configM, pixel_matrix_transpose); //matmul(config.M, pixel_matrix_transpose); //TODO: Matmul implementation
 	int lonlat_coordinates[N][2];
 
 	for (int i = 0; i < N; ++i) {
-		int scale_factor = lonlat_matrix_transpose[3][i];
-		lonlat_coordinates[i][0] = lonlat_matrix_transpose[0][i] / scale_factor;
-		lonlat_coordinates[i][1] = lonlat_matrix_transpose[1][i] / scale_factor;
+		int scale_factor = lonlat_matrix_transpose.at<float>(3,i);
+		lonlat_coordinates[i][0] = lonlat_matrix_transpose.at<float>(0,i) / scale_factor;
+		lonlat_coordinates[i][1] = lonlat_matrix_transpose.at<float>(1,i) / scale_factor;
 	}
 
 	return *lonlat_coordinates;
@@ -176,14 +197,18 @@ int * lonlat_to_pixel(PixelMapperConfig &config, int lonlat_coordinates[][2]) {
 
 	// https://xtensor-blas.readthedocs.io/en/latest/reference.html#_CPPv4I00EN2xt6linalg3dotEDaRK11xexpressionI1TERK11xexpressionI1OE
 	//nc::NdArray<double> cmv = {config.invM};
-	int pixel_matrix_transpose[3][N] = nc::dot(*config.invM, lonlat_matrix_transpose);
+	
+	Mat lonlat_matrix_transpose_converted = Mat(3, N, CV_32F, lonlat_matrix_transpose);
+	Mat configINVM = config.invM;
+	
+	Mat pixel_matrix_transpose = configINVM * lonlat_matrix_transpose_converted;
 	//int pixel_matrix_transpose[3][N] = matmul(config.invM, lonlat_matrix_transpose); //TODO: Matmul implementation
 	int pixel_coordinates[N][2];
 
 	for (int i = 0; i < N; ++i) {
-		int scale_factor = pixel_matrix_transpose[3][i];
-		pixel_coordinates[i][0] = pixel_matrix_transpose[0][i] / scale_factor;
-		pixel_coordinates[i][1] = pixel_matrix_transpose[1][i] / scale_factor;
+		int scale_factor = pixel_matrix_transpose.at<float>(3,i);
+		pixel_coordinates[i][0] = pixel_matrix_transpose.at<float>(0,i) / scale_factor;
+		pixel_coordinates[i][1] = pixel_matrix_transpose.at<float>(1,i) / scale_factor;
 	}
 
 	return *pixel_coordinates;
