@@ -19,9 +19,11 @@
 //#include <cv.h>
 #include <vector>
 #include "NumCpp.hpp"
+#include <opencv2/core/types.hpp>
 
 
 using namespace std;
+using namespace cv;
 /*
 namespace Track {
 	struct locationInfo {
@@ -122,117 +124,144 @@ namespace DashboardInfo {
 namespace PixelMapper {
 class PixelMapperConfig {
 public:
-  int pixel_array[4][2];
-  int lonlat_array[4][2];
+  Point2f* pixel_array[4];
+  Point2f* lonlat_array[4];
 
-  int lonlat_origin[2];
+  Point2f* lonlat_origin;
 
-  float lon_const;
-  float lat_const = 111320;
+  static float lat_const;
+  static float lon_const;
 
-  cv::Mat M = cv::getPerspectiveTransform(pixel_array, lonlat_array);
-  cv::Mat invM = cv::getPerspectiveTransform(lonlat_array, pixel_array);
+  Mat M;
+  Mat invM;
+  
+  PixelMapperConfig(Point2f* (&pixel_array)[4], Point2f* (&lonlat_array)[4], Point2f* (&lonlat_origin))
+  : lonlat_origin(lonlat_origin) {
+  	this->lat_const = 111320.;
+    this->lon_const = 40075000 * cos(lonlat_origin->x * M_PI / 180) / 360;
 
-  PixelMapperConfig(int (&pixel_array)[4][2], int (&lonlat_array)[4][2], int (&lonlat_origin)[2])
-      : pixel_array(pixel_array), lonlat_array(lonlat_array) {
-            lon_const = 40075000 * cos(lonlat_origin[0] * M_PI / 180) / 360;
-        }
+    this->pixel_array[0] = pixel_array[0];
+    this->pixel_array[1] = pixel_array[1];
+    this->pixel_array[2] = pixel_array[2];
+    this->pixel_array[3] = pixel_array[3];
+
+    this->lonlat_array[0] = lonlat_array[0];
+    this->lonlat_array[1] = lonlat_array[1];
+    this->lonlat_array[2] = lonlat_array[2];
+    this->lonlat_array[3] = lonlat_array[3];
+
+	//TODO: No matching function call for pixel_array and lonlat_array
+	M = getPerspectiveTransform(*pixel_array, *lonlat_array);
+	invM = getPerspectiveTransform(*lonlat_array, *pixel_array);
+  }
 };
 
 // Convert a set of pixel coordinates to lon-lat coordinates
-std::vector<int[2]>* pixel_to_lonlat(PixelMapperConfig &config, std::vector<int[2]> pixel_coordinates) {
+std::vector<Point2f*>* pixel_to_lonlat(PixelMapperConfig &config, std::vector<Point2f*>& pixel_coordinates) {
 	int N = pixel_coordinates.size();
 
 	int pixel_matrix_transpose[3][N];
 	for (int i = 0; i < N; ++i) {
-		pixel_matrix_transpose[0][i] = *pixel_coordinates[0];
-		pixel_matrix_transpose[1][i] = *pixel_coordinates[1];
+		pixel_matrix_transpose[0][i] = pixel_coordinates[i]->x;
+		pixel_matrix_transpose[1][i] = pixel_coordinates[i]->y;
 		pixel_matrix_transpose[2][i] = 1;
 	}
+
+	Mat pixel_matrix_transpose_converted = Mat(3, N, CV_32F, pixel_matrix_transpose);
+	Mat lonlat_matrix_transpose = config.M * pixel_matrix_transpose_converted;
 	
-	float lonlat_matrix_transpose[3][N] = nc::dot(config.M, pixel_matrix_transpose);
-	std::vector<float[3]>* lonlat_matrix_transpose = new std::vector<float[3]>(sizeof(float[3]), N);
-	float (*lonlat_coordinates_val)[2] = new float[N][2];
+	std::vector<Point2f*>* lonlat_coordinates = new std::vector<Point2f*>(N);
 
 	for (int i = 0; i < N; ++i) {
-		int scale_factor = lonlat_matrix_transpose[3][i];
-		lonlat_coordinates_val[i][0] = lonlat_matrix_transpose[0][i] / scale_factor;
-		lonlat_coordinates_val[i][1] = lonlat_matrix_transpose[1][i] / scale_factor;
+		int scale_factor = lonlat_matrix_transpose.at<float>(3,i);
+		//TODO: What is the appropriate constructor
+		Point2f* lonlat = new Point2f(0,0);
+		lonlat->x = lonlat_matrix_transpose.at<float>(0,i) / scale_factor;
+		lonlat->y = lonlat_matrix_transpose.at<float>(1,i) / scale_factor;
+		(*lonlat_coordinates)[i] = lonlat;
 	}
 
-	latlon_coordinates = lonlat_coordinates_val;
-	return;
+	return lonlat_coordinates;
 }
 
 // Convert a set of lon-lat coordinates to pixel coordinates
-void lonlat_to_pixel(PixelMapperConfig &config, int (&lonlat_coordinates)[][2], int (&pixel_coordinates)[][2]) {
-	int N = *(lonlat_coordinates + 1) - lonlat_coordinates;
+std::vector<Point2f*>* lonlat_to_pixel(PixelMapperConfig &config, std::vector<Point2f*>& lonlat_coordinates) {
+	int N = lonlat_coordinates.size();
 
 	int lonlat_matrix_transpose[3][N];
 	for (int i = 0; i < N; ++i) {
-		lonlat_matrix_transpose[0][i] = *lonlat_coordinates[0];
-		lonlat_matrix_transpose[1][i] = *lonlat_coordinates[1];
+		lonlat_matrix_transpose[0][i] = lonlat_coordinates[i]->x;
+		lonlat_matrix_transpose[1][i] = lonlat_coordinates[i]->y;
 		lonlat_matrix_transpose[2][i] = 1;
 	}
 
-	float pixel_matrix_transpose[3][N] = nc::dot(config.invM, lonlat_matrix_transpose);
-	float (*pixel_coordinates_val)[2] = new float[N][2];
+	Mat lonlat_matrix_transpose_converted = Mat(3, N, CV_32F, lonlat_matrix_transpose);
+	Mat pixel_matrix_transpose = config.invM * lonlat_matrix_transpose_converted;
+
+	std::vector<Point2f*>* pixel_coordinates = new std::vector<Point2f*>(N);
 
 	for (int i = 0; i < N; ++i) {
-		int scale_factor = pixel_matrix_transpose[3][i];
-		pixel_coordinates_val[i][0] = pixel_matrix_transpose[0][i] / scale_factor;
-		pixel_coordinates_val[i][1] = pixel_matrix_transpose[1][i] / scale_factor;
+		int scale_factor = pixel_matrix_transpose.at<float>(3,i);
+		//TODO: What is the appropriate constructor
+		Point2f* pixel_coordinate = new Point2f(0,0);
+		pixel_coordinate->x = pixel_matrix_transpose.at<float>(0,i) / scale_factor;
+		pixel_coordinate->y = pixel_matrix_transpose.at<float>(1,i) / scale_factor;
+		(*pixel_coordinates)[i] = pixel_coordinate;
 	}
 
-	pixel_coordinates = pixel_coordinates_val;
-	return;
+	return pixel_coordinates;
 }
 
 // Convert a set of lon-lat coordinates to 3D coordinates
-void lonlat_to_3D(PixelMapperConfig &config, int (&lonlat_coordinates)[][2], float (&threeD)[][3]) {
-  int N = *(lonlat_coordinates + 1) - lonlat_coordinates;
-  float (*threeD_val)[3] = new float[N][3];
+std::vector<Point3f*>* lonlat_to_3D(PixelMapperConfig &config, std::vector<Point2f*>& lonlat_coordinates) {
+  int N = lonlat_coordinates.size();
+
+  std::vector<Point3f*>* threeD_coordinates = new std::vector<Point3f*>(N);
 
   for (int i = 0; i < N; ++i) {
-	  float lon_d = lonlat_coordinates[i][0] - config.lonlat_origin[i][0];
-	  float lat_d = lonlat_coordinates[i][1] - config.lonlat_origin[i][1];
+	  float lon_d = lonlat_coordinates[i]->x - config.lonlat_origin[i].x;
+	  float lat_d = lonlat_coordinates[i]->y - config.lonlat_origin[i].y;
 
 	  float lon_m = lon_d * config.lon_const;
 	  float lat_m = lat_d * config.lat_const;
 
-	  threeD_val[i][0] = lat_m
-	  threeD_val[i][1] = lon_m
-	  threeD_val[i][2] = 0;
+	  Point3f* threeD_coordinate = new Point3f(0,0,0);
+	  threeD_coordinate->x = lat_m;
+	  threeD_coordinate->y = lon_m;
+	  threeD_coordinate->z = 0;
+	  (*threeD_coordinates)[i] = threeD_coordinate;
   }
   
-  threeD = threeD_val;
-  return;
+  return threeD_coordinates;
 }
 
 // Convert a set of 3D coordinates to lon-lat coordinates
-float * _3D_to_lonlat(PixelMapperConfig &config, int (&_3D_coordinates)[][3], float (&lonlat_coordinates)[][2]) {
-  int N = *(_3D_coordinates + 1) - _3D_coordinates;
+std::vector<Point2f*>* _3D_to_lonlat(PixelMapperConfig &config, std::vector<Point3f*>& threeD_coordinates) {
+  int N = threeD_coordinates.size();
   float (*lonlat_coordinates_val)[2] = new float[N][2];
 
+  std::vector<Point2f*>* lonlat_coordinates = new std::vector<Point2f*>(N);
   for (int i = 0; i < N; ++i) {
-	  float lon_m = *_3D_coordinates[i][1];
-	  float lat_m = *_3D_coordinates[i][0];
+	  float lon_m = threeD_coordinates[i]->y;
+	  float lat_m = threeD_coordinates[i]->x;
 
 	  float lon_d = lon_m / config.lon_const;
 	  float lat_d = lat_m / config.lat_const;
 
-	  float lon_coord = lat_d + config.lonlat_origin[0];
-	  float lat_coord = lon_d + config.lonlat_origin[1];
+	  float lon_coord = lat_d + config.lonlat_origin->y;
+	  float lat_coord = lon_d + config.lonlat_origin->x;
 
-	  lonlat_coordinates_val[i][0] = lon_d;
-	  lonlat_coordinates_val[i][1] = lat_d;
+	  Point2f* lonlat_coordinate = new Point2f(0,0);
+	  lonlat_coordinate->x = lat_coord;
+	  lonlat_coordinate->y = lon_coord;
+	  (*lonlat_coordinates)[i] = lonlat_coordinate;
   }
-
-  lonlat_coordinates = lonlat_coordinates_val;
-  return;
+  return lonlat_coordinates;
 }
 
-} // namespace PixelMapper
+}
+
+// namespace PixelMapper
 /*
 namespace CVOutput {
 	namespace utils {
