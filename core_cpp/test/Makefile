@@ -10,7 +10,7 @@ debug: executable
 executable:
 	$(CC) $(CCFLAGS) -c -o RunTests.o RunTests.cpp
 	$(CC) $(CCFLAGS) -c -o Main.o Main.cpp
-	libtool --mode=link $(CC) $(CCFLAGS) -o a.out RunTests.o Main.o /usr/local/src/cppunit/libcppunit.la -ldl
+	libtool --mode=link $(CC) $(CCFLAGS) $(LIBS) -o a.out RunTests.o Main.o /usr/local/src/cppunit/libcppunit.la -ldl
 
 clean:
 	rm -rf *.o a.out
