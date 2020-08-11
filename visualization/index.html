@@ -249,6 +249,17 @@
             });
         };
 
+        window.onresize = function() {
+            Plotly.relayout('plotDiv', {
+              width: document.getElementById('plotDiv').offsetWidth,
+              height: document.getElementById('plotDiv').offsetHeight
+            });
+            Plotly.relayout('mapDiv', {
+              width: document.getElementById('mapDiv').offsetWidth,
+              height: document.getElementById('mapDiv').offsetHeight
+            });
+        }
+
         $("#login_password_field").keyup(function(event) {
             if (event.keyCode === 13) {
                 $("#loginButton").click();
