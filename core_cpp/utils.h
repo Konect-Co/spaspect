@@ -129,8 +129,8 @@ public:
 
   Point2f* lonlat_origin;
 
-  static float lat_const;
-  static float lon_const;
+  float lat_const;
+  float lon_const;
 
   Mat M;
   Mat invM;
@@ -168,13 +168,13 @@ std::vector<Point2f*>* pixel_to_lonlat(PixelMapperConfig &config, std::vector<Po
 	}
 
 	Mat pixel_matrix_transpose_converted = Mat(3, N, CV_32F, pixel_matrix_transpose);
+	// TODO: Operator * is undefined between cv::Mat and cv::Mat. What is correct method?
 	Mat lonlat_matrix_transpose = config.M * pixel_matrix_transpose_converted;
 	
 	std::vector<Point2f*>* lonlat_coordinates = new std::vector<Point2f*>(N);
 
 	for (int i = 0; i < N; ++i) {
 		int scale_factor = lonlat_matrix_transpose.at<float>(3,i);
-		//TODO: What is the appropriate constructor
 		Point2f* lonlat = new Point2f(0,0);
 		lonlat->x = lonlat_matrix_transpose.at<float>(0,i) / scale_factor;
 		lonlat->y = lonlat_matrix_transpose.at<float>(1,i) / scale_factor;
@@ -196,13 +196,13 @@ std::vector<Point2f*>* lonlat_to_pixel(PixelMapperConfig &config, std::vector<Po
 	}
 
 	Mat lonlat_matrix_transpose_converted = Mat(3, N, CV_32F, lonlat_matrix_transpose);
+	// TODO: See line 171
 	Mat pixel_matrix_transpose = config.invM * lonlat_matrix_transpose_converted;
 
 	std::vector<Point2f*>* pixel_coordinates = new std::vector<Point2f*>(N);
 
 	for (int i = 0; i < N; ++i) {
 		int scale_factor = pixel_matrix_transpose.at<float>(3,i);
-		//TODO: What is the appropriate constructor
 		Point2f* pixel_coordinate = new Point2f(0,0);
 		pixel_coordinate->x = pixel_matrix_transpose.at<float>(0,i) / scale_factor;
 		pixel_coordinate->y = pixel_matrix_transpose.at<float>(1,i) / scale_factor;
