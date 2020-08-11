@@ -1,6 +1,12 @@
 var first = true;
 
 
+
+$("#login_password_field").keyup(function(event) {
+	if (event.keyCode === 13) {
+		$("#loginButton").click();
+	}
+});
 function update(data) {
 	//document.getElementById("video-src").setAttribute("src", data["streamlink"]);
 	//TODO: Seems like this doesn't update the video successfully
@@ -213,6 +219,11 @@ function update(data) {
 		}
 	};
 
+
+
+
+
+	
 	Plotly.setPlotConfig({
 		mapboxAccessToken: "pk.eyJ1Ijoic3Jhdml0MSIsImEiOiJja2JzY3NpcHgwMGJnMnZzYTY5ZWsyeDR6In0.CIOWohypCmf_oCzed32xRA"
 	})
