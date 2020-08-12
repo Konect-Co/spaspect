@@ -195,7 +195,7 @@ std::vector<Point2f*>* lonlat_to_pixel(PixelMapperConfig &config, std::vector<Po
 		lonlat_matrix_transpose[2][i] = 1;
 	}
 
-	Mat lonlat_matrix_transpose_converted = Mat(3, N, CV_32F, lonlat_matrix_transpose);
+	Mat lonlat_matrix_transpose_converted = Mat(3, N, CV_64F, lonlat_matrix_transpose);
 	// TODO: See line 171
 	Mat pixel_matrix_transpose = config.invM * lonlat_matrix_transpose_converted;
 
@@ -242,8 +242,8 @@ std::vector<Point2f*>* _3D_to_lonlat(PixelMapperConfig &config, std::vector<Poin
 
   std::vector<Point2f*>* lonlat_coordinates = new std::vector<Point2f*>(N);
   for (int i = 0; i < N; ++i) {
-	  float lon_m = threeD_coordinates[i]->y;
-	  float lat_m = threeD_coordinates[i]->x;
+	  float lon_m = threeD_coordinates[i]->x;
+	  float lat_m = threeD_coordinates[i]->y;
 
 	  float lon_d = lon_m / config.lon_const;
 	  float lat_d = lat_m / config.lat_const;

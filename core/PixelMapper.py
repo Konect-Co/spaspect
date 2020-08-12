@@ -67,7 +67,7 @@ class PixelMapper(object):
 		lon_d = lon_m / self.lon_const
 		lat_d = lat_m / self.lat_const
 		
-		lon_coord = lat_d + self.lonlat_origin[0]
-		lat_coord = lon_d + self.lonlat_origin[1]
+		lon_coord = lon_d + self.lonlat_origin[0]
+		lat_coord = lat_d + self.lonlat_origin[1]
 		
-		return [lon_d, lat_d]
+		return [lon_coord, lat_coord]
