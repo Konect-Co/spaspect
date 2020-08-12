@@ -24,10 +24,6 @@ protected:
   Point2f* test_lonlat_array[4] = { new Point2f(0,0), new Point2f(0,0), new Point2f(0,0), new Point2f(0,0) };
   Point2f* test_lonlat_origin = new Point2f(0,0);
 
-  //int test_pixel_array[4][2] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-  //int test_lonlat_array[4][2] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-  //int test_lonlat_origin[2] = { 0, 0 };
-
   PixelMapperConfig* test_config = NULL;
 
 public:
@@ -37,15 +33,10 @@ public:
 
 protected:
   void test_pixel_to_lonlat(){
-    vector<Point2f*> pixel_coordinates(1);
-    pixel_coordinates[0] = new Point2f(0, 0);
+    vector<Point2f*> pixel_coordinates = {new Point2f(0, 0)};
 
     vector<Point2f*>* lonlat_coordinates = pixel_to_lonlat(*test_config, pixel_coordinates);
     cout << "lonlat_coordinates value" << (*lonlat_coordinates)[0]->x << endl;
-
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( 1.0, 1.1, 0.05 );
-    CPPUNIT_ASSERT( 1 == 0 );
-    CPPUNIT_ASSERT( 1 == 1 );
 
     //How bout da memory cleanup??
   };

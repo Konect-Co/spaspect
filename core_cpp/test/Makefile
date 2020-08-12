@@ -1,6 +1,6 @@
 CC=g++
-CCFLAGS =
-LIBS = -lopencv_core -lopencv_imgcodecs -lopencv_videoio -lopencv_imgproc
+CCFLAGS=
+LIBS=-lopencv_core -lopencv_imgcodecs -lopencv_videoio -lopencv_imgproc
 
 all: executable
 
@@ -8,9 +8,7 @@ debug: CCFLAGS += -DDEBUG -g
 debug: executable
 
 executable:
-	$(CC) $(CCFLAGS) -c -o RunTests.o RunTests.cpp
-	$(CC) $(CCFLAGS) -c -o Main.o Main.cpp
-	libtool --mode=link $(CC) $(CCFLAGS) $(LIBS) -o a.out RunTests.o Main.o /usr/local/src/cppunit/libcppunit.la -ldl
+	$(CC) $(CCFLAGS) -o a.out RunTests.cpp Main.cpp -lcppunit-1.15 -lcppunit -ldl -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_videoio -lopencv_imgproc
 
 clean:
 	rm -rf *.o a.out

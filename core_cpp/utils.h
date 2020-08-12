@@ -167,7 +167,7 @@ std::vector<Point2f*>* pixel_to_lonlat(PixelMapperConfig &config, std::vector<Po
 		pixel_matrix_transpose[2][i] = 1;
 	}
 
-	Mat pixel_matrix_transpose_converted = Mat(3, N, CV_32F, pixel_matrix_transpose);
+	Mat pixel_matrix_transpose_converted = Mat(3, N, CV_64F, pixel_matrix_transpose);
 	// TODO: Operator * is undefined between cv::Mat and cv::Mat. What is correct method?
 	Mat lonlat_matrix_transpose = config.M * pixel_matrix_transpose_converted;
 	

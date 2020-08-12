@@ -1,9 +1,9 @@
 #include <cppunit/config/SourcePrefix.h>
 
-#include "ExampleTestCase.h"
+//#include "ExampleTestCase.h"
 #include "PixelMapperTest.h"
 
-CPPUNIT_TEST_SUITE_REGISTRATION( ExampleTestCase );
+//CPPUNIT_TEST_SUITE_REGISTRATION( ExampleTestCase );
 CPPUNIT_TEST_SUITE_REGISTRATION( PixelMapperTest );
 
 /*
