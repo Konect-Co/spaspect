@@ -124,8 +124,8 @@ namespace DashboardInfo {
 namespace PixelMapper {
 class PixelMapperConfig {
 public:
-  Point2f* pixel_array[4];
-  Point2f* lonlat_array[4];
+  Point2f pixel_array[4];
+  Point2f lonlat_array[4];
 
   Point2f* lonlat_origin;
 
@@ -135,7 +135,7 @@ public:
   Mat M;
   Mat invM;
   
-  PixelMapperConfig(Point2f* (&pixel_array)[4], Point2f* (&lonlat_array)[4], Point2f* (&lonlat_origin))
+  PixelMapperConfig(Point2f (&pixel_array)[4], Point2f (&lonlat_array)[4], Point2f* (&lonlat_origin))
   : lonlat_origin(lonlat_origin) {
   	this->lat_const = 111320.;
     this->lon_const = 40075000 * cos(lonlat_origin->x * M_PI / 180) / 360;
@@ -151,8 +151,14 @@ public:
     this->lonlat_array[3] = lonlat_array[3];
 
 	//TODO: No matching function call for pixel_array and lonlat_array
-	M = getPerspectiveTransform(*pixel_array, *lonlat_array);
-	invM = getPerspectiveTransform(*lonlat_array, *pixel_array);
+	this->M = getPerspectiveTransform(pixel_array, lonlat_array);
+	this->invM = getPerspectiveTransform(lonlat_array, pixel_array);
+
+	/*cout << "*pixel_array is " << pixel_array[0] << " " << pixel_array[1] 
+		<< " " << pixel_array[2] << " " << pixel_array[3] << endl;
+	cout << "*lonlat_array is " << lonlat_array[0] << " " << lonlat_array[1] 
+		<< " " << lonlat_array[2] << " " << lonlat_array[3] << endl;
+	cout << "Matrix content " << this->M << endl;*/
   }
 };
 
@@ -160,24 +166,24 @@ public:
 std::vector<Point2f*>* pixel_to_lonlat(PixelMapperConfig &config, std::vector<Point2f*>& pixel_coordinates) {
 	int N = pixel_coordinates.size();
 
-	int pixel_matrix_transpose[3][N];
+	float pixel_matrix_transpose[3][N];
 	for (int i = 0; i < N; ++i) {
-		pixel_matrix_transpose[0][i] = pixel_coordinates[i]->x;
-		pixel_matrix_transpose[1][i] = pixel_coordinates[i]->y;
+		pixel_matrix_transpose[0][i] = static_cast<float>(pixel_coordinates[i]->x);
+		pixel_matrix_transpose[1][i] = static_cast<float>(pixel_coordinates[i]->y);
 		pixel_matrix_transpose[2][i] = 1;
 	}
 
-	Mat pixel_matrix_transpose_converted = Mat(3, N, CV_64F, pixel_matrix_transpose);
-	// TODO: Operator * is undefined between cv::Mat and cv::Mat. What is correct method?
+	Mat pixel_matrix_transpose_converted = Mat(3, N, CV_32F, pixel_matrix_transpose);
+	pixel_matrix_transpose_converted.convertTo(pixel_matrix_transpose_converted, CV_64F);
 	Mat lonlat_matrix_transpose = config.M * pixel_matrix_transpose_converted;
-	
+
 	std::vector<Point2f*>* lonlat_coordinates = new std::vector<Point2f*>(N);
 
 	for (int i = 0; i < N; ++i) {
-		int scale_factor = lonlat_matrix_transpose.at<float>(3,i);
+		float scale_factor = lonlat_matrix_transpose.at<double>(i,2);
 		Point2f* lonlat = new Point2f(0,0);
-		lonlat->x = lonlat_matrix_transpose.at<float>(0,i) / scale_factor;
-		lonlat->y = lonlat_matrix_transpose.at<float>(1,i) / scale_factor;
+		lonlat->x = lonlat_matrix_transpose.at<double>(i,0) / scale_factor;
+		lonlat->y = lonlat_matrix_transpose.at<double>(i,1) / scale_factor;
 		(*lonlat_coordinates)[i] = lonlat;
 	}
 
@@ -188,24 +194,24 @@ std::vector<Point2f*>* pixel_to_lonlat(PixelMapperConfig &config, std::vector<Po
 std::vector<Point2f*>* lonlat_to_pixel(PixelMapperConfig &config, std::vector<Point2f*>& lonlat_coordinates) {
 	int N = lonlat_coordinates.size();
 
-	int lonlat_matrix_transpose[3][N];
+	float lonlat_matrix_transpose[3][N];
 	for (int i = 0; i < N; ++i) {
-		lonlat_matrix_transpose[0][i] = lonlat_coordinates[i]->x;
-		lonlat_matrix_transpose[1][i] = lonlat_coordinates[i]->y;
+		lonlat_matrix_transpose[0][i] = static_cast<float>(lonlat_coordinates[i]->x);
+		lonlat_matrix_transpose[1][i] = static_cast<float>(lonlat_coordinates[i]->y);
 		lonlat_matrix_transpose[2][i] = 1;
 	}
 
-	Mat lonlat_matrix_transpose_converted = Mat(3, N, CV_64F, lonlat_matrix_transpose);
-	// TODO: See line 171
+	Mat lonlat_matrix_transpose_converted = Mat(3, N, CV_32F, lonlat_matrix_transpose);
+	lonlat_matrix_transpose_converted.convertTo(lonlat_matrix_transpose_converted, CV_64F);
 	Mat pixel_matrix_transpose = config.invM * lonlat_matrix_transpose_converted;
 
 	std::vector<Point2f*>* pixel_coordinates = new std::vector<Point2f*>(N);
 
 	for (int i = 0; i < N; ++i) {
-		int scale_factor = pixel_matrix_transpose.at<float>(3,i);
+		float scale_factor = pixel_matrix_transpose.at<double>(i,2);
 		Point2f* pixel_coordinate = new Point2f(0,0);
-		pixel_coordinate->x = pixel_matrix_transpose.at<float>(0,i) / scale_factor;
-		pixel_coordinate->y = pixel_matrix_transpose.at<float>(1,i) / scale_factor;
+		pixel_coordinate->x = pixel_matrix_transpose.at<double>(i,0) / scale_factor;
+		pixel_coordinate->y = pixel_matrix_transpose.at<double>(i,1) / scale_factor;
 		(*pixel_coordinates)[i] = pixel_coordinate;
 	}
 
