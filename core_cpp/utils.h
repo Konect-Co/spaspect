@@ -137,8 +137,8 @@ public:
   
   PixelMapperConfig(Point2f* (&pixel_array)[4], Point2f* (&lonlat_array)[4], Point2f* (&lonlat_origin))
   : lonlat_origin(lonlat_origin) {
-  	this->lat_const = 111320.;
-    this->lon_const = 40075000 * cos(lonlat_origin->x * M_PI / 180) / 360;
+  	this->lat_const = 111320;
+    this->lon_const = 40075000 * (cos((lonlat_origin->x * M_PI) / 180)) / 360;
 
     this->pixel_array[0] = pixel_array[0];
     this->pixel_array[1] = pixel_array[1];
@@ -213,14 +213,14 @@ std::vector<Point2f*>* lonlat_to_pixel(PixelMapperConfig &config, std::vector<Po
 }
 
 // Convert a set of lon-lat coordinates to 3D coordinates
-std::vector<Point3f*>* lonlat_to_3D(PixelMapperConfig &config, std::vector<Point2f*>& lonlat_coordinates) {
+vector<Point3f*>* lonlat_to_3D(PixelMapperConfig &config, vector<Point2f*>& lonlat_coordinates) {
   int N = lonlat_coordinates.size();
 
-  std::vector<Point3f*>* threeD_coordinates = new std::vector<Point3f*>(N);
+  vector<Point3f*>* threeD_coordinates = new vector<Point3f*>(N);
 
   for (int i = 0; i < N; ++i) {
-	  float lon_d = lonlat_coordinates[i]->x - config.lonlat_origin[i].x;
-	  float lat_d = lonlat_coordinates[i]->y - config.lonlat_origin[i].y;
+	  float lon_d = lonlat_coordinates[i]->x - config.lonlat_origin->x;
+	  float lat_d = lonlat_coordinates[i]->y - config.lonlat_origin->y;
 
 	  float lon_m = lon_d * config.lon_const;
 	  float lat_m = lat_d * config.lat_const;
