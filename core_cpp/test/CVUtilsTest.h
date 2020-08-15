@@ -43,6 +43,6 @@ protected:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.14285714285714285, compute_IoU(boxA, boxB), 1e-5);
   };
   void test_compute_IoA() {
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1, compute_IoA(boxA, boxB), 1e-5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.25, compute_IoA(boxA, boxB), 1e-5);
   };
 };
