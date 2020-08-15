@@ -21,7 +21,6 @@ lonlat_coords = [[-73.984976, 40.759271],[-73.985132, 40.759316], [-73.985201, 4
 
 pm = PixelMapper.PixelMapper(pixel_coords, lonlat_coords, lonlat_coords[0])
 
-"""
 Value of pm.M
 array([[-3.19845962e-03,  4.84332889e-01, -7.39855146e+01],
        [ 1.76231853e-03, -2.66824125e-01,  4.07592201e+01],
@@ -40,12 +39,6 @@ Value of pm.lon_const
 
 Value of pm.lonlat_origin
 [-73.984976, 40.759271]
-"""
-
-lonlat = pm.pixel_to_lonlat([100,200]) # ==> [-73.98457242314669, 40.75940737741828]
-pixel = pm.lonlat_to_pixel([-73.985, 40.7592]) # ==> [543.7754262271288, 248.17036212679892]
-_3D = pm.lonlat_to_3D([-73.985, 40.7592]) # ==> [-7.90371999981943, -0.7370845314884706, 0]
-lonlat2 = pm._3D_to_lonlat([10,10,0]) # ==> [-73.98465039284137, 40.7593608311175]
 */
 
 class PixelMapperTest : public CPPUNIT_NS::TestFixture

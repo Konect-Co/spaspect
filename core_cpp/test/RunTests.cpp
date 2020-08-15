@@ -2,9 +2,11 @@
 
 //#include "ExampleTestCase.h"
 #include "PixelMapperTest.h"
+#include "CVUtilsTest.h"
 
 //CPPUNIT_TEST_SUITE_REGISTRATION( ExampleTestCase );
 CPPUNIT_TEST_SUITE_REGISTRATION( PixelMapperTest );
+CPPUNIT_TEST_SUITE_REGISTRATION( CVUtilsTest );
 
 /*
 Methods:

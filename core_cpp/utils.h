@@ -261,19 +261,19 @@ namespace PixelMapper {
 } // namespace PixelMapper
 
 namespace CVUtils {
-	int computeArea(int box[4]) {
+	int compute_area(int box[4]) {
 		//TODO
 		return 0;
 	}
-	int computeIntersection(int boxA[4], int boxB[4]) {
+	int compute_intersection(int boxA[4], int boxB[4]) {
 		//TODO
 		return 0;
 	}
-	float computeIoU (int boxA[4], int boxB[4]) {
+	float compute_IoU (int boxA[4], int boxB[4]) {
 		//TODO
 		return 0;
 	}
-	float computeIoA (int boxA[4], int boxB[4]) {
+	float compute_IoA (int boxA[4], int boxB[4]) {
 		//TODO
 		return 0;
 	}

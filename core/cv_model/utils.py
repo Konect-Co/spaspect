@@ -1,15 +1,21 @@
+#box format: [x, y, height, width] where (x,y) is the top left corner
+
 #this function computes the area of a box
 def computeArea(box):
-	return (box[2]-box[0])*(box[3]-box[1])
+	box_reformed = [box[0], box[1], box[0]+box[2], box[1]+box[3]]
+	return (box_reformed[2]-box_reformed[0])*(box_reformed[3]-box_reformed[1])
 
 #this function computes the intersection between two boxes
 def computeIntersection(boxA, boxB):
-	if (boxB[0]>boxA[2] or boxA[0]>boxB[2] or boxB[1]>boxA[3] or boxA[1]>boxB[3]):
+	boxA_reformed = [boxA[0], boxA[1], boxA[0]+boxA[2], boxA[1]+boxA[3]]
+	boxB_reformed = [boxB[0], boxB[1], boxB[0]+boxB[2], boxB[1]+boxB[3]]
+
+	if (boxB_reformed[0]>boxA_reformed[2] or boxA_reformed[0]>boxB_reformed[2] or boxB_reformed[1]>boxA_reformed[3] or boxA_reformed[1]>boxB_reformed[3]):
 		return 0
 
-	xVals = [boxA[0], boxA[2], boxB[0], boxB[2]]
+	xVals = [boxA_reformed[0], boxA_reformed[2], boxB_reformed[0], boxB_reformed[2]]
 	#print("xVals: ",xVals)
-	yVals = [boxA[1], boxA[3], boxB[1], boxB[3]]
+	yVals = [boxA_reformed[1], boxA_reformed[3], boxB_reformed[1], boxB_reformed[3]]
 	#print("yVals: ",yVals)
 	xVals.sort()
 	yVals.sort()
