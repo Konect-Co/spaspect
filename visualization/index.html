@@ -6,10 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="Demo for spaspect visualization.">
-    <meta name="author" content="Ravit Sharma, Santript Sharma">
+    <meta name="author" content="Cassiano Simas, Ravit Sharma, Santript Sharma">
     <title>SpaSpect Dashboard Demo</title>
-
-
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
@@ -18,13 +16,11 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/video.js@7/dist/video-js.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
-    
-
 </head>
 
 <body>
 
-    <!--Add Site Modal -->
+    <!--Add Site Modal
     <div id="addsite" class="modal fade" role="dialog">
         <div class="modal-dialog modal-sm" role="content">
             <div class="modal-content">
@@ -61,7 +57,7 @@
             </div>
         </div>
     </div>
-
+    -->
 
     <!--Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
@@ -70,24 +66,24 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="loginModalTitle">SpaSpect Login</h5>
                     <p id="login-error-msg" class="error-msg">Template error msg</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="login_email_field">Email address</label>
+                        <span class="fa fa-envelope "></span>
+                        <input type="email" class="form-control" id="login_email_field" aria-describedby="loginEmailHelp" placeholder="Enter email">
+                        <small id="loginEmailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="login_password_field">Password</label>
+                        <span class="fa fa-key "></span>
+                        <input type="password" class="form-control" id="login_password_field" placeholder="Password">
+                    </div>
 
-                    <form>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <span class="fa fa-envelope "></span>
-                            <input type="email" class="form-control" id="login_email_field" aria-describedby="loginEmailHelp" placeholder="Enter email">
-                            <small id="loginEmailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <span class="fa fa-key "></span>
-                            <input type="password" class="form-control" id="login_password_field" name="psw" placeholder="Password">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary fa fa-sign-in fa-lg" id="loginButton" onclick="login()"> Login</button>
-                    </form>
+                    <button class="btn btn-primary fa fa-sign-in" id="loginButton" onclick="login()"> Login</button>
                 </div>
                 <div class=" modal-footer ">
                     <button type="button" class="btn btn-secondary fa fa-google" id="loginGoogle" onclick="loginGoogle()"> Sign in with Google</button>
@@ -98,7 +94,7 @@
         </div>
     </div>
     
-    <!--Sign Up Modal 
+    <!--Signup Modal-->
     <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -132,7 +128,7 @@
             </div>
         </div>
     </div>
-    -->
+    
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar">
@@ -165,12 +161,11 @@
 
         <!-- Page Content  -->
         <div id="content">
-            <div class="container-fluid px-3 " id="dashboardPage">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                        <ul class="navbar-nav">
+            <div class="container-fluid" >
+                <nav class="navbar navbar-expand-lg navbar-light" id="topNav">                    
+                        <ul class="navbar-nav col-md-2 col-lg-1">
                             <li>
-                                <button type="button" id="sidebarCollapse" class="btn btn-info float-left" aria-expanded="false">
+                                <button type="button" id="sidebarCollapse" class="btn btn-light btn-lg btn-block" aria-expanded="false">
                                     <span class="fa fa-align-left"> </span>
                                 </button>
                             </li>
@@ -183,13 +178,13 @@
                         <button class='col-sm-1 btn btn-info float-right' type="button" data-toggle="modal" data-target="#loginModal" onclick="logout()"> <span class="fa fa-sign-out"></span>
                             Logout
                         </button>
-                    </div>
+                    
                 </nav>
-
+            </div>
+            <div class="container" id="dashboardPage">
             
                 <div class="row no-gutters ">
                     <div class="col-sm-6 border border-primary p-2 col-md-offset-2 embed-responsive embed-responsive-4by3" id="videoDiv">
-                        <!--<iframe width="100% " height="100% " src="https://www.myearthcam.com/bioshop?embed " frameborder="0 " allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture " allowfullscreen></iframe>-->
                         <video id="video" class="video-js embed-responsive-item" data-setup=' { "fluid ": true} ' aria-label="live-cam" controls>
                             <source id="video-src" src="https://590804fbbbc47.streamlock.net:444/westland/westland.stream/playlist.m3u8">
                         </video>
@@ -241,14 +236,6 @@
         firebase.analytics();
     </script>
     <script type="text/javascript ">
-        window.onload = function() {
-            $("#loginModal ").modal({
-                backdrop: 'static',
-                keyboard: false,
-                focus: true
-            });
-        };
-
         window.onresize = function() {
             Plotly.relayout('plotDiv', {
               width: document.getElementById('plotDiv').offsetWidth,

@@ -46,7 +46,7 @@ function login() {
     firebase
         .auth()
         .signInWithEmailAndPassword(userEmail, userPass)
-        .then(function(user) {$("#loginGoogle").modal('hide');})
+        .then(function(user) {$("#loginModal").modal('hide');})
         .catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
@@ -65,7 +65,7 @@ function loginGoogle() {
             var token = result.credential.accessToken;
             var user = result.user;
         })
-        .then(function(user) {$("#loginGoogle").modal('hide');})
+        .then(function(user) {$("#loginModal").modal('hide');})
         .catch(function(error) {
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -156,6 +156,7 @@ function updateDashboard(forceUpdate = false) {
         updateDashboardArgs(dashboardID);
     }
 }
+
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         initializeDashboard();

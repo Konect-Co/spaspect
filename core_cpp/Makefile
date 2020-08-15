@@ -1,6 +1,6 @@
 CC=g++
 CCFLAGS = 
-LIBS = -lopencv_core -lopencv_imgcodecs -lopencv_videoio
+LIBS = -lopencv_core -lopencv_imgcodecs -lopencv_videoio -lopencv_imgproc
 
 all: executable
 
