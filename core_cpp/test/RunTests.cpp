@@ -3,6 +3,7 @@
 //#include "ExampleTestCase.h"
 #include "PixelMapperTest.h"
 #include "CVUtilsTest.h"
+#include "../Track.h"
 
 //CPPUNIT_TEST_SUITE_REGISTRATION( ExampleTestCase );
 CPPUNIT_TEST_SUITE_REGISTRATION( PixelMapperTest );

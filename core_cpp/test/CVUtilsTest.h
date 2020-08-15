@@ -7,7 +7,7 @@
 //     |_|            |_|               
 
 #include <cppunit/extensions/HelperMacros.h>
-#include "../utils.h"
+#include "../CVUtils.h"
 
 using namespace std;
 using namespace cv;
