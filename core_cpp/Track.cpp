@@ -7,10 +7,13 @@
 //     |_|            |_|               
 
 #include "Track.h"
-//#include "DashboardInfo.h"
+#include "DashboardInfo.h"
 
 using namespace std;
-using namespace Track;
+
+#ifndef currTime
+	float Track::TrackedEntity::currTime;
+#endif
 
 void Track::TrackedEntity::addNext(float time, Track::locationInfo &newLocationInfo) {
 	locationInfo& currLocationInfo = history[history.rbegin()->first];
@@ -42,31 +45,6 @@ int* Track::TrackedEntity::estimateBB() {
 	return newBB;
 }
 
-static void Track::TrackedEntity::updateTime() {
+void Track::TrackedEntity::updateTime() {
 	currTime = std::time(0);
 }
-
-class dashboard;
-static void Track::TrackedEntity::track(dashboard* dash, std::vector<Track::locationInfo*>) {
-	updateTime();
-
-	std::map<string, locationInfo> allIOUValues();
-	for (auto name : dash->objects) {
-		TrackedEntity currentEntity = dash->objects[name]
-		int predictedBox[4] = currentEntity.estimateBB();
-		std::map<int*, float> IOUValues();
-		for (int box_i = 0; box_i < boundingBoxes; box_i++) {
-			int IOU = computeIOU(predictedBox, boundingBoxes[box_i])
-			IOUValues[box_i] = IOU
-		}
-
-		IOUValues = {k : v for k, v in sorted(IOUValues.items(), reverse=True, key = lambda kv:kv[1])}
-		allIOUValues[currentEntity] = IOUValues;
-		
-	}
-	//TODO
-}
-
-static void Track::TrackedEntity::prune(dashboard* dash) {
-	//TODO
-};

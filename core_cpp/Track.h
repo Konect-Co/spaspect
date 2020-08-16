@@ -11,12 +11,9 @@
 #include <ctime>
 #include <vector>
 
-//#include "DashboardInfo.h"
-
 using namespace std;
 
 namespace Track {
-	class dashboard;
 	//Data structure that location and pixel bounding box information
 	struct locationInfo {
 		int boundingBox[4];
@@ -45,7 +42,10 @@ namespace Track {
 		int* estimateBB();
 		static void updateTime();
 
-		static void track(dashboard* dash, std::vector<locationInfo*>);
-		static void prune(dashboard* dash);
+		//static void track(DashboardInfo::dashboard* dash, std::vector<locationInfo*>);
+		//static void prune(DashboardInfo::dashboard* dash);
+
+		//bool addTrackedObject(DashboardInfo::dashboard* dash);
+		//bool removeTrackedObject(DashboardInfo::dashboard* dash);
 	};
 }; // namespace Track

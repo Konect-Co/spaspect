@@ -14,15 +14,12 @@
 using namespace std;
 
 namespace DashboardInfo {
-	//forward declaration
-	class TrackedEntity;
-
 	//Data structure that represents the dashboard
 	class dashboard {
 	public:
 		string streamlink;
 		string name;
-		vector<TrackedEntity*> objects;
+		vector<Track::TrackedEntity*> objects;
 
 		class {
 		public:
@@ -33,19 +30,10 @@ namespace DashboardInfo {
 			int pixelY_vals[4];
 		} calibration;
 
-		bool addTrackedObject(TrackedEntity* object) {
-			//TODO: Add checks
-			this->objects.push_back(object);
-			return true;
-		}
+		bool addTrackedObject(Track::TrackedEntity* object);
+		bool removeTrackedObject(Track::TrackedEntity* object);
 
-		bool removeTrackedObject(TrackedEntity* object) {
-			int obj_pos = find(objects.begin(), objects.end(), object) - objects.begin();
-			if (obj_pos != objects.size()-1) {
-				objects.erase(objects.begin() + obj_pos-1);
-				return true;
-			}
-			return false;
-		}
+		void track(std::vector<Track::locationInfo*> objects);
+		void prune();
 	};
 } //namespace DashboardInfo

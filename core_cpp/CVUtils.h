@@ -7,6 +7,8 @@
 //     |_|            |_|               
 #pragma once
 
+#include <algorithm>
+
 namespace CVUtils {
 	int compute_area(int box[4]) {
 		//TODO
