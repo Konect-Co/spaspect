@@ -7,7 +7,7 @@
 //     |_|            |_|               
 
 #include <cppunit/extensions/HelperMacros.h>
-#include "../PixelMapper.h"
+#include "PixelMapper.h"
 
 using namespace std;
 using namespace cv;
