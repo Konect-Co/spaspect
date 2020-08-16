@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -40,8 +41,8 @@ namespace DashboardInfo {
 
 		bool removeTrackedObject(TrackedEntity* object) {
 			int obj_pos = find(objects.begin(), objects.end(), object) - objects.begin();
-			if (obj_pos != objects.end()) {
-				objects.erase(obj_pos);
+			if (obj_pos != objects.size()-1) {
+				objects.erase(objects.begin() + obj_pos-1);
 				return true;
 			}
 			return false;
