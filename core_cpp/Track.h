@@ -8,11 +8,15 @@
 #pragma once
 
 #include <map>
+#include <ctime>
+#include <vector>
+
 //#include "DashboardInfo.h"
 
 using namespace std;
 
 namespace Track {
+	class dashboard;
 	//Data structure that location and pixel bounding box information
 	struct locationInfo {
 		int boundingBox[4];
@@ -36,41 +40,12 @@ namespace Track {
 
 		TrackedEntity():lastUpdate(currTime), velocity{0, 0}, history(std::map<int, locationInfo>()) {}
 
-		void addNext(float time, locationInfo &newLocationInfo) {
-			locationInfo& currLocationInfo = history[history.rbegin()->first];
-			history[time] = newLocationInfo;
+		void addNext(float time, locationInfo &newLocationInfo);
 
-			//update velocity
-			int newBoxCenter[2] = {static_cast<int>(newLocationInfo.boundingBox[0] + newLocationInfo.boundingBox[2]/2.), 
-				static_cast<int>(newLocationInfo.boundingBox[1] + newLocationInfo.boundingBox[3]/2.)};
-			int currBoxCenter[2] = {static_cast<int>(currLocationInfo.boundingBox[0] + currLocationInfo.boundingBox[2]/2.), 
-				static_cast<int>(currLocationInfo.boundingBox[1] + currLocationInfo.boundingBox[3]/2.)};
+		int* estimateBB();
+		static void updateTime();
 
-			velocity[0] = static_cast<int>((newBoxCenter[0]-currBoxCenter[0]*1.) / (currTime-lastUpdate));
-			velocity[1] = static_cast<int>((newBoxCenter[1]-currBoxCenter[1]*1.) / (currTime-lastUpdate));
-		}
-		//Computes the prediction of the next bounding box using velocity and current position
-
-		int* estimateBB() {
-			float timeDiff = currTime - lastUpdate;
-			float deltaX = velocity[0]*timeDiff;
-			float deltaY = velocity[1]*timeDiff;
-
-			int currBB[4] = history[history.end()-1].boundingBox;
-			int newBB[4] = {currBB[0]+deltaX, currBB[1]+deltaY, currBB[2]+deltaX, currBB[3]+deltaY};
-			return newBB;
-		}
-		static void updateTime() {
-			currTime = std::time(0);
-		}
-
-		class dashboard;
-		static void track(dashboard* dash, std::vector<locationInfo*>) {
-			//TODO
-		}
-
-		static void prune(dashboard* dash) {
-			//TODO
-		}
+		static void track(dashboard* dash, std::vector<locationInfo*>);
+		static void prune(dashboard* dash);
 	};
-} // namespace Track
+}; // namespace Track
