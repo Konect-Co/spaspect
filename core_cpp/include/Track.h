@@ -37,15 +37,9 @@ namespace Track {
 
 		TrackedEntity():lastUpdate(currTime), velocity{0, 0}, history(std::map<int, locationInfo>()) {}
 
-		void addNext(float time, locationInfo &newLocationInfo);
+		void addNext(locationInfo &newLocationInfo);
 
 		int* estimateBB();
 		static void updateTime();
-
-		//static void track(DashboardInfo::dashboard* dash, std::vector<locationInfo*>);
-		//static void prune(DashboardInfo::dashboard* dash);
-
-		//bool addTrackedObject(DashboardInfo::dashboard* dash);
-		//bool removeTrackedObject(DashboardInfo::dashboard* dash);
 	};
 }; // namespace Track
