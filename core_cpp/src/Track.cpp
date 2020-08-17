@@ -15,9 +15,9 @@ using namespace std;
 	float Track::TrackedEntity::currTime;
 #endif
 
-void Track::TrackedEntity::addNext(float time, Track::locationInfo &newLocationInfo) {
+void Track::TrackedEntity::addNext(Track::locationInfo &newLocationInfo) {
 	locationInfo& currLocationInfo = history[history.rbegin()->first];
-	history[time] = newLocationInfo;
+	history[currTime] = newLocationInfo;
 
 	//update velocity
 	int newBoxCenter[2] = {static_cast<int>(newLocationInfo.boundingBox[0] + newLocationInfo.boundingBox[2]/2.), 
