@@ -1,4 +1,4 @@
-// Copyright 2020 The Konect SpaSpect Authors. All Rights Reserved.
+    // Copyright 2020 The Konect SpaSpect Authors. All Rights Reserved.
 // This file is part of Konect SpaSpect technology.
 //  ___            ___              _   
 // / __|_ __  __ _/ __|_ __  ___ __| |_ 
@@ -11,6 +11,8 @@
 #include "CVUtils.h"
 #include "Track.h"
 #include "DashboardInfo.h"
+
+using namespace std;
 
 
 bool DashboardInfo::dashboard::addTrackedObject(Track::TrackedEntity* object) {
@@ -48,4 +50,18 @@ void DashboardInfo::dashboard::track(std::vector<Track::locationInfo*> newObject
 
 void DashboardInfo::dashboard::prune() {
 	//TODO
+	std::vector<Track::TrackedEntity*> to_delete;
+	int updateThreshold = 5;
+	
+	for(auto tracked_key : this->objects){
+    	int tracked_key_pos = find(this->objects.begin(), this->objects.end(), tracked_key) - this->objects.begin();
+    	auto tracked = this->objects[tracked_key_pos];
+    	if(Track::TrackedEntity::currTime - tracked->lastUpdate > updateThreshold){
+        	to_delete.push_back(tracked_key);
+    	}
+	}
+	for(auto delete_i : to_delete){
+    	int delete_i_pos = find(this->objects.begin(), this->objects.end(), delete_i)- this->objects.begin();
+    	this->objects.erase(this->objects.begin() + delete_i_pos-1);
+	}
 };
