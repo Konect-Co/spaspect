@@ -5,7 +5,7 @@ function showNone() {
 
 function loginPage() {
     showNone();
-    $('#loginModal').modal('show');
+    
 }
 
 function signupPage() {
