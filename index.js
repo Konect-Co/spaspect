@@ -1,35 +1,24 @@
 function showNone() {
-    document.getElementById("dashboard-nav-buttons");
-    document.getElementById("dashboardPage");
-    document.getElementById("signUpModal");
-    document.getElementById("loginModal");
-    document.getElementById("addsite");
+    $('#loginModal').modal('hide');
+    $('#signUpModal').modal('hide');
 }
 
 function loginPage() {
     showNone();
-    document.getElementById("loginModal");
+    
 }
 
 function signupPage() {
     showNone();
-    document.getElementById("signUpModal");
+    $('#signUpModal').modal('show');
 }
 
 function dashboardPage() {
     showNone();
-    //document.getElementById("add-site-btn").style.display = "inline";
-    document.getElementById("dashboard-return-btn");
-    document.getElementById("dashboard-nav-buttons");
-    document.getElementById("dashboardPage");
 }
 
 function addSitePage() {
     showNone();
-    //document.getElementById("add-site-btn");
-    document.getElementById("dashboard-return-btn");
-    document.getElementById("dashboard-nav-buttons");
-    document.getElementById("addsite");
 }
 
 function showpasswordmain() {
@@ -57,7 +46,7 @@ function login() {
     firebase
         .auth()
         .signInWithEmailAndPassword(userEmail, userPass)
-        .then(function(user) { $('#loginModal').modal('hide'); })
+        .then(function(user) {$("#loginModal").modal('hide');})
         .catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
@@ -71,17 +60,18 @@ function login() {
 
 function loginGoogle() {
     var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider).then(function(result) {
-        var token = result.credential.accessToken;
-        var user = result.user;
-        $('#loginModal').modal('hide');
-    }).catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-
-    });
+    firebase
+        .auth().signInWithPopup(provider).then(function(result) {
+            var token = result.credential.accessToken;
+            var user = result.user;
+        })
+        .then(function(user) {$("#loginModal").modal('hide');})
+        .catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            var email = error.email;
+            var credential = error.credential;
+        });
 }
 
 function signup() {
@@ -106,8 +96,7 @@ function initializeDashboard() {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (this.status != 200) {
-            console.log("Error in obtaining list of environments with a status of " + this.status);
-            return;
+            console.log("POST to /dashboards returned a non-200 status of " + this.status);
         }
 
         var accessibleEnvironments = JSON.parse(xhr.responseText);
@@ -120,8 +109,7 @@ function initializeDashboard() {
         Object.keys(accessibleEnvironments).forEach(function(key) {
             //TODO: use name specified in dashboard configuration rather than the one in accessibleEnvironments
             var txt = accessibleEnvironments[key];
-            var opt = document.createElement('a');
-            opt.className = "dropdown-item";
+            var opt = document.createElement('option');
             opt.appendChild(document.createTextNode(txt));
             opt.value = key;
 
@@ -130,7 +118,7 @@ function initializeDashboard() {
 
         updateDashboard();
     }
-    xhr.open("POST", "dashboards", true);
+    xhr.open("POST", "/dashboards", true);
     firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
         xhr.send(JSON.stringify({ "idtoken": idToken }));
     }).catch(function(error) { console.error(error); });
@@ -140,8 +128,7 @@ function updateDashboardArgs(dashboardID) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (this.status != 200) {
-            console.log("Error in obtaining environment file with a status of " + this.status);
-            return;
+            console.log("POST to /environment returned a non-200 status of " + this.status);
         }
 
         //console.log("Success in getting response from Post request to get environment file", xhr.responseText);
@@ -169,6 +156,7 @@ function updateDashboard(forceUpdate = false) {
         updateDashboardArgs(dashboardID);
     }
 }
+
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         initializeDashboard();
@@ -178,6 +166,7 @@ firebase.auth().onAuthStateChanged(function(user) {
             var email_id = user.email;
             console.log("Welcome User:", email_id);
         }
+        $('#loginModal').modal('hide');
     } else {
         loginPage();
     }

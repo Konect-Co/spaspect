@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
     "bootstrap": "^4.5.0",
     "bootstrap-social": "^5.1.1",
     "express": "^4.17.1",
@@ -12,6 +13,8 @@
     "formidable": "^1.2.2",
     "fs": "^0.0.1-security",
     "googleapis": "^52.1.0",
+    "plotly": "^1.0.6",
+    "plotly.js": "^1.54.7",
     "uuid": "^8.2.0"
   },
   "devDependencies": {},

@@ -1,6 +1,12 @@
 var first = true;
 
 
+
+$("#login_password_field").keyup(function(event) {
+	if (event.keyCode === 13) {
+		$("#loginButton").click();
+	}
+});
 function update(data) {
 	//document.getElementById("video-src").setAttribute("src", data["streamlink"]);
 	//TODO: Seems like this doesn't update the video successfully
@@ -68,7 +74,7 @@ function update(data) {
 		text: text_values
 	};
 	
-
+/*
     var tracked = dashboard['tracked'];
     var trackedNamesLen = Object.values(tracked).length;
     
@@ -140,7 +146,7 @@ function update(data) {
 	};
 	//console.log("Dots", trace);
 	//console.log("Lines", mapDataTrace);
-
+*/
     
 	
 	//TODO: Add a separate trace for the history of each person
@@ -148,7 +154,7 @@ function update(data) {
 	//	color for each person by reading from the data argument.
 	//  Add this trace to scatterData variable below
 
-	var scatterData = [trace, mapDataTrace];
+	var scatterData = [trace]//, mapDataTrace];
 	var scatterLayout = {
 		margin: {
 			l: 0,
@@ -213,6 +219,11 @@ function update(data) {
 		}
 	};
 
+
+
+
+
+	
 	Plotly.setPlotConfig({
 		mapboxAccessToken: "pk.eyJ1Ijoic3Jhdml0MSIsImEiOiJja2JzY3NpcHgwMGJnMnZzYTY5ZWsyeDR6In0.CIOWohypCmf_oCzed32xRA"
 	})
