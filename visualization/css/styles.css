@@ -1,3 +1,43 @@
+.btn {
+    background-color: dodgerblue;
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
+
+.btn:hover {
+    opacity: 1;
+}
+
+.fa-google {
+    background: #dd4b39;
+    color: white;
+    text-align: center;
+}
+
+.fa-sign-in {
+    text-align: center;
+}
+
+.fa-sign-out {
+    text-align: center;
+}
+
+.fa-home {
+    color: white;
+    text-align: center;
+}
+
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
 
 .error-msg {
     font-family: 'Nunito', sans-serif;

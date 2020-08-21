@@ -1,29 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <meta name="description" content="Demo for spaspect visualization.">
-        <meta name="author" content="Cassiano Simas, Ravit Sharma, Santript Sharma">
-        <title>SpaSpect Dashboard Demo</title>
-        
-        <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="node_modules/bootstrap-social/bootstrap-social.css">
-        <link rel="stylesheet" type="text/css" href="node_modules/font-awesome/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="css/styles.css">
-        
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Demo for spaspect visualization.">
+    <meta name="author" content="Cassiano Simas, Ravit Sharma, Santript Sharma">
+    <title>SpaSpect Dashboard Demo</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap-social/bootstrap-social.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/video.js@7/dist/video-js.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+</head>
 
-        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
-        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-    </head>
+<body>
 
-    <body>
-        <!--Modals-->
-            <!--Add Site Modal
-            <div id="addsite" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-sm" role="content">
+    <!--Add Site Modal
+    <div id="addsite" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-sm" role="content">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Add a site</h4>
@@ -129,55 +128,58 @@
             </div>
         </div>
     </div>
-
-
-
-        <!--Main Page-->
-        <div class="wrapper">
-            <!-- Sidebar -->
-            <nav id="sidebar">
-                <div id="dismiss">
-                    <i class="fa fa-arrow-left"></i>
-                </div>
     
-                <div class="sidebar-header">
-                    <a class="navbar-brand d-flex w-50" href="https://sites.google.com/view/konect-co/home"><img id="logo" src="Pictures/Logo.png" alt="Konect" height="50"></a>
-                </div>
-    
-                <ul class="list-unstyled components">
-                    <li class="active">
-                        <a href="#"><span class="fa fa-address-card fa-lg"></span> Contact Us </a>
-                    </li>
-                    <li>
-                        <a href="#" onclick="initializeDashboard()"><span class="fa fa-refresh"></span> Refersh Options</a>
-                    </li>
-                    <!--
-                    <li>
-                        <a data-toggle="modal" data-target="#addsite" onclick="addSitePage()"><span class="fa fa-plus-square fa-lg"></span> Add Site</a>
-                    </li>
-                    -->
-                    <li>
-                        <select class="browser-default custom-select" id="dashboard-select" onchange="updateDashboard(true)">
-                            <option selected>Toggle Location</option>
-                        </select>
-                    </li>
-                </ul>
-    
-                <ul class="list-unstyled CTAs">
-                    <li>
-                        <button class='btn btn-block btn-outline-light' type="button" data-toggle="modal" data-target="#loginModal" onclick="logout()"> <span class=""></span>
-                            Logout
-                        </button>
-                        
-                    </li>
-                </ul>
-            </nav>
-        
-            <!-- Page Content -->
-            <div id="content">
-        
-                <nav class="navbar navbar-expand-lg navbar-light bg-light" id="topNav">
-                    <div class="container-fluid">
+    <!--<div class="wrapper">
+        <!-- Sidebar  --<deleteThisTag>>
+        <nav id="sidebar">
+            <div >
+                <a class="navbar-brand d-flex w-50 mx-3 my-3" href="https://sites.google.com/view/konect-co/home"><img id="logo" src="Pictures/Logo.png" alt="Konect"></a>
+                
+            </div>-->
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div id="dismiss">
+                <i class="fa fa-arrow-left"></i>
+            </div>
+
+            <div class="sidebar-header">
+                <a class="navbar-brand d-flex w-50" href="https://sites.google.com/view/konect-co/home"><img id="logo" src="Pictures/Logo.png" alt="Konect" height="50"></a>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="#"><span class="fa fa-address-card fa-lg"></span> Contact Us </a>
+                </li>
+                <li>
+                    <a href="#" onclick="initializeDashboard()"><span class="fa fa-refresh"></span> Refersh Options</a>
+                </li>
+                <!--
+                <li>
+                    <a data-toggle="modal" data-target="#addsite" onclick="addSitePage()"><span class="fa fa-plus-square fa-lg"></span> Add Site</a>
+                </li>
+                -->
+                <li>
+                    <select class="browser-default custom-select" id="dashboard-select" onchange="updateDashboard(true)">
+                        <option selected>Toggle Location</option>
+                    </select>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li>
+                    <button class='btn btn-block btn-outline-light' type="button" data-toggle="modal" data-target="#loginModal" onclick="logout()"> <span class=""></span>
+                        Logout
+                    </button>
+
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+            <div class="container-fluid" >
+                <nav class="navbar navbar-expand-lg navbar-light" id="topNav">                    
                         <ul class="navbar-nav col-md-2 col-lg-1">
                             <li>
                                 <button type="button" id="sidebarCollapse" class="btn btn-outline-dark">
@@ -191,112 +193,125 @@
                                 <a class="nav-item navbar-brand"><h1>Spaspect</h1></a>
                             </li>
                         </ul>
-                        
-                    </div>
+                    
                 </nav>
-                <div class="container" >
+            </div>
+            <div class="container">
             
-                    <div class="row no-gutters">
-                        <div class="col-sm-6 border border-primary p-2 col-md-offset-2 embed-responsive embed-responsive-4by3" id="videoDiv">
-                            <video id="video" class="video-js embed-responsive-item" data-setup=' { "fluid ": true} ' aria-label="live-cam" controls>
-                                <source id="video-src" src="https://590804fbbbc47.streamlock.net:444/westland/westland.stream/playlist.m3u8">
-                            </video>
+                <div class="row no-gutters ">
+                    <div class="col-sm-6 border border-primary p-2 col-md-offset-2 embed-responsive embed-responsive-4by3" id="videoDiv">
+                        <video id="video" class="video-js embed-responsive-item" data-setup=' { "fluid ": true} ' aria-label="live-cam" controls>
+                            <source id="video-src" src="https://590804fbbbc47.streamlock.net:444/westland/westland.stream/playlist.m3u8">
+                        </video>
+                    </div>
+                    <div class="col-sm-6 border border-secondary no-gutters" id="plotDiv"></div>
+                    
+                    <div class="col-sm-6 border border-secondary no-gutters" id="mapDiv"></div>
+                    <div class="col-sm-6 border border-secondary order-last no-gutters" id="statsDiv">
+                        <div id="stats-header">
+                            <h2>Statistics</h2>
                         </div>
-                        <div class="col-sm-6 border border-secondary no-gutters" id="plotDiv"></div>
-                        
-                        <div class="col-sm-6 border border-secondary no-gutters" id="mapDiv"></div>
-                        <div class="col-sm-6 border border-secondary order-last no-gutters" id="statsDiv">
-                            <div id="stats-header">
-                                <h2>Statistics</h2>
-                            </div>
-                            <div id="stats">
-                                <h3>Total count: <span id="statsTotal"></span></h3>
-                                <h3>Undistanced count: <span id="statsUndistanced"></span></h3>
-                                <h3>Unmasked count: <span id="statsUnmasked"></span></h3>
-                            </div>
+                        <div id="stats">
+                            <h3>Total count: <span id="statsTotal"></span></h3>
+                            <h3>Undistanced count: <span id="statsUndistanced"></span></h3>
+                            <h3>Unmasked count: <span id="statsUnmasked"></span></h3>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Dark Overlay element -->
-            <div class="overlay" id="dashboardPage"></div>
         </div>
-        
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+        <!-- Dark Overlay element -->
+        <div class="overlay" id="dashboardPage"></div>
+    </div>
 
-        <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
-        <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
-        <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
-    
-        <script type="text/javascript">
-            // Your web app's Firebase configuration
-            var firebaseConfig = {
-                apiKey: "AIzaSyD6Cm1InAFK-ecUq-F6ku8EQL_4oE_WTF0",
-                authDomain: "spaspect-dashboard.firebaseapp.com",
-                databaseURL: "https://spaspect-dashboard.firebaseio.com",
-                projectId: "spaspect-dashboard",
-                storageBucket: "spaspect-dashboard.appspot.com",
-                messagingSenderId: "270336614615",
-                appId: "1:270336614615:web:f4f64e4b5624fa8ca8d092",
-                measurementId: "G-D03KWN0SXS"
-            };
-    
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            firebase.analytics();
-        </script>
-        <script type="text/javascript ">
-            window.onresize = function() {
-                Plotly.relayout('plotDiv', {
-                  width: document.getElementById('plotDiv').offsetWidth,
-                  height: document.getElementById('plotDiv').offsetHeight
-                });
-                Plotly.relayout('mapDiv', {
-                  width: document.getElementById('mapDiv').offsetWidth,
-                  height: document.getElementById('mapDiv').offsetHeight
-                });
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <script type="text/javascript">
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyD6Cm1InAFK-ecUq-F6ku8EQL_4oE_WTF0",
+            authDomain: "spaspect-dashboard.firebaseapp.com",
+            databaseURL: "https://spaspect-dashboard.firebaseio.com",
+            projectId: "spaspect-dashboard",
+            storageBucket: "spaspect-dashboard.appspot.com",
+            messagingSenderId: "270336614615",
+            appId: "1:270336614615:web:f4f64e4b5624fa8ca8d092",
+            measurementId: "G-D03KWN0SXS"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+    <script type="text/javascript">
+        window.onresize = function() {
+            Plotly.relayout('plotDiv', {
+              width: document.getElementById('plotDiv').offsetWidth,
+              height: document.getElementById('plotDiv').offsetHeight
+            });
+            Plotly.relayout('mapDiv', {
+              width: document.getElementById('mapDiv').offsetWidth,
+              height: document.getElementById('mapDiv').offsetHeight
+            });
+        }
+
+        $("#login_password_field").keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#loginButton").click();
             }
-    
-            $("#login_password_field").keyup(function(event) {
-                if (event.keyCode === 13) {
-                    $("#loginButton").click();
-                }
+        });
+
+        $("#loginButton").click(function() {});
+    </script>
+    <script type="text/javascript">
+        /*$(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
             });
-    
-            $("#loginButton").click(function() {});
-        </script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#sidebar").mCustomScrollbar({
-                    theme: "minimal"
-                });
-        
-                $('#dismiss, .overlay').on('click', function () {
-                    // hide sidebar
-                    $('#sidebar').removeClass('active');
-                    // hide overlay
-                    $('.overlay').removeClass('active');
-                });
-        
-                $('#sidebarCollapse').on('click', function () {
-                    // open sidebar
-                    $('#sidebar').addClass('active');
-                    // fade in the overlay
-                    $('.overlay').addClass('active');
-                    $('.collapse.in').toggleClass('in');
-                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
             });
-        </script>
-        <script type="text/javascript" src="index.js"></script>
-        <script type="text/javascript" type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-        <script type="text/javascript" src="https://unpkg.com/video.js/dist/video.js"></script>
-        <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
-        <script type="text/javascript" type="text/javascript" src="drawPlots.js"></script>
-    </body>
+        });*/
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#dismiss, .overlay').on('click', function () {
+                // hide sidebar
+                $('#sidebar').removeClass('active');
+                // hide overlay
+                $('.overlay').removeClass('active');
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                // open sidebar
+                $('#sidebar').addClass('active');
+                // fade in the overlay
+                $('.overlay').addClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/video.js/dist/video.js"></script>
+    <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
+    <script type="text/javascript" type="text/javascript" src="drawPlots.js"></script>
+</body>
 
 </html>
