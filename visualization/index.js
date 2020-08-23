@@ -174,10 +174,12 @@ firebase.auth().onAuthStateChanged(function(user) {
         if (typeof(user) != undefined) {
             var email_id = user.email;
             console.log("Welcome User:", email_id);
+            document.getElementById("signin-text").innerHTML = "Logout";
         }
         $('#loginModal').modal('hide');
     } else {
         loginPage();
+        document.getElementById("signin-text").innerHTML = "Login";
     }
 });
 
