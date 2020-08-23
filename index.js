@@ -46,7 +46,10 @@ function login() {
     firebase
         .auth()
         .signInWithEmailAndPassword(userEmail, userPass)
-        .then(function(user) {$("#loginModal").modal('hide');})
+        .then(function(user) {
+            $("#loginModal").modal('hide');
+            
+        })
         .catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
@@ -65,7 +68,9 @@ function loginGoogle() {
             var token = result.credential.accessToken;
             var user = result.user;
         })
-        .then(function(user) {$("#loginModal").modal('hide');})
+        .then(function(user) {
+            $("#loginModal").modal('hide');
+        })
         .catch(function(error) {
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -85,8 +90,13 @@ function signup() {
 }
 
 function logout() {
-    firebase.auth().signOut();
-    console.log("Logged out")
+    var user = firebase.auth().currentUser;
+    if(user) {
+        firebase.auth().signOut();
+        console.log("Logged out");
+        alert('successful logout');
+
+    }
 }
 
 var lastUpdate = 0;
@@ -162,11 +172,23 @@ firebase.auth().onAuthStateChanged(function(user) {
         initializeDashboard();
         dashboardPage();
         var user = firebase.auth().currentUser;
-        if (user != null) {
+        if (user) {
             var email_id = user.email;
+            $("#login-logout-button").on("click", function() {
+                $(this).button('Logout')
+                
+            });
             console.log("Welcome User:", email_id);
+            alert('successful login');
+        } else {
+            $("#login-logout-button").on("click", function() {
+                $(this).button('Login')
+                
+            });
         }
         $('#loginModal').modal('hide');
+
+        
     } else {
         loginPage();
     }
