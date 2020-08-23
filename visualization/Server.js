@@ -27,8 +27,8 @@ function isDemoDashboard(dashboard, callback) {
     //reading demoEnvs.json to see whether provided dashboard is a demo dashboard or not
     fs.readFile("./demoEnvs.json", function(err, content) {
         if (err) { return; }
+        var authorized = false;
         var userData = JSON.parse(content);
-        dbUsers.doc(uid).set(userData);
         Object.keys(userData["accessibleEnvironments"]).forEach(function(key) {
             if (dashboard == key) {
                 authorized = true;
