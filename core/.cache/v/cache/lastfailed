@@ -1,0 +1,31 @@
+{
+<<<<<<< HEAD
+  "test_core.py::test_example1": true
+=======
+  "test/test_utils.py": true, 
+  "vision/test/smoke_test.py": true, 
+  "vision/test/test_backbone_utils.py": true, 
+  "vision/test/test_cpp_models.py": true, 
+  "vision/test/test_datasets.py": true, 
+  "vision/test/test_datasets_samplers.py": true, 
+  "vision/test/test_datasets_transforms.py": true, 
+  "vision/test/test_datasets_utils.py": true, 
+  "vision/test/test_datasets_video_utils.py": true, 
+  "vision/test/test_datasets_video_utils_opt.py": true, 
+  "vision/test/test_functional_tensor.py": true, 
+  "vision/test/test_hub.py": true, 
+  "vision/test/test_io.py": true, 
+  "vision/test/test_io_opt.py": true, 
+  "vision/test/test_models.py": true, 
+  "vision/test/test_models_detection_negative_samples.py": true, 
+  "vision/test/test_models_detection_utils.py": true, 
+  "vision/test/test_onnx.py": true, 
+  "vision/test/test_ops.py": true, 
+  "vision/test/test_quantized_models.py": true, 
+  "vision/test/test_transforms.py": true, 
+  "vision/test/test_transforms_tensor.py": true, 
+  "vision/test/test_transforms_video.py": true, 
+  "vision/test/test_utils.py": true, 
+  "vision/test/test_video_reader.py": true
+>>>>>>> c1d4dc6a5e10b1fe506408e7f7a82f82b4b37a8b
+}
