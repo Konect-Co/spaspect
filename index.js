@@ -175,14 +175,14 @@ firebase.auth().onAuthStateChanged(function(user) {
         if (user != null) {
             var email_id = user.email;
             $("#login-logout-button").on("click", function() {
-                $(this).button('Logout')
+                $(this).button('Logout');
                 
             });
             console.log("Welcome User:", email_id);
             alert('successful login');
         } else {
             $("#login-logout-button").on("click", function() {
-                $(this).button('Login')
+                $(this).button('Login');
                 
             });
         }
