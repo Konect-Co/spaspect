@@ -172,7 +172,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         initializeDashboard();
         dashboardPage();
         var user = firebase.auth().currentUser;
-        if (user) {
+        if (user != null) {
             var email_id = user.email;
             $("#login-logout-button").on("click", function() {
                 $(this).button('Logout')
