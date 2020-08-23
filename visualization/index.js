@@ -119,9 +119,14 @@ function initializeDashboard() {
         updateDashboard();
     }
     xhr.open("POST", "/dashboards", true);
-    firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
-        xhr.send(JSON.stringify({ "idtoken": idToken }));
-    }).catch(function(error) { console.error(error); });
+    var user = firebase.auth().currentUser;
+    if (typeof(user) != undefined) {
+        firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
+            xhr.send(JSON.stringify({ "idtoken": idToken }));
+        }).catch(function(error) { console.error(error); });
+    } else {
+        xhr.send(JSON.stringify({ "idtoken": null }));
+    }
 }
 
 function updateDashboardArgs(dashboardID) {
@@ -131,7 +136,7 @@ function updateDashboardArgs(dashboardID) {
             console.log("POST to /environment returned a non-200 status of " + this.status);
         }
 
-        //console.log("Success in getting response from Post request to get environment file", xhr.responseText);
+        console.log("Success in getting response from Post request to get environment file", xhr.responseText);
         var config = JSON.parse(xhr.responseText);
 
         if (config["authorized"] && !config["toDate"]) {
@@ -141,9 +146,13 @@ function updateDashboardArgs(dashboardID) {
         }
     }
     xhr.open("POST", "environment", true);
-    firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
-        xhr.send(JSON.stringify({ "idtoken": idToken, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
-    }).catch(function(error) { console.error(error); });
+    if (typeof(user) != undefined) {
+        firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
+            xhr.send(JSON.stringify({ "idtoken": idToken, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
+        }).catch(function(error) { console.error(error); });
+    } else {
+        xhr.send(JSON.stringify({ "idtoken": null, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
+    }
 }
 
 function updateDashboard(forceUpdate = false) {
@@ -162,7 +171,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         initializeDashboard();
         dashboardPage();
         var user = firebase.auth().currentUser;
-        if (user != null) {
+        if (typeof(user) != undefined) {
             var email_id = user.email;
             console.log("Welcome User:", email_id);
         }
