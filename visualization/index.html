@@ -129,12 +129,22 @@
         </div>
     </div>
     
-    <div class="wrapper">
-        <!-- Sidebar  -->
+    <!--<div class="wrapper">
+        <!-- Sidebar  --<deleteThisTag>>
         <nav id="sidebar">
             <div >
                 <a class="navbar-brand d-flex w-50 mx-3 my-3" href="https://sites.google.com/view/konect-co/home"><img id="logo" src="Pictures/Logo.png" alt="Konect"></a>
                 
+            </div>-->
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div id="dismiss">
+                <i class="fa fa-arrow-left"></i>
+            </div>
+
+            <div class="sidebar-header">
+                <a class="navbar-brand d-flex w-50" href="https://sites.google.com/view/konect-co/home"><img id="logo" src="Pictures/Logo.png" alt="Konect" height="50"></a>
             </div>
 
             <ul class="list-unstyled components">
@@ -142,7 +152,7 @@
                     <a href="#"><span class="fa fa-address-card fa-lg"></span> Contact Us </a>
                 </li>
                 <li>
-                    <a href="#" onclick="initializeDashboard()"><span class="fa fa-refresh fa-lg"></span> Refersh Options</a>
+                    <a href="#" onclick="initializeDashboard()"><span class="fa fa-refresh"></span> Refresh Options</a>
                 </li>
                 <!--
                 <li>
@@ -151,12 +161,18 @@
                 -->
                 <li>
                     <select class="browser-default custom-select" id="dashboard-select" onchange="updateDashboard(true)">
-                        <option selected>Toggle Location</option>
+                        <option value="86176f90-d02c-4a5b-94f7-c6baf24d2f7f">Demo: Venice Beach</option>
+                        <option value="d3c4fd41-8892-453b-bc00-64d1f494284b">Demo: Greece</option>
                     </select>
                 </li>
-                    
             </ul>
 
+            <ul class="list-unstyled CTAs">
+                <li>
+                    <button class='btn btn-block btn-outline-light' type="button" data-toggle="modal" data-target="#loginModal" onclick="logout()"> <span class="" id="signin-text">Logout</span></button>
+
+                </li>
+            </ul>
         </nav>
 
         <!-- Page Content  -->
@@ -165,8 +181,9 @@
                 <nav class="navbar navbar-expand-lg navbar-light" id="topNav">                    
                         <ul class="navbar-nav col-md-2 col-lg-1">
                             <li>
-                                <button type="button" id="sidebarCollapse" class="btn btn-light btn-lg btn-block" aria-expanded="false">
-                                    <span class="fa fa-align-left"> </span>
+                                <button type="button" id="sidebarCollapse" class="btn btn-outline-dark">
+                                    <i class="fa fa-align-left"></i>
+                                    <span></span>
                                 </button>
                             </li>
                         </ul>
@@ -175,13 +192,10 @@
                                 <a class="nav-item navbar-brand"><h1>Spaspect</h1></a>
                             </li>
                         </ul>
-                        <button class='col-sm-1 btn btn-info float-right' type="button" data-toggle="modal" data-target="#loginModal" onclick="logout()"> <span class="fa fa-sign-out"></span>
-                            Logout
-                        </button>
                     
                 </nav>
             </div>
-            <div class="container" id="dashboardPage">
+            <div class="container">
             
                 <div class="row no-gutters ">
                     <div class="col-sm-6 border border-primary p-2 col-md-offset-2 embed-responsive embed-responsive-4by3" id="videoDiv">
@@ -205,12 +219,15 @@
                 </div>
             </div>
         </div>
+        <!-- Dark Overlay element -->
+        <div class="overlay" id="dashboardPage"></div>
     </div>
 
     <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
 
     <script type="text/javascript" src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
@@ -235,7 +252,7 @@
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
     </script>
-    <script type="text/javascript ">
+    <script type="text/javascript">
         window.onresize = function() {
             Plotly.relayout('plotDiv', {
               width: document.getElementById('plotDiv').offsetWidth,
@@ -256,13 +273,34 @@
         $("#loginButton").click(function() {});
     </script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        /*$(document).ready(function () {
             $("#sidebar").mCustomScrollbar({
                 theme: "minimal"
             });
 
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });*/
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#dismiss, .overlay').on('click', function () {
+                // hide sidebar
+                $('#sidebar').removeClass('active');
+                // hide overlay
+                $('.overlay').removeClass('active');
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                // open sidebar
+                $('#sidebar').addClass('active');
+                // fade in the overlay
+                $('.overlay').addClass('active');
                 $('.collapse.in').toggleClass('in');
                 $('a[aria-expanded=true]').attr('aria-expanded', 'false');
             });

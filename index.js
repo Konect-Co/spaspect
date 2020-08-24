@@ -1,5 +1,3 @@
-//UTILS FUNCTIONS
-
 function showNone() {
     $('#loginModal').modal('hide');
     $('#signUpModal').modal('hide');
@@ -7,6 +5,7 @@ function showNone() {
 
 function loginPage() {
     showNone();
+    
 }
 
 function signupPage() {
@@ -40,7 +39,6 @@ function showpasswordsignup() {
     }
 }
 
-//:ISTENER FUNCTIONS (do something on some event)
 function login() {
     var userEmail = document.getElementById("login_email_field").value;
     var userPass = document.getElementById("login_password_field").value;
@@ -48,7 +46,10 @@ function login() {
     firebase
         .auth()
         .signInWithEmailAndPassword(userEmail, userPass)
-        .then(function(user) {$("#loginModal").modal('hide');})
+        .then(function(user) {
+            $("#loginModal").modal('hide');
+            
+        })
         .catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
@@ -67,7 +68,9 @@ function loginGoogle() {
             var token = result.credential.accessToken;
             var user = result.user;
         })
-        .then(function(user) {$("#loginModal").modal('hide');})
+        .then(function(user) {
+            $("#loginModal").modal('hide');
+        })
         .catch(function(error) {
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -87,8 +90,13 @@ function signup() {
 }
 
 function logout() {
-    firebase.auth().signOut();
-    console.log("Logged out")
+    var user = firebase.auth().currentUser;
+    if(user) {
+        firebase.auth().signOut();
+        console.log("Logged out");
+        alert('successful logout');
+
+    }
 }
 
 var lastUpdate = 0;
@@ -98,7 +106,7 @@ function initializeDashboard() {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (this.status != 200) {
-            //console.log("POST to /dashboards returned a non-200 status of " + this.status);
+            console.log("POST to /dashboards returned a non-200 status of " + this.status);
         }
 
         var accessibleEnvironments = JSON.parse(xhr.responseText);
@@ -121,21 +129,16 @@ function initializeDashboard() {
         updateDashboard();
     }
     xhr.open("POST", "/dashboards", true);
-    var user = firebase.auth().currentUser;
-    if (typeof(user) != undefined && user != null) {
-        user.getIdToken(true).then(function(idToken) {
-            xhr.send(JSON.stringify({ "idtoken": idToken }));
-        }).catch(function(error) { console.error(error); });
-    } else {
-        xhr.send(JSON.stringify({ "idtoken": null }));
-    }
+    firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
+        xhr.send(JSON.stringify({ "idtoken": idToken }));
+    }).catch(function(error) { console.error(error); });
 }
 
 function updateDashboardArgs(dashboardID) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (this.status != 200) {
-            //console.log("POST to /environment returned a non-200 status of " + this.status);
+            console.log("POST to /environment returned a non-200 status of " + this.status);
         }
 
         //console.log("Success in getting response from Post request to get environment file", xhr.responseText);
@@ -148,14 +151,9 @@ function updateDashboardArgs(dashboardID) {
         }
     }
     xhr.open("POST", "environment", true);
-    var user = firebase.auth().currentUser;
-    if (typeof(user) != undefined && user != null) {
-        user.getIdToken(true).then(function(idToken) {
-            xhr.send(JSON.stringify({ "idtoken": idToken, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
-        }).catch(function(error) { console.error(error); });
-    } else {
-        xhr.send(JSON.stringify({ "idtoken": null, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
-    }
+    firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
+        xhr.send(JSON.stringify({ "idtoken": idToken, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
+    }).catch(function(error) { console.error(error); });
 }
 
 function updateDashboard(forceUpdate = false) {
@@ -174,15 +172,25 @@ firebase.auth().onAuthStateChanged(function(user) {
         initializeDashboard();
         dashboardPage();
         var user = firebase.auth().currentUser;
-        if (typeof(user) != undefined && user != null) {
+        if (user != null) {
             var email_id = user.email;
+            $("#login-logout-button").on("click", function() {
+                $(this).button('Logout');
+                
+            });
             console.log("Welcome User:", email_id);
-            document.getElementById("signin-text").innerHTML = "Logout";
+            alert('successful login');
+        } else {
+            $("#login-logout-button").on("click", function() {
+                $(this).button('Login');
+                
+            });
         }
         $('#loginModal').modal('hide');
+
+        
     } else {
         loginPage();
-        document.getElementById("signin-text").innerHTML = "Login";
     }
 });
 
@@ -194,10 +202,4 @@ function submitAddSite() {
     }).catch(function(error) { console.error(error); });
 }
 
-//STARTUP SCRIPT
-function startupScript() {
-    updateDashboard();
-    //setInterval(function(){updateDashboard()}, 1000);    
-}
-
-startupScript();
+//setInterval(function(){updateDashboard()}, 1000);
