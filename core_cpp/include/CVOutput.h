@@ -8,10 +8,11 @@
 #pragma once
 
 #include <opencv2/opencv.hpp>
+#include "DashboardInfo.h"
 
 using namespace std;
 using namespace cv;
 
 namespace CVOutput {
-	void predict(Mat &image, dashboard &dash);
+	void predict(Mat &image, DashboardInfo::dashboard &dash);
 }
