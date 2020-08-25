@@ -30,7 +30,7 @@ def main(dashboard):
 
 
 	# Ravit Uncomment:
-	#imagePath = "/home/ravit/Pictures/Frame.jpg"
+	imagePath = "/home/ravit/Pictures/Frame.jpg"
 	#streamLink = "/home/ravit/Downloads/TimesSquare.mp4"
 
 	# Santript Uncomment:
@@ -111,5 +111,5 @@ def main(dashboard):
 
 
 if __name__ == "__main__":
-	dashboard = "f0883513-b8e5-41b0-8df6-477291c81e8a"
+	dashboard = "d3c4fd41-8892-453b-bc00-64d1f494284b"
 	sys.exit(main(dashboard))
