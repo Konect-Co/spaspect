@@ -11,31 +11,30 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 
 # Ravit Uncomment:
-#cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
+cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
 
 # Santript Uncomment:
-cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-8efff333dc.json')
+#cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-8efff333dc.json')
 
 firebase_admin.initialize_app(cred)
 
-root_dir = "/home/santript/ImportantProjects/spaspect/visualization"
 db = firestore.client()
 
 def main(dashboard):
 	dashboardDoc = db.collection(u'dashboards').document(dashboard)
 	dashboardInfo = dashboardDoc.get().to_dict()
 
-	#streamLink = dashboardInfo["streamlink"]
+	streamLink = dashboardInfo["streamlink"]
 
-	streamLink = "/home/santript/ImportantProjects/Files/NewClearPeople.mp4"
+	#streamLink = "/home/santript/ImportantProjects/Files/NewClearPeople.mp4"
 
 
 	# Ravit Uncomment:
-	#imagePath = "/home/ravit/Pictures/Frame.jpg"
+	imagePath = "/home/ravit/Pictures/Frame.jpg"
 	#streamLink = "/home/ravit/Downloads/TimesSquare.mp4"
 
 	# Santript Uncomment:
-	imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
+	#imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
 	#streamLink = "/home/santript/ImportantProjects/Files/TimesSquare2.mp4"
 
 	cap = cv2.VideoCapture()

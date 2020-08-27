@@ -11,10 +11,6 @@
 
 using namespace std;
 
-#ifndef currTime
-	float Track::TrackedEntity::currTime;
-#endif
-
 void Track::TrackedEntity::addNext(Track::locationInfo &newLocationInfo) {
 	locationInfo& currLocationInfo = history[history.rbegin()->first];
 	history[currTime] = newLocationInfo;

@@ -6,8 +6,7 @@
 #include <cppunit/TestRunner.h>
 
 
-int
-main()
+int main()
 {
   // Create the event manager and test controller
   CPPUNIT_NS::TestResult controller;

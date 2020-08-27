@@ -1,7 +1,5 @@
 var first = true;
 
-
-
 $("#login_password_field").keyup(function(event) {
 	if (event.keyCode === 13) {
 		$("#loginButton").click();
@@ -74,6 +72,74 @@ function update(data) {
 		text: text_values
 	};
 	
+
+	
+	//TODO: Add a separate trace for the history of each person
+	//	Fill the values of the trace with the appropriate line and
+	//	color for each person by reading from the data argument.
+	//  Add this trace to scatterData variable below
+
+	var scatterData = [trace]//, mapDataTrace];
+	var scatterLayout = {
+		margin: {
+			l: 0,
+			r: 0,
+			b: 0,
+			t: 0
+		}
+	};
+
+
+	//==========================
+	
+	var lat_vals = dashboard['lat_vals'];
+	var lon_vals = dashboard['lon_vals'];
+	
+	
+	var mapData = [{
+		type:'scattermapbox',
+		lat:lat_vals,
+		lon:lon_vals,
+		mode:'marker',
+		marker: {
+			size:8
+		}
+	}]
+
+	var mapLayout = {
+		autosize: true,
+		hovermode:'closest',
+		mapbox: {
+			bearing:0,
+			center: {
+    			lat:lat_vals[0],
+    			lon:lon_vals[0]
+			},
+			pitch:0,
+			zoom:19
+		},
+		margin: {
+			l: 0,
+			r: 0,
+			b: 0,
+			t: 0
+		}
+	};
+
+	Plotly.setPlotConfig({
+		mapboxAccessToken: "pk.eyJ1Ijoic3Jhdml0MSIsImEiOiJja2JzY3NpcHgwMGJnMnZzYTY5ZWsyeDR6In0.CIOWohypCmf_oCzed32xRA"
+	})
+
+	if (first) {
+		Plotly.newPlot('plotDiv', scatterData, scatterLayout);
+		Plotly.newPlot('mapDiv', mapData, mapLayout);
+		first = false;
+	} else {
+		Plotly.react('plotDiv', scatterData, scatterLayout);
+		Plotly.react('mapDiv', mapData, mapLayout);
+	}
+}
+
 /*
     var tracked = dashboard['tracked'];
     var trackedNamesLen = Object.values(tracked).length;
@@ -144,42 +210,7 @@ function update(data) {
 		type: 'scatter3d',
 		text: text_values
 	};
-	//console.log("Dots", trace);
-	//console.log("Lines", mapDataTrace);
 */
-    
-	
-	//TODO: Add a separate trace for the history of each person
-	//	Fill the values of the trace with the appropriate line and
-	//	color for each person by reading from the data argument.
-	//  Add this trace to scatterData variable below
-
-	var scatterData = [trace]//, mapDataTrace];
-	var scatterLayout = {
-		margin: {
-			l: 0,
-			r: 0,
-			b: 0,
-			t: 0
-		}
-	};
-
-
-	//==========================
-	
-	var lat_values = dashboard['lat_vals'];
-	var long_values = dashboard['lon_vals'];
-	
-	
-	var mapData = [{
-		type:'scattermapbox',
-		lat:lat_values,
-		lon:long_values,
-		mode:'marker',
-		marker: {
-			size:8
-		}
-	}]
 
 	//var name = dashboard['tracked']['name']
 	//var name2 = data['currentTime']
@@ -198,42 +229,3 @@ function update(data) {
 			size:1
 		}
 	};*/
-
-	var mapLayout = {
-		autosize: true,
-		hovermode:'closest',
-		mapbox: {
-			bearing:110,
-			center: {
-    			lat:lat_values[0],
-    			lon:long_values[0]
-			},
-			pitch:0,
-			zoom:19
-		},
-		margin: {
-			l: 0,
-			r: 0,
-			b: 0,
-			t: 0
-		}
-	};
-
-
-
-
-
-	
-	Plotly.setPlotConfig({
-		mapboxAccessToken: "pk.eyJ1Ijoic3Jhdml0MSIsImEiOiJja2JzY3NpcHgwMGJnMnZzYTY5ZWsyeDR6In0.CIOWohypCmf_oCzed32xRA"
-	})
-
-	if (first) {
-		Plotly.newPlot('plotDiv', scatterData, scatterLayout);
-		Plotly.newPlot('mapDiv', mapData, mapLayout);
-		first = false;
-	} else {
-		Plotly.react('plotDiv', scatterData, scatterLayout);
-		Plotly.react('mapDiv', mapData, mapLayout);
-	}
-}

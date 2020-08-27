@@ -29,7 +29,7 @@ namespace Track {
 	};
 	class TrackedEntity {
 	public:
-		static float currTime;
+		float currTime;
 
 		float lastUpdate;
 		float velocity[2];
@@ -40,6 +40,6 @@ namespace Track {
 		void addNext(locationInfo &newLocationInfo);
 
 		int* estimateBB();
-		static void updateTime();
+		void updateTime();
 	};
 }; // namespace Track
