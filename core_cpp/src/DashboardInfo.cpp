@@ -15,13 +15,13 @@
 using namespace std;
 
 
-bool DashboardInfo::dashboard::addTrackedObject(Track::TrackedEntity* object) {
+bool DashboardInfo::dashboard::add_tracked_object(Track::TrackedEntity* object) {
 	//TODO: Add checks
 	this->objects.push_back(object);
 	return true;
 }
 
-bool DashboardInfo::dashboard::removeTrackedObject(Track::TrackedEntity* object) {
+bool DashboardInfo::dashboard::remove_tracked_object(Track::TrackedEntity* object) {
 	int obj_pos = find(objects.begin(), objects.end(), object) - objects.begin();
 	if (obj_pos != objects.size()-1) {
 		objects.erase(objects.begin() + obj_pos-1);
@@ -30,8 +30,8 @@ bool DashboardInfo::dashboard::removeTrackedObject(Track::TrackedEntity* object)
 	return false;
 }
 
-void DashboardInfo::dashboard::track(std::vector<Track::locationInfo*> newObjects) {
-	Track::TrackedEntity::updateTime();
+void DashboardInfo::dashboard::track(Track::TrackedEntity* object, std::vector<Track::locationInfo*> newObjects) {
+	object->updateTime();
 
 	//minimum overlap between tracked object and bbox to count as same object
 	float minThresholdIOU = 0.3;
@@ -75,8 +75,16 @@ void DashboardInfo::dashboard::track(std::vector<Track::locationInfo*> newObject
 		int maximum_newObjects = 0;
 		float maximum_iou = 0.;
 		for (map<Track::TrackedEntity*, map<int, float>>::iterator i = allIOUValues.begin(); i != allIOUValues.end() ; i++) {
-			int maximum_currObject = 0; //TODO: Must find the maximum value in the current trackedentity
-			float iou = i->second[maximum_currObject];
+			int maximum_currObject = 0;
+			//Must find the maximum value in the current trackedentity
+			float iou = 0;
+			for (map<int, float>::iterator j = i->second.begin(); j != i->second.end() ; j++) {
+				if (j->second > iou) {
+					maximum_currObject = j->first;
+					iou = j->second;
+				}
+			}
+			
 			if (iou>maximum_iou) {
 				Track::TrackedEntity* trackingObj = i->first;
 				Track::locationInfo objLocation = trackingObj->history.end()->second;
@@ -98,11 +106,11 @@ void DashboardInfo::dashboard::track(std::vector<Track::locationInfo*> newObject
 			Track::locationInfo* location = newObjects[maximum_newObjects];
 			maximumTracking->addNext(*location);
 
-			//TODO: Deleting the row and column of the maximum IoU
-			/*for trackingKey in list(allIOUValues)
-				delete allIOUValues[trackingKey][maximum_newObjects]
-			delete allIOUValues[maximumTracking]
-			delete newBoxes[maximum_newObjects]*/
+			//Deleting the row and column of the maximum IoU
+			allIOUValues.erase(maximumTracking);
+			for (auto trackingKey : allIOUValues)
+				trackingKey.second.erase(maximum_newObjects);
+			newBoxes.erase(newBoxes.begin()+maximum_newObjects);
 		}
 	}
 
@@ -114,23 +122,17 @@ void DashboardInfo::dashboard::track(std::vector<Track::locationInfo*> newObject
 		
 		Track::TrackedEntity* newObject = new Track::TrackedEntity();
 		newObject->addNext(*newLocationInfo);
-		addTrackedObject(newObject);
+		add_tracked_object(newObject);
 	}
 
-	prune();
-	return;
-
-}
-
-void DashboardInfo::dashboard::prune() {
-	//TODO
+	//Pruning objects that haven't been accessed in past 5 frames
 	std::vector<Track::TrackedEntity*> to_delete;
 	int updateThreshold = 5;
 	
 	for(auto tracked_key : this->objects){
     	int tracked_key_pos = find(this->objects.begin(), this->objects.end(), tracked_key) - this->objects.begin();
     	auto tracked = this->objects[tracked_key_pos];
-    	if(Track::TrackedEntity::currTime - tracked->lastUpdate > updateThreshold){
+    	if(tracked_key->currTime - tracked->lastUpdate > updateThreshold){
         	to_delete.push_back(tracked_key);
     	}
 	}
@@ -138,4 +140,6 @@ void DashboardInfo::dashboard::prune() {
     	int delete_i_pos = find(this->objects.begin(), this->objects.end(), delete_i)- this->objects.begin();
     	this->objects.erase(this->objects.begin() + delete_i_pos-1);
 	}
-};
+
+	return;
+}

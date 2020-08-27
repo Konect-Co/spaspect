@@ -14,6 +14,14 @@
 using namespace std;
 
 namespace DashboardInfo {
+	struct calibration {
+		float lon_vals[4];
+		float lat_vals[4];			
+		float lonlat_origin[2];
+		int pixelX_vals[4];
+		int pixelY_vals[4];
+	};
+
 	//Data structure that represents the dashboard
 	class dashboard {
 	public:
@@ -21,19 +29,14 @@ namespace DashboardInfo {
 		string name;
 		vector<Track::TrackedEntity*> objects;
 
-		class {
-		public:
-			float lon_vals[4];
-			float lat_vals[4];			
-			float lonlat_origin[2];
-			int pixelX_vals[4];
-			int pixelY_vals[4];
-		} calibration;
+		struct calibration dash_calib;
 
-		bool addTrackedObject(Track::TrackedEntity* object);
-		bool removeTrackedObject(Track::TrackedEntity* object);
+		dashboard(string streamlink, string name, vector<Track::TrackedEntity*>* objects_ptr, struct calibration dash_calib) : 
+			streamlink(streamlink), name(name), objects(*objects_ptr), dash_calib(dash_calib) {}
 
-		void track(std::vector<Track::locationInfo*> objects);
-		void prune();
+		bool add_tracked_object(Track::TrackedEntity* object);
+		bool remove_tracked_object(Track::TrackedEntity* object);
+
+		void track(Track::TrackedEntity* object, std::vector<Track::locationInfo*> newObjects);
 	};
 } //namespace DashboardInfo
