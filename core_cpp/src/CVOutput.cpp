@@ -10,6 +10,10 @@
 #include <algorithm>
 #include <string>
 #include <opencv2/opencv.hpp>
+#include <iterator>
+#include <map>
+#include <iostream>
+#include <algorithm>
 
 #include "CVOutput.h"
 #include "CVUtils.h"
@@ -19,7 +23,7 @@
 using namespace std;
 using namespace cv;
 
-void CVOutput::predict(Mat &image, DashboardInfo::dashboard &dash) {
+void CVOutput::predict(Mat &image, DashboardInfo::dashboard &dash, int distance_threshold = 2) {
 	//Running image through cv model --> person_boxes, scores, classes
 	//Running image through mask detector --> face_boxes, masked
 	vector<float> detection_scores;
@@ -27,7 +31,12 @@ void CVOutput::predict(Mat &image, DashboardInfo::dashboard &dash) {
 	vector<int> detection_boxes;
     
     vector<int> face_boxes;
-    vector<int> masked;
+    vector<float> lat_vals;
+	vector<float> lon_vals;
+	vector<float> X3D_vals;
+	vector<float> Y3D_vals;
+	vector<float> Z3D_vals;
+	vector<int> masked;
     
     
 	//Remainder of code is spent filling in values for distanced
@@ -39,7 +48,7 @@ void CVOutput::predict(Mat &image, DashboardInfo::dashboard &dash) {
 		if(detection_classes.at(i) != "person")
 			continue;
 
-		vector<double> box;
+		vector<float> box;
 		box.push_back(detection_boxes.at(i));
 
 		double midpoint[2] = {(box[0]+box[2])/2, box[3]};
@@ -69,12 +78,6 @@ void CVOutput::predict(Mat &image, DashboardInfo::dashboard &dash) {
 			}
 		}
 		
-		vector<float> lat_vals;
-		vector<float> lon_vals;
-		vector<float> X3D_vals;
-		vector<float> Y3D_vals;
-		vector<float> Z3D_vals;
-		vector<int> masked;
 		
 		lat_vals.push_back(long_lat.at(0));
 		lon_vals.push_back(long_lat.at(1));
@@ -85,10 +88,15 @@ void CVOutput::predict(Mat &image, DashboardInfo::dashboard &dash) {
 	}
 
 	DashboardInfo::dashboard::track(boxes, X3D_vals, Y3D_vals, Z3D_vals); //wrong num of params
-	map<string,int>trackedObjects = TrackedObject.TrackedObject.objects;
+	map<string,int> trackedObjects = TrackedObject.TrackedObject.objects;
+	vector<string> keys;
 
-	for(string key : trackedObjects.keys()){
-		trackedObjectsDict[key] = trackedObjects[key].toDict();
+	for(map<string,int>::iterator it = trackedObjects.begin(); it != trackedObjects.end(); ++it){
+		keys.push_back(it->first);
+	}
+
+	for(string key : keys){
+		trackedObjectsDict[key] = trackedObjects[key].toDict(); //line 64 utils.py
 	}
 	int distanced[] = 1 * X3D_vals.size(); //WRONG
 	int X3D_vals_len = X3D_vals.size();
@@ -101,7 +109,7 @@ void CVOutput::predict(Mat &image, DashboardInfo::dashboard &dash) {
 			for(int element : distance){
 				distance = sqrt(arraySum(pow(element,2.0))); //IS THE SUM RIGHT?
 			}
-			if(distance < distance_threshold){
+			if(*distance < distance_threshold){
 				distanced[i] = 0;
 				distanced[j] = 0;
 			}
@@ -113,9 +121,37 @@ void CVOutput::predict(Mat &image, DashboardInfo::dashboard &dash) {
 			}
 		}
 	}
-	map<string,double,int> predOutput = {"X3D_vals":X3D_vals, "Y3D_vals":Y3D_vals, "Z3D_vals":Z3D_vals,
-	"lat_vals":lat_vals, "lon_vals":lon_vals, "masked":masked, "distanced":distanced,
-	"tracked":trackedObjectsDict};
-	
+	map<string,vector<float>,vector<int>> predOutput; //FIX THIS
+
+
+	predOutput["X3D_vals"] = X3D_vals;
+	predOutput["Y3D_vals"] = Y3D_vals;
+	predOutput["Z3D_vals"] = Z3D_vals;
+	predOutput["lat_vals"] = lat_vals;
+	predOutput["lon_vals"] = lon_vals;
+	predOutput["masked"] = masked;
+	predOutput["distanced"] = distanced;
+	predOutput["tracked"] = trackedObjectsDict;
+
+/*
+	predOutput.insert(std::make_pair("X3D_vals", X3D_vals));
+	predOutput.insert(std::make_pair("Y3D_vals", Y3D_vals));
+	predOutput.insert(std::make_pair("Z3D_vals", Z3D_vals));
+	predOutput.insert(std::make_pair("lat_vals", lat_vals));
+	predOutput.insert(std::make_pair("lon_vals", lon_vals));
+	predOutput.insert(std::make_pair("masked", masked));
+	predOutput.insert(std::make_pair("distanced", distanced));
+	predOutput.insert(std::make_pair("tracked", tracked));
+*/
+/*
+	predOutput.insert(pair<string,double>("X3D_vals",X3D_vals));
+	predOutput.insert(pair<string,double>("Y3D_vals",Y3D_vals));
+	predOutput.insert(pair<string,double>("Z3D_vals",Z3D_vals));
+	predOutput.insert(pair<string,double>("lat_vals",lat_vals));
+	predOutput.insert(pair<string,double>("lon_vals",lon_vals));
+	predOutput.insert(pair<string,int>("masked",masked));
+	predOutput.insert(pair<string,int>("distanced",distanced));
+	predOutput.insert(pair<string,double>("tracked",trackedObjectsDict));
+*/
 	//return;
 }
