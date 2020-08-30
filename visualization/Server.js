@@ -46,6 +46,18 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/index.html', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/contactus.html', function(req, res) {
+    res.sendFile(__dirname + '/contactus.html');
+});
+
+app.get('/signup.html', function(req, res) {
+    res.sendFile(__dirname + '/signup.html');
+});
+
 app.get('/Pictures/Logo.png', function(req, res) {
     res.sendFile(__dirname + '/Pictures/Logo.png');
 });

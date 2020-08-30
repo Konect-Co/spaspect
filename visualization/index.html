@@ -87,7 +87,7 @@
                 </div>
                 <div class=" modal-footer ">
                     <button type="button" class="btn btn-secondary fa fa-google" id="loginGoogle" onclick="loginGoogle()"> Sign in with Google</button>
-                    <button type="button" class="btn btn-secondary fa fa-sign-in "data-toggle="modal" data-target="#signUpModal " data-backdrop="static" data-keyboard="false"> Sign up for an account</button>
+                    <a type="button" class="btn btn-secondary fa fa-sign-in" href="./signup.html" data-backdrop="static" data-keyboard="false"> Sign up for an account</a>
 
                 </div>
             </div>
@@ -138,18 +138,22 @@
             </div>-->
     <div class="wrapper">
         <!-- Sidebar  -->
+
         <nav id="sidebar">
             <div id="dismiss">
                 <i class="fa fa-arrow-left"></i>
             </div>
 
             <div class="sidebar-header">
-                <a class="navbar-brand d-flex w-50" href="https://sites.google.com/view/konect-co/home"><img id="logo" src="Pictures/Logo.png" alt="Konect" height="50"></a>
+                <a class="navbar-brand d-flex w-50" href="https://sites.google.com/view/konect-co/home"><img id="logo" src="Pictures/Logo.png" alt="Konect" height="50" width="160"></a>
             </div>
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="#"><span class="fa fa-address-card fa-lg"></span> Contact Us </a>
+                    <a href="./index.html"><span class="fa fa-home fa-lg"></span> Home </a>
+                </li>
+                <li>
+                    <a href="./contactus.html"><span class="fa fa-address-card fa-lg"></span> Contact Us </a>
                 </li>
                 <li>
                     <a href="#" onclick="initializeDashboard()"><span class="fa fa-refresh"></span> Refresh Options</a>
@@ -170,7 +174,11 @@
             <ul class="list-unstyled CTAs">
                 <li>
                     <button class='btn btn-block btn-outline-light' type="button" data-toggle="modal" data-target="#loginModal" onclick="logout()"> <span class="" id="signin-text">Logout</span></button>
-
+                </li>
+            </ul>
+            <ul class="list-unstyled CTAs fixed-bottom" id="donateButton">
+                <li>
+                    <button class='btn btn-block btn-outline-light' type="button" > <span class="fa fa-donate">Donate</span></button>
                 </li>
             </ul>
         </nav>
@@ -195,7 +203,7 @@
                     
                 </nav>
             </div>
-            <div class="container">
+            <div class="container-fluid px-4">
             
                 <div class="row no-gutters ">
                     <div class="col-sm-6 border border-primary border-3 p-2 col-md-offset-2 embed-responsive embed-responsive-4by3" id="videoDiv">
@@ -219,9 +227,13 @@
                 </div>
             </div>
         </div>
+
+
         <!-- Dark Overlay element -->
         <div class="overlay" id="dashboardPage"></div>
+        
     </div>
+
 
     <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -311,6 +323,8 @@
     <script type="text/javascript" src="https://unpkg.com/video.js/dist/video.js"></script>
     <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
     <script type="text/javascript" type="text/javascript" src="drawPlots.js"></script>
+
+
 </body>
 
 </html>
