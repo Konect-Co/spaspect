@@ -203,29 +203,48 @@
                     
                 </nav>
             </div>
-            <div class="container-fluid px-4">
             
-                <div class="row no-gutters ">
-                    <div class="col-sm-6 border border-primary border-3 p-2 col-md-offset-2 embed-responsive embed-responsive-4by3" id="videoDiv">
-                        <video id="video" class="video-js embed-responsive-item" data-setup=' { "fluid ": true} ' aria-label="live-cam" controls>
-                            <source id="video-src" src="https://590804fbbbc47.streamlock.net:444/westland/westland.stream/playlist.m3u8">
-                        </video>
+            
+            <div class="container-fluid px-4">
+                <div class="card">
+                    <div class="card-header">
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                              <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Real Time Analysis</a>
+                              <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Aggregate analysis</a>
+                            </div>
+                          </nav>
                     </div>
-                    <div class="col-sm-6 border border-primary border-3 no-gutters" id="plotDiv"></div>
-                    
-                    <div class="col-sm-6 border border-primary border-3 no-gutters" id="mapDiv"></div>
-                    <div class="col-sm-6 border border-primary border-3 order-last no-gutters" id="statsDiv">
-                        <div id="stats-header">
-                            <h2><b style="color:#429a50">Statistics</b></h2>
-                        </div>
-                        <div id="stats">
-                            <h3>Total count:  <span id="statsTotal"></span></h3>
-                            <h3>Undistanced count:  <span id="statsUndistanced"></span></h3>
-                            <h3>Unmasked count:  <span id="statsUnmasked"></span></h3>
+                    <div class="card-body">
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="row no-gutters ">
+                                    <div class="col-sm-6 border border-primary border-3 p-2 col-md-offset-2 embed-responsive embed-responsive-4by3" id="videoDiv">
+                                        <video id="video" class="video-js embed-responsive-item" data-setup=' { "fluid ": true} ' aria-label="live-cam" controls>
+                                            <source id="video-src" src="https://590804fbbbc47.streamlock.net:444/westland/westland.stream/playlist.m3u8">
+                                        </video>
+                                    </div>
+                                    <div class="col-sm-6 border border-primary border-3 no-gutters" id="plotDiv"></div>
+                                    
+                                    <div class="col-sm-6 border border-primary border-3 no-gutters" id="mapDiv"></div>
+                                    <div class="col-sm-6 border border-primary border-3 order-last no-gutters" id="statsDiv">
+                                        <div id="stats-header">
+                                            <h2><b style="color:#429a50">Statistics</b></h2>
+                                        </div>
+                                        <div id="stats">
+                                            <h3>Total count:  <span id="statsTotal"></span></h3>
+                                            <h3>Undistanced count:  <span id="statsUndistanced"></span></h3>
+                                            <h3>Unmasked count:  <span id="statsUnmasked"></span></h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">Aggregate Analysis goes here</div>
                         </div>
                     </div>
                 </div>
             </div>
+            
         </div>
 
 
