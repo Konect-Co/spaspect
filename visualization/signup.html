@@ -144,15 +144,19 @@
             </div>
 
             <div class="sidebar-header">
-                <a class="navbar-brand d-flex w-50" href="https://sites.google.com/view/konect-co/home"><img id="logo" src="Pictures/Logo.png" alt="Konect" height="50" width="160"></a>
+                <a class="navbar-brand d-flex w-50" href="https://sites.google.com/view/konect-co/home"><img id="logo" src="Pictures/Logo.png" alt="Konect" height="50"></a>
             </div>
 
             <ul class="list-unstyled components">
-                <li class="active">
-                    <a href="#"><span class="fa fa-address-card fa-lg"></span> Contact Us </a>
+                <li>
+                    <a href="./index.html"><span class="fa fa-home fa-lg"></span> Home </a>
                 </li>
                 <li>
-                    <a href="#" onclick="initializeDashboard()"><span class="fa fa-refresh"></span> Refersh Options</a>
+                <li>
+                    <a href="./contactus.html"><span class="fa fa-address-card fa-lg"></span> Contact Us </a>
+                </li>
+                <li>
+                    <a href="#" onclick="initializeDashboard()"><span class="fa fa-refresh"></span> Refresh Options</a>
                 </li>
                 <!--
                 <li>
@@ -161,26 +165,20 @@
                 -->
                 <li>
                     <select class="browser-default custom-select" id="dashboard-select" onchange="updateDashboard(true)">
-                        <option selected>Toggle Location</option>
+                        <option value="86176f90-d02c-4a5b-94f7-c6baf24d2f7f">Demo: Venice Beach</option>
+                        <option value="d3c4fd41-8892-453b-bc00-64d1f494284b">Demo: Greece</option>
                     </select>
                 </li>
             </ul>
 
             <ul class="list-unstyled CTAs">
                 <li>
-                    <button 
-                        class='btn btn-block btn-outline-light' 
-                        type="button" 
-                        id="login-logout-button" 
-                        data-text-swap="Logout" 
-                        data-text-original="Login" 
-                        data-toggle="modal" 
-                        data-target="#loginModal" 
-                        onclick="logout()"
-                    > 
-                        Login     
-                    </button>
-
+                    <button class='btn btn-block btn-outline-light' type="button" data-toggle="modal" data-target="#loginModal" onclick="logout()"> <span class="" id="signin-text">Logout</span></button>
+                </li>
+            </ul>
+            <ul class="list-unstyled CTAs fixed-bottom" id="donateButton">
+                <li>
+                    <button class='btn btn-block btn-outline-light' type="button" > <span class="fa fa-donate">Donate</span></button>
                 </li>
             </ul>
         </nav>
@@ -207,23 +205,29 @@
             </div>
             <div class="container">
             
-                <div class="row no-gutters ">
-                    <div class="col-sm-6 border border-primary p-2 col-md-offset-2 embed-responsive embed-responsive-4by3" id="videoDiv">
-                        <video id="video" class="video-js embed-responsive-item" data-setup=' { "fluid ": true} ' aria-label="live-cam" controls>
-                            <source id="video-src" src="https://590804fbbbc47.streamlock.net:444/westland/westland.stream/playlist.m3u8">
-                        </video>
-                    </div>
-                    <div class="col-sm-6 border border-secondary no-gutters" id="plotDiv"></div>
-                    
-                    <div class="col-sm-6 border border-secondary no-gutters" id="mapDiv"></div>
-                    <div class="col-sm-6 border border-secondary order-last no-gutters" id="statsDiv">
-                        <div id="stats-header">
-                            <h2>Statistics</h2>
+                <div class="row justify-content-center">
+                    <div class="card col-6">
+                        <div class="card-header">
+                            <h3>Spaspect Sign up</h3>
                         </div>
-                        <div id="stats">
-                            <h3>Total count: <span id="statsTotal"></span></h3>
-                            <h3>Undistanced count: <span id="statsUndistanced"></span></h3>
-                            <h3>Unmasked count: <span id="statsUnmasked"></span></h3>
+                        <div class="card-body"">
+                            <div class="card-title">Sign up for a Konect account</div>
+                            <form>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Email address</label>
+                                    <input type="email" class="form-control" id="signup_email_field" aria-describedby="emailHelp" placeholder="Enter email" name="Email">
+                                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Password</label>
+                                    <input type="password" class="form-control" id="signup_password_field" placeholder="Password" name="psw">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Confirm Password</label>
+                                    <input type="password" class="form-control" id="signup_check_password_field" placeholder="Password" name="check_psw">
+                                </div>
+                                <button type="submit" class="btn btn-primary fa fa-user-plus" onclick="signup()" data-dismiss="modal"> Create Account</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -315,9 +319,6 @@
                 $('a[aria-expanded=true]').attr('aria-expanded', 'false');
             });
         });
-    </script>
-    <script type="text/javascript">
-
     </script>
     <script type="text/javascript" src="index.js"></script>
     <script type="text/javascript" type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>

@@ -1,11 +1,20 @@
+
 .btn {
-    background-color: dodgerblue;
-    color: white;
+/*Removed background colors*/
     padding: 15px 20px;
     border: none;
     cursor: pointer;
     width: 100%;
     opacity: 0.9;
+}
+
+#footer {
+    
+    height:200px;
+}
+
+#donateButton {
+    max-width: 250px;
 }
 
 .btn:hover {
