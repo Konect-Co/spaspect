@@ -30,11 +30,12 @@ namespace DashboardInfo {
 		string streamlink;
 		string name;
 		vector<Track::TrackedEntity*> objects;
+		dashboard *pm;
 
 		struct calibration dash_calib;
 
 		dashboard(string streamlink, string name, vector<Track::TrackedEntity*>* objects_ptr, struct calibration dash_calib) : 
-			streamlink(streamlink), name(name), objects(*objects_ptr), dash_calib(dash_calib) {}
+			streamlink(streamlink), name(name), objects(*objects_ptr), dash_calib(dash_calib), pm(pm) {}
 
 		bool add_tracked_object(Track::TrackedEntity* object);
 		bool remove_tracked_object(Track::TrackedEntity* object);

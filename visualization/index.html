@@ -189,8 +189,9 @@
                 <nav class="navbar navbar-expand-lg navbar-light" id="topNav">                    
                         <ul class="navbar-nav col-md-2 col-lg-1">
                             <li>
-                                <button type="button" id="sidebarCollapse" class="btn btn-outline-dark">
+                                <button type="button" style= "background:#7386D5" id="sidebarCollapse" class="btn btn-outline-dark">
                                     <i class="fa fa-align-left"></i>
+                                    <i class="fa fa-bars"></i>
                                     <span></span>
                                 </button>
                             </li>
@@ -211,7 +212,7 @@
                         <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                               <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Real Time Analysis</a>
-                              <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Aggregate analysis</a>
+                              <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Aggregate Analysis</a>
                             </div>
                           </nav>
                     </div>
@@ -239,7 +240,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">Aggregate Analysis goes here</div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                <div class="col border border-primary border-3 no-gutters" id="plotAggregate"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -293,6 +296,11 @@
               width: document.getElementById('mapDiv').offsetWidth,
               height: document.getElementById('mapDiv').offsetHeight
             });
+            Plotly.relayout('plotAggregate', {
+              width: document.getElementById('plotAggregate').offsetWidth,
+              height: document.getElementById('plotAggregate').offsetHeight
+            });
+
         }
 
         $("#login_password_field").keyup(function(event) {
@@ -337,11 +345,12 @@
             });
         });
     </script>
-    <script type="text/javascript" src="index.js"></script>
     <script type="text/javascript" type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/video.js/dist/video.js"></script>
     <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
+    <script type="text/javascript" type="text/javascript" src="drawPlotsAggregate.js"></script>
     <script type="text/javascript" type="text/javascript" src="drawPlots.js"></script>
+    <script type="text/javascript" src="index.js"></script>
 
 
 </body>
