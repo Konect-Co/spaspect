@@ -14,6 +14,7 @@
 #include <map>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 
 #include "CVOutput.h"
 #include "CVUtils.h"
@@ -53,8 +54,10 @@ void CVOutput::predict(Mat &image, DashboardInfo::dashboard &dash, int distance_
 
 		double midpoint[2] = {(box[0]+box[2])/2, box[3]};
 
-		vector<double> long_lat = pm.pixel_to_lonlat(midpoint)[0];
-		vector<double> coord3D = pm.lonlat_to_3D(long_lat);
+		//vector<DashboardInfo::dashboard*> pm;
+
+		vector<double> long_lat = PixelMapper::pixel_to_lonlat(dash.pm, midpoint)[0]; //FIX THIS	
+		vector<double> coord3D = PixelMapper::lonlat_to_3D(dash.pm, long_lat); //FIX THIS
 
 		//0=unsure, 1=wearing, 2=not wearing
 		int wearingMask = 0;
@@ -98,30 +101,39 @@ void CVOutput::predict(Mat &image, DashboardInfo::dashboard &dash, int distance_
 	for(string key : keys){
 		trackedObjectsDict[key] = trackedObjects[key].toDict(); //line 64 utils.py
 	}
-	int distanced[] = 1 * X3D_vals.size(); //WRONG
+
+	vector<int> distanced;
+	distanced.push_back(1 * X3D_vals.size());
+
 	int X3D_vals_len = X3D_vals.size();
 	for(int i = 0 ; i < X3D_vals_len ; i++){
 		for(int j = 0 ; j < i+1 && X3D_vals_len ; j++){ //check if this is valid
 			if(distanced[i] == 0 && distanced[j] ==0){
 				continue;
 			}
-			double distance[] = {X3D_vals[i]-X3D_vals[j], Y3D_vals[i]-Y3D_vals[j], Z3D_vals[i]-Z3D_vals[j]};
+			//double distance[] = {X3D_vals[i]-X3D_vals[j], Y3D_vals[i]-Y3D_vals[j], Z3D_vals[i]-Z3D_vals[j]};
+			vector<double> distance;
+			distance.push_back(X3D_vals[i]-X3D_vals[j]);
+			distance.push_back(Y3D_vals[i]-Y3D_vals[j]);
+			distance.push_back(Z3D_vals[i]-Z3D_vals[j]);
+
+			int distance_num = 0;
 			for(int element : distance){
-				distance = sqrt(arraySum(pow(element,2.0))); //IS THE SUM RIGHT?
+				distance_num += sqrt(pow(element,2.0));
 			}
-			if(*distance < distance_threshold){
-				distanced[i] = 0;
-				distanced[j] = 0;
+			if(distance_num < distance_threshold){
+				distanced.at(i) = 0;
+				distanced.at(j) = 0;
 			}
 
 			for(int x = 0 ; x < sizeof(distanced)/sizeof(distanced[0]) ; x++){
-    			if(distanced[x] != 1){
+    			if(distanced.at(x) != 1){
         			break;
     			}
 			}
 		}
 	}
-	map<string,vector<float>,vector<int>> predOutput; //FIX THIS
+	map<string,vector<float>> predOutput; //FIX THIS
 
 
 	predOutput["X3D_vals"] = X3D_vals;
