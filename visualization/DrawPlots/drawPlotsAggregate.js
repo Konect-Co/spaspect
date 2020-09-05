@@ -1,6 +1,6 @@
 var first = true;
 
-function update(){
+function updateAgg(){
 
 	//=========================
 	//PEOPLE VS TIME LINE GRAPH
@@ -29,3 +29,6 @@ function update(){
 	}
 	
 }
+
+//TODO: PLACE CORRECTLY
+updateAgg();
