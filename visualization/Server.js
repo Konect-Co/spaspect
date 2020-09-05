@@ -70,6 +70,10 @@ app.get('/drawPlots.js', function(req, res) {
     res.sendFile(__dirname + '/drawPlots.js');
 });
 
+app.get('/drawPlotsAggregate.js', function(req, res) {
+    res.sendFile(__dirname + '/drawPlotsAggregate.js');
+});
+
 app.get('/css/styles.css', function(req, res) {
     res.sendFile(__dirname + '/css/styles.css');
 });
