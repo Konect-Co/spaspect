@@ -67,11 +67,11 @@ app.get('/index.js', function(req, res) {
 });
 
 app.get('/drawPlots.js', function(req, res) {
-    res.sendFile(__dirname + '/drawPlots.js');
+    res.sendFile(__dirname + '/DrawPlots/drawPlots.js');
 });
 
 app.get('/drawPlotsAggregate.js', function(req, res) {
-    res.sendFile(__dirname + '/drawPlotsAggregate.js');
+    res.sendFile(__dirname + '/DrawPlots/drawPlotsAggregate.js');
 });
 
 app.get('/css/styles.css', function(req, res) {

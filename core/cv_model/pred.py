@@ -35,8 +35,7 @@ def predict(image_path):
 
 	# Load image and preprocess
 	input_image = cv2.imread(image_path)
-	original_width, original_height = input_image.shape[:-1]
-	input_image = cv2.resize(input_image, (new_width, new_height))
+
 	input_image = np.expand_dims(input_image, 0)
 
 	output = infer(tf.constant(input_image))
@@ -49,8 +48,6 @@ def predict(image_path):
 	#[top left x position, top left y position, width, height]
 
 	output["detection_classes"] = [ coco_labels[int(label)] for label in output["detection_classes"] ]
-	output["detection_boxes"][:,::2] *= original_width/new_width
-	output["detection_boxes"][:,1::2] *= original_height/new_height
 
 	output["masks"] = detectMask.genPredictions(image_path)
 
