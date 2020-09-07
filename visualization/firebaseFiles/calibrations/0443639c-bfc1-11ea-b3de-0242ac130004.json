@@ -1,21 +1,10 @@
 {
     "calibration": {
-        "name":"Times Square",
         "pixelX_vals": [
             330,
             50,
             945,
             815
-        ],
-        "lonlat_origin": [
-            40.75926,
-            -73.985235
-        ],
-        "lon_vals": [
-            -73.984976,
-            -73.985132,
-            -73.985201,
-            -73.985035
         ],
         "pixelY_vals": [
             250,
@@ -23,12 +12,23 @@
             395,
             245
         ],
+        "lon_vals": [
+            -73.984976,
+            -73.985132,
+            -73.985201,
+            -73.985035
+        ],
+        "streamlink": "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w202109066.m3u8",
         "lat_vals": [
             40.759271,
             40.759316,
             40.759196,
             40.759104
         ],
-        "streamlink": "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w202109066.m3u8"
+        "lonlat_origin": [
+            40.75926,
+            -73.985235
+        ],
+        "name": "Times Square"
     }
 }
