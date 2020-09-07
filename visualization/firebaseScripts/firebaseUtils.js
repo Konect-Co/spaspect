@@ -17,7 +17,7 @@ exports.readFromFirebase = function(collectionName, docName, fileLocation) {
 		if (doc.exists) {
 			console.log("[INFO] Read from firebase successfully");
 			const docData = doc.data();
-			fs.writeFileSync(fileLocation, JSON.stringify(docData));
+			fs.writeFileSync(fileLocation, JSON.stringify(docData, null, 4));
 		} else {
 			throw new Error("[ERROR] invalid collection name/doc name specified.");			
 		}
