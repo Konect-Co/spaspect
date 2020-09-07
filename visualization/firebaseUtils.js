@@ -11,7 +11,7 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 
-function readFromFirebase(collectionName, docName, fileLocation) {
+exports.readFromFirebase = function(collectionName, docName, fileLocation) {
 	const collection = db.collection(collectionName);
 	collection.doc(docName).get().then((doc) => {
 		if (doc.exists) {
@@ -24,29 +24,10 @@ function readFromFirebase(collectionName, docName, fileLocation) {
 	});
 }
 
-function writeToFirebase(collectionName, docName, fileLocation) {
+exports.writeToFirebase = function(collectionName, docName, fileLocation) {
 	const collection = db.collection(collectionName);
 	const docData = JSON.parse(fs.readFileSync(fileLocation));
 	collection.doc(docName).set(docData).then(function() {
 		console.log("[INFO] Written to firebase successfully");
 	});
-}
-
-var args = process.argv.slice(2);
-if (args.length != 4) {
-	throw new Error("Usage: node firebaseUtils.js [read/write] <collectionName> <docName> <fileLocation>");	
-}
-
-var mode = args[0];
-var collectionName = args[1];
-var docName = args[2];
-var fileLocation = args[3];
-if (mode == "read") {
-	console.log("[INFO] reading from firebase collection " + collectionName + ", document name " +
-		+ docName + ", and writing output to file location " + fileLocation);
-	readFromFirebase(collectionName, docName, fileLocation);
-} else if (mode == "write") {
-	console.log("[INFO] reading from file location " + fileLocation +
-		", and writing output to firebase collection " + collectionName + ", document name " + docName);
-	writeToFirebase(collectionName, docName, fileLocation);
 }
