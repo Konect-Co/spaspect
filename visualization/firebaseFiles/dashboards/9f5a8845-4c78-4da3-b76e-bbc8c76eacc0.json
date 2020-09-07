@@ -1,0 +1,34 @@
+{
+    "name": "Southlake",
+    "streamlink": "https://videos-3.earthcam.com/fecnetwork/9779.flv/chunklist_w1492877880.m3u8",
+    "calibration": {
+        "lat_vals": [
+            -97.131277,
+            -97.130891,
+            -97.130891,
+            -97.131224
+        ],
+        "lonlat_origin": [
+            32.942547,
+            -97.131277
+        ],
+        "lon_vals": [
+            32.942547,
+            32.942437,
+            32.94255,
+            32.942222
+        ],
+        "pixelX_vals": [
+            1034,
+            691,
+            65,
+            771
+        ],
+        "pixelY_vals": [
+            587,
+            450,
+            583,
+            309
+        ]
+    }
+}
