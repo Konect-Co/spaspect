@@ -15,7 +15,8 @@
     "googleapis": "^52.1.0",
     "plotly": "^1.0.6",
     "plotly.js": "^1.54.7",
-    "uuid": "^8.2.0"
+    "uuid": "^8.2.0",
+    "walk": "^2.3.14"
   },
   "devDependencies": {},
   "scripts": {
