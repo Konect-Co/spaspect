@@ -1,0 +1,11 @@
+{
+	"aggregateData": {
+		"1": {
+			"visitorCount":1,
+			"averageDistance":1.0,
+			"undistancedCount":1,
+			"unmaskedCount":1,
+			"violationsCount":1
+		}
+	}
+}
