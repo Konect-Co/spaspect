@@ -1,0 +1,34 @@
+{
+    "calibration": {
+        "pixelX_vals": [
+            360,
+            60,
+            984,
+            765
+        ],
+        "pixelY_vals": [
+            230,
+            384,
+            387,
+            489
+        ],
+        "lon_vals": [
+            -73.984987,
+            -73.985685,
+            -73.985650,
+            -73.985304
+        ],
+        "streamlink": "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w202109066.m3u8",
+        "lat_vals": [
+            40.759084,
+            40.759761,
+            40.759154,
+            40.759453
+        ],
+        "lonlat_origin": [
+            40.75867,
+            -73.985197
+        ],
+        "name": "Times Square"
+    }
+}
