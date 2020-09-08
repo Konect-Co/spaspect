@@ -6,24 +6,9 @@ from cv_model import pred
 import PixelMapper
 import TrackedObject
 
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
-
-# Ravit Uncomment:
-cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
-
-# Santript Uncomment:
-#cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-8efff333dc.json')
-
-firebase_admin.initialize_app(cred)
-
 db = firestore.client()
 
-def main(dashboard):
-	dashboardDoc = db.collection(u'dashboards').document(dashboard)
-	dashboardInfo = dashboardDoc.get().to_dict()
-
+def main(dashboardInfo):
 	streamLink = dashboardInfo["streamlink"]
 
 	#streamLink = "/home/santript/ImportantProjects/Files/NewClearPeople.mp4"
@@ -65,17 +50,17 @@ def main(dashboard):
 			print("END")
 			break
 
+		# writing image to specified path
 		cv2.imwrite(imagePath, image)
+
+		# generating prediction from image
 		output = pred.predict(imagePath)
 
 		predOutput = utils.makeVisualizationOutput(pm, output)
-
-		#print("predOutput:",predOutput)
-		#print(predOutput["tracked"])
-
 		        
 		frame_index += 1
 
+		# adding fields to dashboardOutput
 		dashboardOutput["X3D_vals"] = predOutput["X3D_vals"]
 		dashboardOutput["Y3D_vals"] = predOutput["Y3D_vals"]
 		dashboardOutput["Z3D_vals"] = predOutput["Z3D_vals"]
@@ -85,10 +70,9 @@ def main(dashboard):
 		dashboardOutput["distanced"] = predOutput["distanced"]
 		dashboardOutput["tracked"] = predOutput["tracked"]
         
-		print("New Dashboard: ",dashboardInfo)
-        
-		dashboardDoc.set(dashboardInfo)	
+		print("New Dashboard: ",dashboardInfo)	
 
+		# Code for visualizing tracking output (should make this a separate function later on)
 		"""
 		for tracked_obj in predOutput["tracked"].values():
 			id = float(tracked_obj["name"])

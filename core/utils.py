@@ -6,6 +6,11 @@ import cv_model.utils as cv_utils
 import TrackedObject
 
 def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=0.60):
+	# aggregateData = genAggData(<parameters>)
+	# realTimeData = genRealData(<parameters>)
+
+	# fullData = {"realTime":realTimeData, "aggregate":aggregateData}
+
 	X3D_vals = []
 	Y3D_vals = []
 	Z3D_vals = []
@@ -57,8 +62,7 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 
 	TrackedObject.TrackedObject.track(boxes, X3D_vals, Y3D_vals, Z3D_vals)
 	trackedObjects = TrackedObject.TrackedObject.objects
-   	#print(trackedObjects.getHistoryKeys())
-	#print("Objects: ",trackedObjects)
+
 	trackedObjectsDict = {}
 	for key in trackedObjects.keys():
 		trackedObjectsDict[key] = trackedObjects[key].toDict()
@@ -81,3 +85,11 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 		"tracked":trackedObjectsDict}
     
 	return predOutput
+
+def genRealData():
+	# masks = genMaskData()
+	# distance = genDistanceData()
+	# return realData
+
+def genAggData():
+	# return aggData
