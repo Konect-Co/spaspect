@@ -176,11 +176,6 @@
                     <button class='btn btn-block btn-outline-light' type="button" data-toggle="modal" data-target="#loginModal" onclick="logout()"> <span class="" id="signin-text">Logout</span></button>
                 </li>
             </ul>
-            <ul class="list-unstyled CTAs fixed-bottom" id="donateButton">
-                <li>
-                    <button class='btn btn-block btn-outline-light' type="button" > <span class="fa fa-donate">Donate</span></button>
-                </li>
-            </ul>
         </nav>
 
         <!-- Page Content  -->
@@ -189,8 +184,7 @@
                 <nav class="navbar navbar-expand-lg navbar-light" id="topNav">                    
                         <ul class="navbar-nav col-md-2 col-lg-1">
                             <li>
-                                <button type="button" style= "background:#7386D5" id="sidebarCollapse" class="btn btn-outline-dark">
-                                    <i class="fa fa-align-left"></i>
+                                <button type="button" style= "background:#7386D5" id="sidebarCollapse" class="btn btn-outline-light">
                                     <i class="fa fa-bars"></i>
                                     <span></span>
                                 </button>
@@ -216,6 +210,7 @@
                             </div>
                           </nav>
                     </div>
+                    <!--Real time pannel -->
                     <div class="card-body">
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -240,8 +235,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <!--Aggregate Pannel-->
                             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                <div class="col border border-primary border-3 no-gutters" id="plotAggregate"></div>
+                                <div class="row">
+                                    <div class="col border border-primary border-3 no-gutters" id="plotAggregate"></div>
+                                    <div class="col">Second plot</div>
+                                    <div class="col">Third Plot</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">Fourth Plot</div>
+                                    <div class="col">Fourth Plot</div>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -249,12 +254,25 @@
             </div>
             
         </div>
-
+    
 
         <!-- Dark Overlay element -->
         <div class="overlay" id="dashboardPage"></div>
         
     </div>
+    
+
+    <footer class="footer justify-content-center">  
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <span>
+                        Copyright © Spaspect 2020
+                    </span>                   
+                </div>
+            </div>
+          </div>
+    </footer>
 
 
     <!-- jQuery CDN - Slim version (=without AJAX) -->

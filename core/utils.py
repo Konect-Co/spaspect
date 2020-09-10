@@ -10,6 +10,12 @@ returns a map of all the realtime analytics portrayed on the SpaSpect dashboard
 """
 def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=0.60):
 	#all realtime
+
+	# aggregateData = genAggData(<parameters>)
+	# realTimeData = genRealData(<parameters>)
+
+	# fullData = {"realTime":realTimeData, "aggregate":aggregateData}
+
 	X3D_vals = []
 	Y3D_vals = []
 	Z3D_vals = []
@@ -71,10 +77,9 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 	#Tracking of objects to return "track"
 	TrackedObject.TrackedObject.track(boxes, X3D_vals, Y3D_vals, Z3D_vals)
 	trackedObjects = TrackedObject.TrackedObject.objects
-   	#print(trackedObjects.getHistoryKeys())
-	#print("Objects: ",trackedObjects)
 
 	#returns a map of name, label, velocity, history and lastUpdate, which will be displayed in firebase
+
 	trackedObjectsDict = {}
 	for key in trackedObjects.keys():
 		trackedObjectsDict[key] = trackedObjects[key].toDict()
@@ -101,3 +106,11 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 		"tracked":trackedObjectsDict}
     
 	return predOutput
+
+def genRealData():
+	# masks = genMaskData()
+	# distance = genDistanceData()
+	# return realData
+
+def genAggData():
+	# return aggData

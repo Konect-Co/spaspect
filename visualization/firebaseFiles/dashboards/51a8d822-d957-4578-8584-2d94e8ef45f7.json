@@ -1,0 +1,57 @@
+{
+    "streamlink": "https://frn.rtsp.me/XcPV4xW2bqsP5b72nOROVw/1598237179/hls/8th9S69b.m3u8",
+    "calibration": {
+        "lonlat_origin": [
+            26.297081,
+            47.464073
+        ],
+        "lon_vals": [
+            26.297081,
+            26.297097,
+            26.297097,
+            26.297127
+        ],
+        "lat_vals": [
+            47.464073,
+            47.464059,
+            47.46406,
+            47.464086
+        ],
+        "pixelY_vals": [
+            373,
+            375,
+            93,
+            400
+        ],
+        "pixelX_vals": [
+            366,
+            709,
+            862,
+            790
+        ]
+    },
+    "name": "Faltecini, Romania",
+    "output": {
+        "X3D_vals": [
+            null
+        ],
+        "Y3D_vals": [
+            null
+        ],
+        "distanced": [
+            null
+        ],
+        "Z3D_vals": [
+            null
+        ],
+        "lat_vals": [
+            null
+        ],
+        "lon_vals": [
+            null
+        ],
+        "masked": [
+            null
+        ]
+    }
+}

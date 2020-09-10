@@ -6,31 +6,9 @@ from cv_model import pred
 import PixelMapper
 import TrackedObject
 
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
-
-# Ravit Uncomment:
-#personalized json files for firebase
-cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
-
-# Santript Uncomment:
-#cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-8efff333dc.json')
-
-#allowing access to firebase database
-firebase_admin.initialize_app(cred)
-
 db = firestore.client()
 
-
-"""
-Displays all the realtime analytics on SpaSpect dashboard
-"""
-def main(dashboard):
-	#accessing firebase dashboard and a few elements
-	dashboardDoc = db.collection(u'dashboards').document(dashboard)
-	dashboardInfo = dashboardDoc.get().to_dict()
-
+def main(dashboardInfo):
 	streamLink = dashboardInfo["streamlink"]
 
 	#streamLink = "/home/santript/ImportantProjects/Files/NewClearPeople.mp4"
@@ -83,18 +61,18 @@ def main(dashboard):
 		#returns whether frames were successfully saved
 		cv2.imwrite(imagePath, image)
 		#runs object detection and mask detection
+
+		# generating prediction from image
 		output = pred.predict(imagePath)
 
 		#calculates all the realtime analytics displayed on dashboard
 		predOutput = utils.makeVisualizationOutput(pm, output)
-
-		#print("predOutput:",predOutput)
-		#print(predOutput["tracked"])
-
 		        
 		frame_index += 1
 
 		#sets the output on firebase database to the output of the AI models
+
+		# adding fields to dashboardOutput
 		dashboardOutput["X3D_vals"] = predOutput["X3D_vals"]
 		dashboardOutput["Y3D_vals"] = predOutput["Y3D_vals"]
 		dashboardOutput["Z3D_vals"] = predOutput["Z3D_vals"]
@@ -104,10 +82,9 @@ def main(dashboard):
 		dashboardOutput["distanced"] = predOutput["distanced"]
 		dashboardOutput["tracked"] = predOutput["tracked"]
         
-		print("New Dashboard: ",dashboardInfo)
-        
-		dashboardDoc.set(dashboardInfo)	
+		print("New Dashboard: ",dashboardInfo)	
 
+		# Code for visualizing tracking output (should make this a separate function later on)
 		"""
 		for tracked_obj in predOutput["tracked"].values():
 			id = float(tracked_obj["name"])
