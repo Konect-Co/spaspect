@@ -6,7 +6,6 @@ $("#login_password_field").keyup(function(event) {
 	}
 });
 function update(data) {
-	//document.getElementById("video-src").setAttribute("src", data["streamlink"]);
 	//TODO: Seems like this doesn't update the video successfully
 	var player = videojs('video');
 	player.src(data["streamlink"]);

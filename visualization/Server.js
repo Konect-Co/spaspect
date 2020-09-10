@@ -17,6 +17,8 @@ admin.initializeApp({
 const db = admin.firestore();
 const dbUsers = db.collection('users');
 const dbDashboards = db.collection('dashboards');
+const dbAggregate = db.collection('aggregate');
+const dbRealtime = db.collection('realtime');
 
 // Utils Functions
 
@@ -66,8 +68,8 @@ app.get('/index.js', function(req, res) {
     res.sendFile(__dirname + '/index.js');
 });
 
-app.get('/drawPlots.js', function(req, res) {
-    res.sendFile(__dirname + '/DrawPlots/drawPlots.js');
+app.get('/drawPlotsRealtime.js', function(req, res) {
+    res.sendFile(__dirname + '/DrawPlots/drawPlotsRealtime.js');
 });
 
 app.get('/drawPlotsAggregate.js', function(req, res) {
@@ -141,6 +143,15 @@ app.post('/dashboards', function(req, res) {
     });
 });
 
+app.post('/realtimeData', function(req, res) {
+    // Use dbRealtime to get the appropriate dashboard and return the result
+});
+
+app.post('/aggregateData', function(req, res) {
+    // Use dbAggregate to get the appropriate dashboard and return the result
+});
+
+//TODO: Replace following function with two post request implementations above
 //POST request to get info about a particular dashboard for the current user
 app.post('/environment', function(req, res) {
     //declaring function that sends response to who sent request

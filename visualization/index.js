@@ -40,7 +40,7 @@ function showpasswordsignup() {
     }
 }
 
-//:ISTENER FUNCTIONS (do something on some event)
+//LISTENER FUNCTIONS (do something on some event)
 function login() {
     var userEmail = document.getElementById("login_email_field").value;
     var userPass = document.getElementById("login_password_field").value;
@@ -55,7 +55,6 @@ function login() {
             var errorMessage = error.message;
 
             var loginError = document.getElementById("login-error-msg");
-            loginError;
             loginError.innerHTML = "Error: " + errorMessage;
         });
 }
@@ -88,7 +87,7 @@ function signup() {
 
 function logout() {
     firebase.auth().signOut();
-    console.log("Logged out")
+    console.log("Logged out");
 }
 
 var lastUpdate = 0;
@@ -97,10 +96,6 @@ function initializeDashboard() {
     lastUpdate = 0;
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        if (this.status != 200) {
-            //console.log("POST to /dashboards returned a non-200 status of " + this.status);
-        }
-
         var accessibleEnvironments = JSON.parse(xhr.responseText);
         var sel = document.getElementById('dashboard-select');
 
@@ -117,8 +112,6 @@ function initializeDashboard() {
 
             sel.appendChild(opt);
         });
-
-        updateDashboard();
     }
     xhr.open("POST", "/dashboards", true);
     var user = firebase.auth().currentUser;
@@ -131,23 +124,19 @@ function initializeDashboard() {
     }
 }
 
-function updateDashboardArgs(dashboardID) {
+function updateRealtimeArgs(dashboardID) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        if (this.status != 200) {
-            //console.log("POST to /environment returned a non-200 status of " + this.status);
-        }
-
-        //console.log("Success in getting response from Post request to get environment file", xhr.responseText);
         var config = JSON.parse(xhr.responseText);
-
+        //TODO: Update with new format of data
         if (config["authorized"] && !config["toDate"]) {
             lastUpdate = config["currentTime"];
             var dashboard = config["dashboard"];
-            update(dashboard);
+            updateRealtime(dashboard);
         }
     }
-    xhr.open("POST", "environment", true);
+    //TODO: Replace this with new POST request
+    xhr.open("POST", "/environment", true);
     var user = firebase.auth().currentUser;
     if (typeof(user) != undefined && user != null) {
         user.getIdToken(true).then(function(idToken) {
@@ -158,15 +147,49 @@ function updateDashboardArgs(dashboardID) {
     }
 }
 
-function updateDashboard(forceUpdate = false) {
+function updateRealtime(forceUpdate = false) {
     var selectObj = document.getElementById("dashboard-select");
     if (selectObj.selectedIndex != -1) {
         if (forceUpdate)
             lastUpdate = 0;
         var dashboardID = selectObj.options[selectObj.selectedIndex].value;
         //console.log("Currently selected dashboard", dashboardID);
-        updateDashboardArgs(dashboardID);
+        updateRealtimeArgs(dashboardID);
     }
+}
+
+function updateAggregateArgs(dashboardID) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        var config = JSON.parse(xhr.responseText);
+        //TODO: Update with new format of data
+        if (config["authorized"] && !config["toDate"]) {
+            lastUpdate = config["currentTime"];
+            var dashboard = config["dashboard"];
+            updateAggregate(dashboard);
+        }
+    }
+    //TODO: Replace this with new POST request
+    xhr.open("POST", "/environment", true);
+    var user = firebase.auth().currentUser;
+    if (typeof(user) != undefined && user != null) {
+        user.getIdToken(true).then(function(idToken) {
+            xhr.send(JSON.stringify({ "idtoken": idToken, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
+        }).catch(function(error) { console.error(error); });
+    } else {
+        xhr.send(JSON.stringify({ "idtoken": null, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
+    }
+}
+
+function updateAggregate(forceUpdate = false) {
+    var selectObj = document.getElementById("dashboard-select");
+    if (selectObj.selectedIndex != -1) {
+        if (forceUpdate)
+            lastUpdate = 0;
+        var dashboardID = selectObj.options[selectObj.selectedIndex].value;
+        //console.log("Currently selected dashboard", dashboardID);
+        updateAggregateArgs(dashboardID);
+    }   
 }
 
 firebase.auth().onAuthStateChanged(function(user) {
@@ -186,6 +209,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     }
 });
 
+//TODO: We should delete this soon, as it's not providing much value
 function submitAddSite() {
     firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
         document.getElementById("user-token").setAttribute("hidden", false);
@@ -194,10 +218,17 @@ function submitAddSite() {
     }).catch(function(error) { console.error(error); });
 }
 
+//TODO: Add command to update these variables depending on which is active
+var realtimeActive = true;
+var aggregateActive = false;
 //STARTUP SCRIPT
 function startupScript() {
-    updateDashboard();
-    //setInterval(function(){updateDashboard()}, 1000);    
+    setTimeout({
+        if (realtimeActive)
+            updateRealtime();
+        if (aggregateActive)
+            updateAggregate();
+    }, 1000);
 }
 
 startupScript();
