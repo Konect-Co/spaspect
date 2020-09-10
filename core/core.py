@@ -11,16 +11,23 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 
 # Ravit Uncomment:
+#personalized json files for firebase
 cred = credentials.Certificate('/home/ravit/Downloads/spaspect-dashboard-firebase-adminsdk-bip9h-4407f5fe40.json')
 
 # Santript Uncomment:
 #cred = credentials.Certificate('/home/santript/ImportantProjects/Files/spaspect-dashboard-firebase-adminsdk-bip9h-8efff333dc.json')
 
+#allowing access to firebase database
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
+
+"""
+Displays all the realtime analytics on SpaSpect dashboard
+"""
 def main(dashboard):
+	#accessing firebase dashboard and a few elements
 	dashboardDoc = db.collection(u'dashboards').document(dashboard)
 	dashboardInfo = dashboardDoc.get().to_dict()
 
@@ -37,23 +44,31 @@ def main(dashboard):
 	#imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
 	#streamLink = "/home/santript/ImportantProjects/Files/TimesSquare2.mp4"
 
+	#pulls up stream from camera
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
 
+	#accessing calibration information
 	calibration = dashboardInfo["calibration"]
 	dashboardOutput = dashboardInfo["output"]
 	pixelX = calibration["pixelX_vals"]
 	pixelY = calibration["pixelY_vals"]
+	#getting pixel coordinates from pixelX and pixelY
 	pixel_array = [[pixelX[i], pixelY[i]] for i in range(len(pixelX))]
 	lat = calibration["lat_vals"]
 	lon = calibration["lon_vals"]
+	#getting longitude and latitude coordinates from lat and lon
 	lonlat_array = [[lat[i], lon[i]] for i in range(len(lat))]
+
+	#makes pixel, lonlat, and 3D conversions
 	pm = PixelMapper.PixelMapper(pixel_array, lonlat_array, calibration["lonlat_origin"])
 
 	video = False
+	#gives the frames per second
 	frame_rate = cv2.CAP_PROP_FPS
 	frame_index = 0
 
+	#reading the frames of the stream
 	for _ in range(10):
 		cap.read()
 
@@ -65,9 +80,12 @@ def main(dashboard):
 			print("END")
 			break
 
+		#returns whether frames were successfully saved
 		cv2.imwrite(imagePath, image)
+		#runs object detection and mask detection
 		output = pred.predict(imagePath)
 
+		#calculates all the realtime analytics displayed on dashboard
 		predOutput = utils.makeVisualizationOutput(pm, output)
 
 		#print("predOutput:",predOutput)
@@ -76,6 +94,7 @@ def main(dashboard):
 		        
 		frame_index += 1
 
+		#sets the output on firebase database to the output of the AI models
 		dashboardOutput["X3D_vals"] = predOutput["X3D_vals"]
 		dashboardOutput["Y3D_vals"] = predOutput["Y3D_vals"]
 		dashboardOutput["Z3D_vals"] = predOutput["Z3D_vals"]
@@ -111,5 +130,6 @@ def main(dashboard):
 
 
 if __name__ == "__main__":
+	#firebase dashboard ID
 	dashboard = "d3c4fd41-8892-453b-bc00-64d1f494284b"
 	sys.exit(main(dashboard))

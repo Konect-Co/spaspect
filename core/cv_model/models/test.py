@@ -6,9 +6,11 @@ from tensorflow.python.framework.convert_to_constants import convert_variables_t
 import numpy as np
 
 #set mobilenetv2 as a example
+#loading and infering model
 model = tf.saved_model.load("./mobilenet_model")
 infer = model.signatures["serving_default"]
 
+#compiling function into tf graph
 full_model = tf.function(lambda x:infer(x))
 full_model = full_model.get_concrete_function(
     tf.TensorSpec(infer.inputs[0].shape, infer.inputs[0].dtype))
@@ -17,12 +19,14 @@ full_model = full_model.get_concrete_function(
 frozen_func = convert_variables_to_constants_v2(full_model)
 frozen_func.graph.as_graph_def()
 
+#getting model layers
 layers = [op.name for op in frozen_func.graph.get_operations()]
 print("-" * 50)
 print("Frozen model layers: ")
 for layer in layers:
     print(layer)
 
+#getting frozen model inputs and outputs
 print("-" * 50)
 print("Frozen model inputs: ")
 print(frozen_func.inputs)
@@ -32,15 +36,17 @@ print(frozen_func.outputs)
 # Save frozen graph from frozen ConcreteFunction to hard drive
 tf.io.write_graph(graph_or_graph_def=frozen_func.graph, logdir=".", name="frozen_graph.pb", as_text=False)
 
-
+#wrapping frozen graph
 def wrap_frozen_graph(graph_def, inputs, outputs, print_graph=False):
     def _imports_graph_def():
+        #imports graph_def graph into default graph
         tf.compat.v1.import_graph_def(graph_def, name="")
 
     wrapped_import = tf.compat.v1.wrap_function(_imports_graph_def, [])
     import_graph = wrapped_import.graph
 
     print("-" * 50)
+    #printing out layers
     print("Frozen model layers: ")
     layers = [op.name for op in import_graph.get_operations()]
     if print_graph == True:

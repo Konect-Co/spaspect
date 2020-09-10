@@ -16,9 +16,12 @@ args = parser.parse_args()
 
 # TODO: Inefficient - image is being read btth here and in predict function
 # TODO: Inefficient - face detections are being made but not processed
+# getting output from image
 output = pred.predict(args.imagePath)
+# returns whether image was successfully saved
 image = cv2.imread(args.imagePath)
 
+#printing image shape
 print("Image shape", image.shape)
 
 minScoreThreshold = 0.6
@@ -27,6 +30,7 @@ for i in range(len(output["detection_scores"])):
     if (score < minScoreThreshold):
         break
 
+    #defining box
     box_orig = output["detection_boxes"][i]
     box = [0,0,0,0]
     box[0] = int(box_orig[0]*image.shape[0])

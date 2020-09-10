@@ -5,6 +5,7 @@ import numpy as np
 import cv2
 import os
 
+#setting args and getting image, the face detector model, and mask detector model
 args = {
 	"image":"/home/ravit/Pictures/person.jpg",
 	"face":"cv_model/models/face_detector",
@@ -14,9 +15,11 @@ args = {
 
 # load our serialized face detector model from disk
 print("[INFO] loading face detector model...")
+#creates a string of concatenated path components
 prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
 weightsPath = os.path.sep.join([args["face"],
 	"res10_300x300_ssd_iter_140000.caffemodel"])
+#used to load the deep learning network
 net = cv2.dnn.readNet(prototxtPath, weightsPath)
 
 # load the face mask detector model from disk

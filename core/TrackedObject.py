@@ -40,6 +40,7 @@ class TrackedObject(object):
 			"lastUpdate":self.lastUpdate
 		}
 
+	#getter methods
 	def getName(self):
 		return self.name
 
@@ -69,11 +70,14 @@ class TrackedObject(object):
 			#remove all tracked objects which have not been updated within updateThreshold seconds
 			to_delete = []
 
+			#goes through objects
 			for tracked_key in cls.objects:
 				tracked = cls.objects[tracked_key]
+				#deciding whether to add tracked_key to the to_delete list
 				if (cls.currTime-tracked.getLastUpdate() > cls.updateThreshold):
 					to_delete.append(tracked_key)
 
+			#deletes the objects in to_delete
 			for delete_i in to_delete:
 				del cls.objects[delete_i]
 
@@ -94,12 +98,15 @@ class TrackedObject(object):
 			allIOUValues = {}
 			for name in cls.objects.keys():
 				trackedEntity = cls.objects[name]
+				#computing predicted box of a tracked entity
 				predictedBox = trackedEntity.computePrediction()
 				IOUValues = {}
+				#getting the bounding boxes
 				for box_i in range(len(boundingBoxes)):
 					box = boundingBoxes[box_i]
 
 					#BUG: Returning negative values, sometimes values over 1
+					#computing the Intersection over Union of the bounding box
 					IOU = cv_utils.computeIOU(predictedBox, box)
 					
 					IOUValues[box_i] = IOU
@@ -108,6 +115,8 @@ class TrackedObject(object):
 				#print("IOU: ", IOUValues)
 			    #print("IOU: ", allIOUValues)
 
+			    #sorts IOUs and places them in IOUValues
+			    #2D dictionary formed
 				IOUValues = {k : v for k, v in sorted(IOUValues.items(), reverse=True, key = lambda kv:kv[1])}
 				allIOUValues[trackedEntity] = IOUValues
                 
@@ -128,6 +137,7 @@ class TrackedObject(object):
 			"""
 			#storing the indices of the new boxes that are to be created
 			minThresholdIOU = 0.3
+			#creating new boxes
 			newBoxes = []
 			if len(allIOUValues.keys()) == 0:
 				newBoxes = range(len(boundingBoxes))
@@ -142,7 +152,7 @@ class TrackedObject(object):
 
 					maximum_iou = 0
 					maximumTracking = keys[0]
-
+					#comparing IOUs and setting to maximum if greater
 					for trackingObj in keys:
 						iou = allIOUValues[trackingObj][list(allIOUValues[trackingObj])[0]]
 						if iou>maximum_iou:
@@ -185,11 +195,10 @@ class TrackedObject(object):
 		#assigned : Ravit
 		if len(self.history.keys()) != 0:
 			assert self.lastUpdate != type(self).currTime
+		#defining history and lastupdate which goes in the toDict() function
 		self.history[str(type(self).currTime)] = {"bounding_box": bounding_box.tolist(), "X3D": X_3D, "Y3D": Y_3D, "Z3D": Z_3D}
 		self.lastUpdate = type(self).currTime
 		self.updateVelocity()
-		#print("History keys1: ", self.history.keys()[-1])
-		#print("History keys2: ", self.history.keys()[-2])
 		return
 
 	def updateVelocity(self):
@@ -198,16 +207,20 @@ class TrackedObject(object):
 		#calculate the pixel velocity
 		#velocity = difference in position(in pixels)/difference in time(time between each frame)
 		
+		#base case
 		if len(self.history.keys()) < 2:
 			self.velocity = [0, 0]
 			return
         
+        #getting time from history.keys()
 		time_i = list(self.history.keys())[-1]
 		time_f = list(self.history.keys())[-2]
 
+		#getting positions
 		bounding_box_i = self.history[time_i]['bounding_box'] #initial position
 		bounding_box_f = self.history[time_f]['bounding_box'] #final position
 
+		#difference in position(in pixels)/difference in time(time between each frame)
 		xVelocity = (bounding_box_f[0] - bounding_box_i[0])/(float(time_f) - float(time_i))
 		yVelocity = (bounding_box_f[1] - bounding_box_i[1])/(float(time_f) - float(time_i))
 
@@ -215,11 +228,16 @@ class TrackedObject(object):
 		self.velocity = velocity
 		return
 
+	"""
+	returns the pridicted prediction of box during next frame of a video
+	"""
 	def computePrediction(self):
+		#if number of keys is greater than 0, assert if lastupdate and currTime are equal or not
 		if len(self.history.keys()) != 0:
 			assert self.lastUpdate != type(self).currTime
 		delta_t = type(self).currTime - self.lastUpdate
 
+		#getting history and velocity
 		velocity = self.getVelocity()
 		history = self.getHistory()
 		lastPosition = history[list(history.keys())[-1]]['bounding_box']
@@ -229,8 +247,6 @@ class TrackedObject(object):
 		if (velocity == 0):
 			return lastPosition
         
-		#print("Last position: ",lastPosition)
-		#print("Length of last position: ",len(lastPosition))
 		assert len(lastPosition) == 4
 		assert len(velocity) == 2
 		for coord_i in range(len(lastPosition)):
