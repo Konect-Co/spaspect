@@ -1,10 +1,5 @@
 var first = true;
 
-$("#login_password_field").keyup(function(event) {
-	if (event.keyCode === 13) {
-		$("#loginButton").click();
-	}
-});
 function renderReal(data) {
 	//TODO: Seems like this doesn't update the video successfully
 	var player = videojs('video');
