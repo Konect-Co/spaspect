@@ -5,7 +5,7 @@ $("#login_password_field").keyup(function(event) {
 		$("#loginButton").click();
 	}
 });
-function update(data) {
+function renderReal(data) {
 	//TODO: Seems like this doesn't update the video successfully
 	var player = videojs('video');
 	player.src(data["streamlink"]);

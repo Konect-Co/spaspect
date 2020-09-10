@@ -1,6 +1,6 @@
 var first = true;
 
-function updateAgg(){
+function renderAgg(data){
 
 	//=========================
 	//PEOPLE VS TIME LINE GRAPH

@@ -132,7 +132,8 @@ function updateRealtimeArgs(dashboardID) {
         if (config["authorized"] && !config["toDate"]) {
             lastUpdate = config["currentTime"];
             var dashboard = config["dashboard"];
-            updateRealtime(dashboard);
+            //following function is in drawPlotsRealtime.js
+            renderReal(dashboard);
         }
     }
     //TODO: Replace this with new POST request
@@ -166,7 +167,8 @@ function updateAggregateArgs(dashboardID) {
         if (config["authorized"] && !config["toDate"]) {
             lastUpdate = config["currentTime"];
             var dashboard = config["dashboard"];
-            updateAggregate(dashboard);
+            //following function is in drawPlotsAggregate.js
+            renderAgg(dashboard);
         }
     }
     //TODO: Replace this with new POST request
