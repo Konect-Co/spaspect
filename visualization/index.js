@@ -127,24 +127,19 @@ function initializeDashboard() {
 function updateRealtimeArgs(dashboardID) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        var config = JSON.parse(xhr.responseText);
+        var data = JSON.parse(xhr.responseText);
         //TODO: Update with new format of data
-        if (config["authorized"] && !config["toDate"]) {
-            lastUpdate = config["currentTime"];
-            var dashboard = config["dashboard"];
-            //following function is in drawPlotsRealtime.js
-            renderReal(dashboard);
-        }
+        renderRealtime(data);
     }
     //TODO: Replace this with new POST request
-    xhr.open("POST", "/environment", true);
+    xhr.open("POST", "/realtimeData", true);
     var user = firebase.auth().currentUser;
     if (typeof(user) != undefined && user != null) {
         user.getIdToken(true).then(function(idToken) {
-            xhr.send(JSON.stringify({ "idtoken": idToken, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
+            xhr.send(JSON.stringify({ "idtoken": idToken, "dashboard": dashboardID}));
         }).catch(function(error) { console.error(error); });
     } else {
-        xhr.send(JSON.stringify({ "idtoken": null, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
+        xhr.send(JSON.stringify({ "idtoken": null, "dashboard": dashboardID }));
     }
 }
 
@@ -162,24 +157,19 @@ function updateRealtime(forceUpdate = false) {
 function updateAggregateArgs(dashboardID) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        var config = JSON.parse(xhr.responseText);
+        var data = JSON.parse(xhr.responseText);
         //TODO: Update with new format of data
-        if (config["authorized"] && !config["toDate"]) {
-            lastUpdate = config["currentTime"];
-            var dashboard = config["dashboard"];
-            //following function is in drawPlotsAggregate.js
-            renderAgg(dashboard);
-        }
+        renderAgg(data);
     }
     //TODO: Replace this with new POST request
-    xhr.open("POST", "/environment", true);
+    xhr.open("POST", "/aggregateData", true);
     var user = firebase.auth().currentUser;
     if (typeof(user) != undefined && user != null) {
         user.getIdToken(true).then(function(idToken) {
-            xhr.send(JSON.stringify({ "idtoken": idToken, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
+            xhr.send(JSON.stringify({ "idtoken": idToken, "dashboard": dashboardID}));
         }).catch(function(error) { console.error(error); });
     } else {
-        xhr.send(JSON.stringify({ "idtoken": null, "dashboard": dashboardID, "lastUpdate": lastUpdate }));
+        xhr.send(JSON.stringify({ "idtoken": null, "dashboard": dashboardID }));
     }
 }
 

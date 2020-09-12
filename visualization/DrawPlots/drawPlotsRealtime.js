@@ -1,6 +1,6 @@
 var first = true;
 
-function renderReal(data) {
+function renderRealtime(data) {
 	//TODO: Seems like this doesn't update the video successfully
 	var player = videojs('video');
 	player.src(data["streamlink"]);
@@ -9,7 +9,7 @@ function renderReal(data) {
 	});
 
 	//TODO: Check if the data actually has an output section
-	dashboard = data["output"];
+	dashboard = data["realtime"];
 
 	document.getElementById("statsTotal").innerHTML = dashboard['masked'].length;
 
