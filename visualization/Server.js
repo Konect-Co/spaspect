@@ -152,23 +152,10 @@ app.post('/realtimeData', function(req, res) {
     req.on('end', function() {
         //Taking arguments from /dashboards POST request
         bodyJSON = JSON.parse(body);
-        if (!("idtoken" in bodyJSON))
+        if (!("idtoken" in bodyJSON && "dashboardId" in bodyJSON))
             res.end();
         var idToken = bodyJSON["idtoken"];
         var dashboardId = bodyJSON["dashboardId"];
-
-        //If user id is not specified (i.e. logged out), return values in demoEnvs.json
-        if (idToken == null) {
-            fs.readFile("./demoEnvs.json", function(err, content) {
-                if (err) { res.end(); return; }
-                var userData = JSON.parse(content);
-
-                res.writeHead(200);
-                res.write(JSON.stringify(userData["accessibleEnvironments"]));
-                res.end();
-            });
-            return;
-        }
 
         //verfiying given idToken first
         admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
@@ -180,18 +167,15 @@ app.post('/realtimeData', function(req, res) {
                 //if doc exists, return the accessible environments
                 if (doc.exists) {
                     var userData = doc.data();
-                    var accessibleEnvironments = userData["accessibleEnvironments"];
 
                     res.writeHead(200);
-                    res.write(JSON.stringify(accessibleEnvironments));
+                    res.write(JSON.stringify(userData));
                     res.end();
                 }
                 //otherwise, read from demoEnvs.json and return demo dashboards
                 else {
-                    fs.readFile("./demoEnvs.json", function(err, content) {
-                        res.writeHead(400);
-                        res.end();
-                    });
+                    res.writeHead(400);
+                    res.end();
                 }
             });
         });
@@ -212,19 +196,6 @@ app.post('/aggregateData', function(req, res) {
         var idToken = bodyJSON["idtoken"];
         var dashboardId = bodyJSON["dashboardId"];
 
-        //If user id is not specified (i.e. logged out), return values in demoEnvs.json
-        if (idToken == null) {
-            fs.readFile("./demoEnvs.json", function(err, content) {
-                if (err) { res.end(); return; }
-                var userData = JSON.parse(content);
-
-                res.writeHead(200);
-                res.write(JSON.stringify(userData["accessibleEnvironments"]));
-                res.end();
-            });
-            return;
-        }
-
         //verfiying given idToken first
         admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
             //reading uid of current user
@@ -234,24 +205,19 @@ app.post('/aggregateData', function(req, res) {
                 //if doc exists, return the accessible environments
                 if (doc.exists) {
                     var userData = doc.data();
-                    var accessibleEnvironments = userData["accessibleEnvironments"];
 
                     res.writeHead(200);
-                    res.write(JSON.stringify(accessibleEnvironments));
+                    res.write(JSON.stringify(userData));
                     res.end();
                 }
                 //otherwise, read from demoEnvs.json and return demo dashboards
                 else {
-                    fs.readFile("./demoEnvs.json", function(err, content) {
-                        res.writeHead(400);
-                        res.end();
-                    });
+                    res.writeHead(400);
+                    res.end();
                 }
             });
         });
     });
-
-
 });
 
 //TODO: Replace following function with two post request implementations above
