@@ -215,7 +215,7 @@ var realtimeActive = $('.active.tab-pane').attr('realTime');
 var aggregateActive = $('.active.tab-pane').attr('aggregate');
 //STARTUP SCRIPT
 function startupScript() {
-    setTimeout({
+    setTimeout(function(){
         if (realtimeActive) {
             updateRealtime();
         }
