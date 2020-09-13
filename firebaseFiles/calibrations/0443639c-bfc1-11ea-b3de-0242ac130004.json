@@ -18,7 +18,6 @@
             -73.985201,
             -73.985035
         ],
-        "streamlink": "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w202109066.m3u8",
         "lat_vals": [
             40.759271,
             40.759316,
@@ -29,6 +28,7 @@
             40.75926,
             -73.985235
         ],
+        "streamWebpage": "https://www.earthcam.com/usa/newyork/timessquare/?cam=tsstreet",
         "name": "Times Square"
     }
 }

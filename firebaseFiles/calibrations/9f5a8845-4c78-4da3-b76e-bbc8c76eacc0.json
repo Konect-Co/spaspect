@@ -1,0 +1,34 @@
+{
+    "calibration": {
+        "lonlat_origin": [
+            32.942547,
+            -97.131277
+        ],
+        "lat_vals": [
+            -97.131277,
+            -97.130891,
+            -97.130891,
+            -97.131224
+        ],
+        "pixelX_vals": [
+            1034,
+            691,
+            65,
+            771
+        ],
+        "pixelY_vals": [
+            587,
+            450,
+            583,
+            309
+        ],
+        "lon_vals": [
+            32.942547,
+            32.942437,
+            32.94255,
+            32.942222
+        ],
+        "name": "Southlake",
+        "streamWebpage": "https://www.earthcam.com/usa/texas/southlake/?cam=southlake"
+    }
+}

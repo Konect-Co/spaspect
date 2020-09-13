@@ -1,34 +1,32 @@
 {
-    "calibration": {
-        "pixelX_vals": [
-            362,
-            59,
-            931,
-            846
-        ],
-        "pixelY_vals": [
-            215,
-            335,
-            325,
-            246
-        ],
-        "lon_vals": [
-            -73.984654,
-            -73.985135,
-            -73.985468,
-            -73.985975
-        ],
-        "streamlink": "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w202109066.m3u8",
-        "lat_vals": [
-            40.759165,
-            40.759498,
-            40.759489,
-            40.759687
-        ],
-        "lonlat_origin": [
-            40.75473,
-            -73.985648
-        ],
-        "name": "Times Square"
-    }
+    "lat_vals": [
+        -118.474918,
+        -118.47492,
+        -118.475292,
+        -118.475297
+    ],
+    "lonlat_origin": [
+        33.988004,
+        -118.474918
+    ],
+    "pixelY_vals": [
+        230,
+        232,
+        154,
+        150
+    ],
+    "pixelX_vals": [
+        300,
+        388,
+        167,
+        352
+    ],
+    "lon_vals": [
+        33.988004,
+        33.988042,
+        33.987963,
+        33.988096
+    ],
+    "name": "Venice Beach",
+    "streamWebPage":"https://www.westland.net/beachcam/"
 }

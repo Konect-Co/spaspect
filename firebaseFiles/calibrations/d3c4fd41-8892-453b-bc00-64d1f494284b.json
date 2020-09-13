@@ -1,34 +1,32 @@
 {
-    "calibration": {
-        "pixelX_vals": [
-            397,
-            94,
-            465,
-            798
-        ],
-        "pixelY_vals": [
-            165,
-            765,
-            946,
-            526
-        ],
-        "lon_vals": [
-            -73.984564,
-            -73.985823,
-            -73.985913,
-            -73.985804
-        ],
-        "streamlink": "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w202109066.m3u8",
-        "lat_vals": [
-            40.759460,
-            40.759230,
-            40.759160,
-            40.759098
-        ],
-        "lonlat_origin": [
-            40.75640,
-            -73.985762
-        ],
-        "name": "Times Square"
-    }
+    "lonlat_origin": [
+        38.0164,
+        23.754965
+    ],
+    "lat_vals": [
+        38.0164,
+        38.016322,
+        38.016331,
+        38.016435
+    ],
+    "pixelY_vals": [
+        331,
+        490,
+        340,
+        274
+    ],
+    "lon_vals": [
+        23.754965,
+        23.754958,
+        23.754931,
+        23.75481
+    ],
+    "pixelX_vals": [
+        585,
+        480,
+        320,
+        212
+    ],
+    "name": "Galatsi, Greece",
+    "streamWebpage":"https://www.myearthcam.com/bioshop"
 }

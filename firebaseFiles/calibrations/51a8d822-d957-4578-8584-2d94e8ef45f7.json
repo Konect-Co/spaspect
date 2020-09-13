@@ -1,0 +1,32 @@
+{
+    "lonlat_origin": [
+        26.297081,
+        47.464073
+    ],
+    "lon_vals": [
+        26.297081,
+        26.297097,
+        26.297097,
+        26.297127
+    ],
+    "lat_vals": [
+        47.464073,
+        47.464059,
+        47.46406,
+        47.464086
+    ],
+    "pixelY_vals": [
+        373,
+        375,
+        93,
+        400
+    ],
+    "pixelX_vals": [
+        366,
+        709,
+        862,
+        790
+    ],
+    "name": "Faltecini, Romania",
+    "streamWebpage": "https://worldcams.tv/romania/falticeni/thales-pub"
+}
