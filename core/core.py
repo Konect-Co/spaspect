@@ -1,5 +1,6 @@
 import sys
-#import utils
+from utilScripts import readDashboard
+from utilScripts import obtainStreamLink
 import cv2
 import RealTime
 
@@ -7,27 +8,14 @@ from cv_model import pred
 import PixelMapper
 #import TrackedObject
 
-#db = firestore.client()
-
-def main(dashboardInfo):
-	streamLink = dashboardInfo["streamlink"]
-
-	#streamLink = "/home/santript/ImportantProjects/Files/NewClearPeople.mp4"
-
-
-	# Ravit Uncomment:
-	imagePath = "/home/ravit/Pictures/Frame.jpg"
-	#streamLink = "/home/ravit/Downloads/TimesSquare.mp4"
-
-	# Santript Uncomment:
-	#imagePath = "/home/santript/ImportantProjects/Frames/Frame.jpg"
-	#streamLink = "/home/santript/ImportantProjects/Files/TimesSquare2.mp4"
+def main(dashboardID):
+	dashboardInfo = readDashboard.read(dashboardID);
 
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
 
 	calibration = dashboardInfo["calibration"]
-	dashboardOutput = dashboardInfo["output"]
+
 	pixelX = calibration["pixelX_vals"]
 	pixelY = calibration["pixelY_vals"]
 	pixel_array = [[pixelX[i], pixelY[i]] for i in range(len(pixelX))]
@@ -36,7 +24,11 @@ def main(dashboardInfo):
 	lonlat_array = [[lat[i], lon[i]] for i in range(len(lat))]
 	pm = PixelMapper.PixelMapper(pixel_array, lonlat_array, calibration["lonlat_origin"])
 
-	video = False
+	if ("streamlink" in calibration.keys()):
+		streamLink = calibration["streamLink"]
+	else ():
+		streamLink = obtainStreamLink(calibration["streamWebpage"])
+
 	frame_rate = cv2.CAP_PROP_FPS
 	frame_index = 0
 
@@ -51,48 +43,16 @@ def main(dashboardInfo):
 			print("END")
 			break
 
-		# writing image to specified path
-		cv2.imwrite(imagePath, image)
-
 		# generating prediction from image
-		output = pred.predict(imagePath)
+		output = pred.predict(image)
 
 		predOutput = RealTime.genRealData(pm, output)
 		        
 		frame_index += 1
 
-		# adding fields to dashboardOutput
-		dashboardOutput["X3D_vals"] = predOutput["X3D_vals"]
-		dashboardOutput["Y3D_vals"] = predOutput["Y3D_vals"]
-		dashboardOutput["Z3D_vals"] = predOutput["Z3D_vals"]
-		dashboardOutput["lat_vals"] = predOutput["lat_vals"]
-		dashboardOutput["lon_vals"] = predOutput["lon_vals"]
-		dashboardOutput["masked"] = predOutput["masked"]
-		dashboardOutput["distanced"] = predOutput["distanced"]
-		dashboardOutput["tracked"] = predOutput["tracked"]
-
-		# Code for visualizing tracking output (should make this a separate function later on)
-		"""
-		for tracked_obj in predOutput["tracked"].values():
-			id = float(tracked_obj["name"])
-			color = (int((id%1)*255), int((id*100%1)*255), int((id*10000%1)*255))
-			current_pos = tracked_obj["history"][str(tracked_obj["lastUpdate"])]
-			current_pos = [int(elem) for elem in current_pos]
-			image = cv2.rectangle(image, (current_pos[0], current_pos[1]), (current_pos[2], current_pos[3]), color, 2)
-			for i in range(len(list(tracked_obj["history"]))-1):
-				pos_c = tracked_obj["history"][list(tracked_obj["history"])[i]]
-				pos_n = tracked_obj["history"][list(tracked_obj["history"])[i+1]]
-
-				midpoint_c = (int((pos_c[0] + pos_c[2])/2),int((pos_c[1] + pos_c[3])/2))
-				midpoint_n = (int((pos_n[0] + pos_n[2])/2),int((pos_n[1] + pos_n[3])/2))
-
-				image = cv2.line(image, midpoint_c, midpoint_n, color, 2)
-		cv2.imwrite("/home/santript/ImportantProjects/Frames/frame" + str(frame_index) + ".jpg", image)
-		"""
-
 	return 0
 
 
 if __name__ == "__main__":
-	dashboard = "d3c4fd41-8892-453b-bc00-64d1f494284b"
-	sys.exit(main(dashboard))
+	dashboardID = "d3c4fd41-8892-453b-bc00-64d1f494284b"
+	sys.exit(main(dashboardID))
