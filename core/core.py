@@ -1,12 +1,13 @@
 import sys
-import utils
+#import utils
 import cv2
+import RealTime
 
 from cv_model import pred
 import PixelMapper
-import TrackedObject
+#import TrackedObject
 
-db = firestore.client()
+#db = firestore.client()
 
 def main(dashboardInfo):
 	streamLink = dashboardInfo["streamlink"]
@@ -56,7 +57,7 @@ def main(dashboardInfo):
 		# generating prediction from image
 		output = pred.predict(imagePath)
 
-		predOutput = utils.makeVisualizationOutput(pm, output)
+		predOutput = RealTime.genRealData(pm, output)
 		        
 		frame_index += 1
 
@@ -69,8 +70,6 @@ def main(dashboardInfo):
 		dashboardOutput["masked"] = predOutput["masked"]
 		dashboardOutput["distanced"] = predOutput["distanced"]
 		dashboardOutput["tracked"] = predOutput["tracked"]
-        
-		print("New Dashboard: ",dashboardInfo)	
 
 		# Code for visualizing tracking output (should make this a separate function later on)
 		"""
