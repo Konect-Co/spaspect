@@ -1,6 +1,6 @@
 import streamlink
 
-def getStreamLink(link, option = None):
+def get(link, option = None):
     streams = streamlink.streams(link)
     if (option is None):
     	option = list(streams.keys())[0]
