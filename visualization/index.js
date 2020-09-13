@@ -211,15 +211,17 @@ function submitAddSite() {
 }
 
 //TODO: Add command to update these variables depending on which is active
-var realtimeActive = true;
-var aggregateActive = false;
+var realtimeActive = $('.active.tab-pane').attr('realTime');
+var aggregateActive = $('.active.tab-pane').attr('aggregate');
 //STARTUP SCRIPT
 function startupScript() {
     setTimeout({
-        if (realtimeActive)
+        if (realtimeActive) {
             updateRealtime();
-        if (aggregateActive)
+        }
+        if (aggregateActive) {
             updateAggregate();
+        }
     }, 1000);
 }
 
