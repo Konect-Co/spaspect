@@ -15,8 +15,8 @@ var fs = require("fs");
 var path = require('path');
 
 var main = async function() {
-	var collections = ["dashboards", "users", "aggregate", "calibrations", "realtime"]
-	var topDirPath = "../firebaseFiles/";
+	var collections = ["users", "aggregate", "calibrations", "realtime"]
+	var topDirPath = "../../firebaseFiles/";
 
 	for (var i = 0; i < collections.length; i++) {
 		var collection = collections[i];

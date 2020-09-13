@@ -4,7 +4,7 @@ var walk = require("walk");
 var path = require('path');
 
 var main = async function() {
-	var topDirPath = "../firebaseFiles";
+	var topDirPath = "../../firebaseFiles";
 
 	walker = walk.walk(topDirPath);
 
