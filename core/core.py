@@ -9,10 +9,7 @@ import PixelMapper
 #import TrackedObject
 
 def main(dashboardID):
-	dashboardInfo = readDashboard.read(dashboardID);
-
-	cap = cv2.VideoCapture()
-	cap.open(streamLink)
+	dashboardInfo = readDashboard.read(dashboardID)
 
 	calibration = dashboardInfo["calibration"]
 
@@ -29,11 +26,11 @@ def main(dashboardID):
 	else ():
 		streamLink = obtainStreamLink(calibration["streamWebpage"])
 
+	cap = cv2.VideoCapture()
+	cap.open(streamLink)
+
 	frame_rate = cv2.CAP_PROP_FPS
 	frame_index = 0
-
-	for _ in range(10):
-		cap.read()
 
 	while True:
 		print("FRAME", frame_index, "##############")
@@ -46,12 +43,12 @@ def main(dashboardID):
 		# generating prediction from image
 		output = pred.predict(image)
 
-		predOutput = RealTime.genRealData(pm, output)
-		        
+		RealTime.genRealData(pm, output)
+		Aggregate.genAggData()
+
 		frame_index += 1
 
 	return 0
-
 
 if __name__ == "__main__":
 	dashboardID = "d3c4fd41-8892-453b-bc00-64d1f494284b"

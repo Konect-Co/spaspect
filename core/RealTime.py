@@ -1,19 +1,13 @@
-#from TrackedObject import TrackedObject
-
 import numpy as np
 import math
+import os
+import json
 import cv_model.utils as cv_utils
 #import TrackedObject
 
-
+#TODO: Place these utils functions into a new file
+###UTILS FUNCTIONS START###
 def genCoordinates(pm, CVOutput, score_threshold=0.60):
-	#all realtime
-
-	# aggregateData = genAggData(<parameters>)
-	# realTimeData = genRealData(<parameters>)
-
-	# fullData = {"realTime":realTimeData, "aggregate":aggregateData}
-
 	X3D_vals = []
 	Y3D_vals = []
 	Z3D_vals = []
@@ -47,10 +41,9 @@ def genCoordinates(pm, CVOutput, score_threshold=0.60):
 		Y3D_vals.append(coord3D[1])
 		Z3D_vals.append(coord3D[2])
 
-		allCoordinates={"X3D_vals":X3D_vals, "Y3D_vals": Y3D_vals, "Z3D_vals": Z3D_vals, "lat_vals":lat_vals, "lon_vals": lon_vals}
+	allCoordinates={"X3D_vals":X3D_vals, "Y3D_vals": Y3D_vals, "Z3D_vals": Z3D_vals, "lat_vals":lat_vals, "lon_vals": lon_vals}
 
-		return allCoordinates
-
+	# have json write this dictionary to file
 
 def genMaskData(CVOutput):
 	#part that determines whether person is wearing mask
@@ -100,22 +93,20 @@ def genDistanceData(pm, CVOutput, distance_threshold=2):
 		if 1 not in distanced:
 			break
 	return distanced
+###UTILS FUNCTIONS END###
 
-
-
+#returns a map of all the realtime analytics
 def genRealData(pm, CVOutput, distance_threshold=2, score_threshold=0.60):
-	
-	X3D_vals = genCoordinates(pm, CVOutput)["X3D_vals"]
-	Y3D_vals = genCoordinates(pm, CVOutput)["Y3D_vals"]
-	Z3D_vals = genCoordinates(pm, CVOutput)["Z3D_vals"]
-	lat_vals = genCoordinates(pm, CVOutput)["lat_vals"]
-	lon_vals = genCoordinates(pm, CVOutput)["lon_vals"]
+	coordinateData = genCoordinates(pm, CVOutput)
+	X3D_vals = coordinateData["X3D_vals"]
+	Y3D_vals = coordinateData["Y3D_vals"]
+	Z3D_vals = coordinateData["Z3D_vals"]
+	lat_vals = coordinateData["lat_vals"]
+	lon_vals = coordinateData["lon_vals"]
 	masked = genMaskData(CVOutput)
 	distanced = genDistanceData(pm, CVOutput)
 
-	#returns a map of all the realtime analytics
-	#"tracked":trackedObjectsDict --> removed since not working on tracked rn
-
+	#TODO: Add data on tracked individuals as well
 	predOutput = {"X3D_vals":X3D_vals, "Y3D_vals":Y3D_vals, "Z3D_vals":Z3D_vals,
 		"lat_vals":lat_vals, "lon_vals":lon_vals, "masked":masked, "distanced":distanced}
     
