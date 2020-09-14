@@ -76,6 +76,8 @@ def genDistanceData(pm, CVOutput, distance_threshold=2):
 	#determines whether person is distanced or not
 
 	X3D_vals = genCoordinates(pm, CVOutput)["X3D_vals"]
+	Y3D_vals = genCoordinates(pm, CVOutput)["Y3D_vals"]
+	Z3D_vals = genCoordinates(pm, CVOutput)["Z3D_vals"]
 
 	distanced = [1] * len(X3D_vals)
 	for i in range(len(X3D_vals)):
