@@ -162,6 +162,8 @@ app.post('/realtimeData', function(req, res) {
             //reading uid of current user
             let uid = decodedToken.uid;
 
+            //TODO: Check whether specified user is allowed to access
+
             //reading user doc from Firebase
             dbRealtime.doc(dashboardId).get().then((doc) => {
                 //if doc exists, return the accessible environments

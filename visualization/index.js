@@ -136,10 +136,10 @@ function updateRealtimeArgs(dashboardID) {
     var user = firebase.auth().currentUser;
     if (typeof(user) != undefined && user != null) {
         user.getIdToken(true).then(function(idToken) {
-            xhr.send(JSON.stringify({ "idtoken": idToken, "dashboard": dashboardID}));
+            xhr.send(JSON.stringify({ "idtoken": idToken, "dashboardId": dashboardID}));
         }).catch(function(error) { console.error(error); });
     } else {
-        xhr.send(JSON.stringify({ "idtoken": null, "dashboard": dashboardID }));
+        xhr.send(JSON.stringify({ "idtoken": null, "dashboardId": dashboardID }));
     }
 }
 

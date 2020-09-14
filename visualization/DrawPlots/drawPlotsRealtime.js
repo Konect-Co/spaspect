@@ -9,7 +9,7 @@ function renderRealtime(data) {
 	});
 
 	//TODO: Check if the data actually has an output section
-	dashboard = data["realtime"];
+	dashboard = data["realtimeData"];
 
 	document.getElementById("statsTotal").innerHTML = dashboard['masked'].length;
 
