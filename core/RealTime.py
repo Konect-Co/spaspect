@@ -14,8 +14,6 @@ def genCoordinates(pm, CVOutput, score_threshold=0.60):
 	lat_vals = []
 	lon_vals = []
 
-	boxes = []
-
 	#checking whether detection scores matches criteria and checks the object detection keys
 	for i in range(len(CVOutput["detection_boxes"])):
 		if (CVOutput["detection_scores"][i] < score_threshold):
@@ -25,18 +23,17 @@ def genCoordinates(pm, CVOutput, score_threshold=0.60):
 		
 		#indices of detection boxes
 		box = CVOutput["detection_boxes"][i]
-		boxes.append(box)
 
 		#finding midpoint
 		midpoint = [int((box[0]+box[2])/2), box[3]]
 
 		#using conversions from PixelMapper.py
-		long_lat = pm.pixel_to_lonlat(midpoint)[0]
-		coord3D = pm.lonlat_to_3D(long_lat)
+		lonlat = pm.pixel_to_lonlat(midpoint)[0]
+		coord3D = pm.lonlat_to_3D(lonlat)
 
 
-		lat_vals.append(long_lat[0])
-		lon_vals.append(long_lat[1])
+		lat_vals.append(lonlat[0])
+		lon_vals.append(lonlat[1])
 		X3D_vals.append(coord3D[0])
 		Y3D_vals.append(coord3D[1])
 		Z3D_vals.append(coord3D[2])
@@ -64,10 +61,8 @@ def genMaskData(CVOutput):
 		if (IOA > 0.9):
 			if (mask>0.7):
 				wearingMask = 1
-			elif (mask < 0.7):
-				wearingMask = 2
 			else:
-				break
+				wearingMask = 2
 	masked.append(wearingMask)
 
 	return masked

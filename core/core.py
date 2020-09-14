@@ -11,6 +11,7 @@ import PixelMapper
 fbFilesDir = os.path.join(os.path.dirname(os.getcwd()), "firebaseFiles")
 
 def main(dashboardID):
+	# Getting all dashboard data in dictionary format
 	dashboardInfo = readDashboard.read(dashboardID)
 
 	calibration = dashboardInfo["calibration"]
@@ -21,22 +22,36 @@ def main(dashboardID):
 	lat = calibration["lat_vals"]
 	lon = calibration["lon_vals"]
 	lonlat_array = [[lat[i], lon[i]] for i in range(len(lat))]
+	
+	# Obtaining pixelMapper object from calibration information
 	pm = PixelMapper.PixelMapper(pixel_array, lonlat_array, calibration["lonlat_origin"])
 
-	if ("streamlink" in calibration.keys()):
+	# Obtaining streamLink (statically or dynamically) from calibration
+	# either "streamLink" or "streamWebpage" should be present in calibration
+	# 
+	streamLinkStatic = False
+	streamLink = None
+	if ("streamLink" in calibration.keys()):
 		streamLink = calibration["streamLink"]
-	else ():
-		streamLink = obtainStreamLink(calibration["streamWebpage"])
+		streamLinkStatic = True
+	else:
+		assert "streamWebpage" in calibration.keys()
+		streamLinkStatic = False
 
+	# Opening the videoCApture object
 	cap = cv2.VideoCapture()
 	cap.open(streamLink)
 
-	frame_rate = cv2.CAP_PROP_FPS
 	frame_index = 0
 
 	while True:
 		print("FRAME", frame_index, "##############")
 		
+		# TODO: Refreshing every second may not be the best approach
+		# if the streamLink is not static, then it's necessary to continuously refresh
+		if (not streamLinkStatic):
+			streamLink = obtainStreamLink(calibration["streamWebpage"])
+
 		read, image = cap.read()
 		if (not read):
 			print("END")
