@@ -72,12 +72,12 @@ def genMaskData(CVOutput):
 
 	return masked
 
-def genDistanceData(pm, CVOutput, distance_threshold=2):
+def genDistanceData(coordinatesData, distance_threshold=2):
 	#determines whether person is distanced or not
 
-	X3D_vals = genCoordinates(pm, CVOutput)["X3D_vals"]
-	Y3D_vals = genCoordinates(pm, CVOutput)["Y3D_vals"]
-	Z3D_vals = genCoordinates(pm, CVOutput)["Z3D_vals"]
+	X3D_vals = coordinatesData["X3D_vals"]
+	Y3D_vals = coordinatesData["Y3D_vals"]
+	Z3D_vals = coordinatesData["Z3D_vals"]
 
 	distanced = [1] * len(X3D_vals)
 	for i in range(len(X3D_vals)):
@@ -101,11 +101,11 @@ def genRealData(pm, CVOutput, filename, distance_threshold=2, score_threshold=0.
 	# starting point for realtim data
 	realData = genCoordinates(pm, CVOutput)
 
+	distanced = genDistanceData(realData)
+	realData["distanced"] = distanced	
+
 	masked = genMaskData(CVOutput)
-	distanced = genDistanceData(pm, CVOutput)
-
 	realData["masked"] = masked
-	realData["distanced"] = distanced
-	#TODO: Add data on tracked individuals as well
 
+	#TODO: Add data on tracked individuals as well
 	json.dump(realData, filename, indent=4)
