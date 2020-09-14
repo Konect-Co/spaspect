@@ -42,7 +42,7 @@ def genCoordinates(pm, CVOutput, score_threshold=0.60):
 		Z3D_vals.append(coord3D[2])
 
 	allCoordinates={"X3D_vals":X3D_vals, "Y3D_vals": Y3D_vals, "Z3D_vals": Z3D_vals, "lat_vals":lat_vals, "lon_vals": lon_vals}
-
+	return allCoordinates
 	# have json write this dictionary to file
 
 def genMaskData(CVOutput):
@@ -97,17 +97,14 @@ def genDistanceData(pm, CVOutput, distance_threshold=2):
 
 #returns a map of all the realtime analytics
 def genRealData(pm, CVOutput, distance_threshold=2, score_threshold=0.60):
-	coordinateData = genCoordinates(pm, CVOutput)
-	X3D_vals = coordinateData["X3D_vals"]
-	Y3D_vals = coordinateData["Y3D_vals"]
-	Z3D_vals = coordinateData["Z3D_vals"]
-	lat_vals = coordinateData["lat_vals"]
-	lon_vals = coordinateData["lon_vals"]
+	# starting point for realtim data
+	realData = genCoordinates(pm, CVOutput)
+
 	masked = genMaskData(CVOutput)
 	distanced = genDistanceData(pm, CVOutput)
 
+	realData["masked"] = masked
+	realData["distanced"] = distanced
 	#TODO: Add data on tracked individuals as well
-	predOutput = {"X3D_vals":X3D_vals, "Y3D_vals":Y3D_vals, "Z3D_vals":Z3D_vals,
-		"lat_vals":lat_vals, "lon_vals":lon_vals, "masked":masked, "distanced":distanced}
-    
-	return predOutput
+
+	return realData
