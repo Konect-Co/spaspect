@@ -6,7 +6,8 @@ function renderAgg(data){
     var distance = hourData["averageDistance"];
     if (data["authorized"] && !data["toDate"]) {
         lastUpdate = data["currentTime"];
-        var dashboard = data["dashboard"];
+		var dashboard = data["dashboard"];
+		
         //following function is in drawPlotsAggregate.js
         renderAgg(dashboard);
     }
