@@ -8,6 +8,8 @@ from cv_model import pred
 import PixelMapper
 #import TrackedObject
 
+fbFilesDir = os.path.join(os.path.dirname(os.getcwd()), "firebaseFiles")
+
 def main(dashboardID):
 	dashboardInfo = readDashboard.read(dashboardID)
 
@@ -43,8 +45,8 @@ def main(dashboardID):
 		# generating prediction from image
 		output = pred.predict(image)
 
-		RealTime.genRealData(pm, output)
-		Aggregate.genAggData()
+		RealTime.genRealData(pm, output, os.path.join(fbFilesDir, "realtime"))
+		Aggregate.genAggData(os.path.join(fbFilesDir, "aggregate"))
 
 		frame_index += 1
 

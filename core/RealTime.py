@@ -43,7 +43,6 @@ def genCoordinates(pm, CVOutput, score_threshold=0.60):
 
 	allCoordinates={"X3D_vals":X3D_vals, "Y3D_vals": Y3D_vals, "Z3D_vals": Z3D_vals, "lat_vals":lat_vals, "lon_vals": lon_vals}
 	return allCoordinates
-	# have json write this dictionary to file
 
 def genMaskData(CVOutput):
 	#part that determines whether person is wearing mask
@@ -96,7 +95,7 @@ def genDistanceData(pm, CVOutput, distance_threshold=2):
 ###UTILS FUNCTIONS END###
 
 #returns a map of all the realtime analytics
-def genRealData(pm, CVOutput, distance_threshold=2, score_threshold=0.60):
+def genRealData(pm, CVOutput, filename, distance_threshold=2, score_threshold=0.60):
 	# starting point for realtim data
 	realData = genCoordinates(pm, CVOutput)
 
@@ -107,4 +106,4 @@ def genRealData(pm, CVOutput, distance_threshold=2, score_threshold=0.60):
 	realData["distanced"] = distanced
 	#TODO: Add data on tracked individuals as well
 
-	return realData
+	json.dump(realData, filename, indent=4)
