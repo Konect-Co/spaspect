@@ -24,7 +24,7 @@ fbFilesDir = os.path.join(os.path.dirname(os.getcwd()), "firebaseFiles")
 Determines the realtime and aggregate analytics frame by frame of a video stream
 
 @params dashboardID(firebase document ID)
-@return 0
+@return 0 if executed successfully
 """
 def main(dashboardID):
 	# Getting all dashboard data in dictionary format
@@ -36,6 +36,7 @@ def main(dashboardID):
 	pixelX = calibration["pixelX_vals"]
 	pixelY = calibration["pixelY_vals"]
 	pixel_array = [[pixelX[i], pixelY[i]] for i in range(len(pixelX))]
+
 	lat = calibration["lat_vals"]
 	lon = calibration["lon_vals"]
 	lonlat_array = [[lat[i], lon[i]] for i in range(len(lat))]
@@ -46,17 +47,15 @@ def main(dashboardID):
 	# Obtaining streamLink (statically or dynamically) from calibration
 	# either "streamLink" or "streamWebpage" should be present in calibration
 
-	streamLinkStatic = False
+	streamLinkStatic = calibration["static"]
 	streamLink = None
 	#getting streamlink from calibration json file
 	#sets the value of streamLinkStatic
 	if ("streamLink" in calibration.keys()):
 		streamLink = calibration["streamLink"]
 		streamLinkStatic = True
-	else:
-		#checks whether "streamWebpage" is in calibration keys if "streamLink" isn't present
+	if (not streamLinkStatic):
 		assert "streamWebpage" in calibration.keys()
-		streamLinkStatic = False
 
 	# Opening the videoCApture object
 	cap = cv2.VideoCapture()
