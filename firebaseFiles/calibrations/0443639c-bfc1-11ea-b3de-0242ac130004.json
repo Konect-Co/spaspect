@@ -1,35 +1,33 @@
 {
-    "calibration": {
-        "pixelX_vals": [
-            330,
-            50,
-            945,
-            815
-        ],
-        "pixelY_vals": [
-            250,
-            370,
-            395,
-            245
-        ],
-        "lon_vals": [
-            -73.984976,
-            -73.985132,
-            -73.985201,
-            -73.985035
-        ],
-        "lat_vals": [
-            40.759271,
-            40.759316,
-            40.759196,
-            40.759104
-        ],
-        "lonlat_origin": [
-            40.75926,
-            -73.985235
-        ],
-        "static": true,
-        "streamWebpage": "https://www.earthcam.com/usa/newyork/timessquare/?cam=tsstreet",
-        "name": "Times Square"
-    }
+    "pixelY_vals": [
+        250,
+        370,
+        395,
+        245
+    ],
+    "name": "Times Square",
+    "lonlat_origin": [
+        40.75926,
+        -73.985235
+    ],
+    "static": false,
+    "pixelX_vals": [
+        330,
+        50,
+        945,
+        815
+    ],
+    "lon_vals": [
+        -73.984976,
+        -73.985132,
+        -73.985201,
+        -73.985035
+    ],
+    "streamWebpage": "https://www.earthcam.com/usa/newyork/timessquare/?cam=tsstreet",
+    "lat_vals": [
+        40.759271,
+        40.759316,
+        40.759196,
+        40.759104
+    ]
 }

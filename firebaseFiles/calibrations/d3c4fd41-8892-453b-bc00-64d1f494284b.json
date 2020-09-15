@@ -1,13 +1,9 @@
 {
-    "lonlat_origin": [
-        38.0164,
-        23.754965
-    ],
-    "lat_vals": [
-        38.0164,
-        38.016322,
-        38.016331,
-        38.016435
+    "pixelX_vals": [
+        585,
+        480,
+        320,
+        212
     ],
     "pixelY_vals": [
         331,
@@ -15,19 +11,23 @@
         340,
         274
     ],
+    "static": false,
+    "lat_vals": [
+        38.0164,
+        38.016322,
+        38.016331,
+        38.016435
+    ],
+    "streamWebpage": "https://www.myearthcam.com/bioshop",
     "lon_vals": [
         23.754965,
         23.754958,
         23.754931,
         23.75481
     ],
-    "pixelX_vals": [
-        585,
-        480,
-        320,
-        212
-    ],
-    "static": true,
     "name": "Galatsi, Greece",
-    "streamWebpage":"https://www.myearthcam.com/bioshop"
+    "lonlat_origin": [
+        38.0164,
+        23.754965
+    ]
 }
