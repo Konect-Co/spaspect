@@ -27,6 +27,7 @@
         33.987963,
         33.988096
     ],
+    "static": true,
     "name": "Venice Beach",
     "streamWebPage":"https://www.westland.net/beachcam/"
 }

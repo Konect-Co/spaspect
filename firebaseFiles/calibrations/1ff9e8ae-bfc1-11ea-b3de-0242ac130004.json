@@ -27,6 +27,7 @@
         53.345506,
         53.345568
     ],
+    "static": true,
     "name": "Dublin",
     "streamWebpage": "https://www.earthcam.com/world/ireland/dublin/?cam=templebar"
 }

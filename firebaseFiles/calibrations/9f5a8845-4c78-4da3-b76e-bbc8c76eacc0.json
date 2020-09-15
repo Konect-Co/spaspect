@@ -28,6 +28,7 @@
             32.94255,
             32.942222
         ],
+        "static": true,
         "name": "Southlake",
         "streamWebpage": "https://www.earthcam.com/usa/texas/southlake/?cam=southlake"
     }

@@ -28,6 +28,7 @@
             40.75926,
             -73.985235
         ],
+        "static": true,
         "streamWebpage": "https://www.earthcam.com/usa/newyork/timessquare/?cam=tsstreet",
         "name": "Times Square"
     }
