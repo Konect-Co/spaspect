@@ -7,7 +7,14 @@ function renderAgg(data){
     if (data["authorized"] && !data["toDate"]) {
         lastUpdate = data["currentTime"];
 		var dashboard = data["dashboard"];
-		
+		JSON.data.array.forEach(element => {
+			avg_dist = element.averageDistance;
+			unmasked = element.unmaskedCount;
+			violationsCount = element.violationsCount;
+			visitorCount = element.visitorCount;
+		});
+			
+		});
         //following function is in drawPlotsAggregate.js
         renderAgg(dashboard);
     }
