@@ -1,19 +1,36 @@
+# Copyright 2020 The Konect SpaSpect Authors. All Rights Reserved.
+# This file is part of Konect SpaSpect technology.
+#  ___            ___              _   
+# / __|_ __  __ _/ __|_ __  ___ __| |_ 
+# \__ \ '_ \/ _` \__ \ '_ \/ -_) _|  _|
+# |___/ .__/\__,_|___/ .__/\___\__|\__|
+#     |_|            |_|               
+
+
 import sys
 from utilScripts import readDashboard
 from utilScripts import obtainStreamLink
 import cv2
 import RealTime
+import PixelMapper
+import os
 
 from cv_model import pred
-import PixelMapper
-#import TrackedObject
 
+#file where realtime and aggregate will be
 fbFilesDir = os.path.join(os.path.dirname(os.getcwd()), "firebaseFiles")
 
+"""
+Determines the realtime and aggregate analytics frame by frame of a video stream
+
+@params dashboardID(firebase document ID)
+@return 0
+"""
 def main(dashboardID):
 	# Getting all dashboard data in dictionary format
 	dashboardInfo = readDashboard.read(dashboardID)
 
+	#calibration information from firebase files
 	calibration = dashboardInfo["calibration"]
 
 	pixelX = calibration["pixelX_vals"]
@@ -28,13 +45,16 @@ def main(dashboardID):
 
 	# Obtaining streamLink (statically or dynamically) from calibration
 	# either "streamLink" or "streamWebpage" should be present in calibration
-	# 
+
 	streamLinkStatic = False
 	streamLink = None
+	#getting streamlink from calibration json file
+	#sets the value of streamLinkStatic
 	if ("streamLink" in calibration.keys()):
 		streamLink = calibration["streamLink"]
 		streamLinkStatic = True
 	else:
+		#checks whether "streamWebpage" is in calibration keys if "streamLink" isn't present
 		assert "streamWebpage" in calibration.keys()
 		streamLinkStatic = False
 
@@ -60,6 +80,7 @@ def main(dashboardID):
 		# generating prediction from image
 		output = pred.predict(image)
 
+		#generates the realtime and aggregate analytics displayed on spaspect dashboard
 		RealTime.genRealData(pm, output, os.path.join(fbFilesDir, "realtime"))
 		Aggregate.genAggData(os.path.join(fbFilesDir, "aggregate"))
 
@@ -67,6 +88,10 @@ def main(dashboardID):
 
 	return 0
 
+
+"""
+Setting sample dashboard ID for parameter
+"""
 if __name__ == "__main__":
 	dashboardID = "d3c4fd41-8892-453b-bc00-64d1f494284b"
 	sys.exit(main(dashboardID))

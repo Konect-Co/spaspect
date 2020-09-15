@@ -3,10 +3,17 @@ import math
 import os
 import json
 import cv_model.utils as cv_utils
-#import TrackedObject
 
 #TODO: Place these utils functions into a new file
 ###UTILS FUNCTIONS START###
+
+
+"""
+Finds all realtime coordinates
+
+@params pm, CVOutput, score_threshold
+@return map of X Y Z 3D coordinates and longitude/latitude coordinates
+"""
 def genCoordinates(pm, CVOutput, score_threshold=0.60):
 	X3D_vals = []
 	Y3D_vals = []
@@ -41,6 +48,14 @@ def genCoordinates(pm, CVOutput, score_threshold=0.60):
 	allCoordinates={"X3D_vals":X3D_vals, "Y3D_vals": Y3D_vals, "Z3D_vals": Z3D_vals, "lat_vals":lat_vals, "lon_vals": lon_vals}
 	return allCoordinates
 
+
+
+"""
+Determines value representing mask wearing
+
+@params CVOutput
+@return value(0, 1, or 2) representing whether detected person is wearing mask or not
+"""	
 def genMaskData(CVOutput):
 	#part that determines whether person is wearing mask
 	#0=unsure, 1=wearing, 2=not wearing
@@ -67,8 +82,15 @@ def genMaskData(CVOutput):
 
 	return masked
 
+
+
+"""
+Determines whether person is distanced or not
+
+@params coordinatesData(output of genCoordinates()), distance_threshold
+@return value of 0 or 1 representing undistanced or distanced
+"""
 def genDistanceData(coordinatesData, distance_threshold=2):
-	#determines whether person is distanced or not
 
 	X3D_vals = coordinatesData["X3D_vals"]
 	Y3D_vals = coordinatesData["Y3D_vals"]
@@ -91,7 +113,14 @@ def genDistanceData(coordinatesData, distance_threshold=2):
 	return distanced
 ###UTILS FUNCTIONS END###
 
-#returns a map of all the realtime analytics
+
+
+"""
+Combines all the functions above to generate all realtime analytics within this one function.
+
+@params pm, CVOutput, filename(json file where all realtime analytics will be placed), distance_threshold, score_threshold
+@return all realtime analytics
+"""
 def genRealData(pm, CVOutput, filename, distance_threshold=2, score_threshold=0.60):
 	# starting point for realtim data
 	realData = genCoordinates(pm, CVOutput)
