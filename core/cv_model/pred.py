@@ -26,10 +26,9 @@ infer = loaded.signatures["serving_default"]
 # by the object detection and mask classification model. Outputs of 
 # this function are processed further to yield data for aggregate and
 # realtime dashboard.
-def predict(image_path):
+def predict(input_image_orig):
 	# Load image and preprocess
-	input_image = cv2.imread(image_path)
-	input_image = np.expand_dims(input_image, 0)
+	input_image = np.expand_dims(input_image_orig, 0)
 
 	# Run inference on the input image
 	odResults = infer(tf.constant(input_image))
@@ -39,19 +38,19 @@ def predict(image_path):
 	odResults["detection_scores"] = odResults["detection_scores"].numpy()[0]
 	odResults["detection_classes"] = odResults["detection_classes"].numpy()[0]
 	# Replace number labels with strings corresponding with object name
-	odResults["detection_classes"] = [ coco_labels[int(label)] for label in output["detection_classes"] ]
+	odResults["detection_classes"] = [ coco_labels[int(label)] for label in odResults["detection_classes"] ]
 	
 	output = {"boxes":[], "scores":[], "classes":[]}
 
 	# Run image through mask detection network and store inference results
-	output["masks"] = detectMask.genPredictions(image_path)
+	output["masks"] = detectMask.genPredictions(input_image_orig)
 
 	for i in range(len(odResults["detection_boxes"])):
 		score = odResults["detection_scores"][i]
 		_class = odResults["detection_classes"][i]
 		box = odResults["detection_boxes"][i]
 
-		if (score < score_threshold):
+		if (score < 0.7):
 			break
 		if (not _class == "person"):
 			continue

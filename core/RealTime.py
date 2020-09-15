@@ -22,14 +22,14 @@ def genCoordinates(pm, CVOutput, score_threshold=0.60):
 	lon_vals = []
 
 	#checking whether detection scores matches criteria and checks the object detection keys
-	for i in range(len(CVOutput["detection_boxes"])):
-		if (CVOutput["detection_scores"][i] < score_threshold):
+	for i in range(len(CVOutput["boxes"])):
+		if (CVOutput["scores"][i] < score_threshold):
 			break
-		if (not CVOutput["detection_classes"][i] == "person"):
+		if (not CVOutput["classes"][i] == "person"):
 			continue
 		
 		#indices of detection boxes
-		box = CVOutput["detection_boxes"][i]
+		box = CVOutput["boxes"][i]
 
 		#finding midpoint
 		midpoint = [int((box[0]+box[2])/2), box[3]]
@@ -122,7 +122,7 @@ Combines all the functions above to generate all realtime analytics within this 
 @return all realtime analytics
 """
 def genRealData(pm, CVOutput, filename, distance_threshold=2, score_threshold=0.60):
-	# starting point for realtim data
+	# starting point for realtime data
 	realData = genCoordinates(pm, CVOutput)
 
 	distanced = genDistanceData(realData)
@@ -132,4 +132,5 @@ def genRealData(pm, CVOutput, filename, distance_threshold=2, score_threshold=0.
 	realData["masked"] = masked
 
 	#TODO: Add data on tracked individuals as well
-	json.dump(realData, filename, indent=4)
+	with open(filename, 'w') as f:
+		json.dump(realData, f, indent=4)

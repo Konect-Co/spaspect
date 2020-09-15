@@ -26,10 +26,10 @@ model = load_model(args["model"])
 # load the input image from disk, clone it, and grab the image spatial
 # dimensions
 
-def genPredictions(imagePath):
-	image = cv2.imread(imagePath)
+def genPredictions(image):
 	orig = image.copy()
 	(h, w) = image.shape[:2]
+	print("DIMS are", image.shape)
 
 	# construct a blob from the image
 	blob = cv2.dnn.blobFromImage(image, 1.0, (300, 300),

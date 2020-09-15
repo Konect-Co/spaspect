@@ -10,4 +10,5 @@ Generates the aggregate data displayed on SpaSpect dashboard
 def genAggData(filename):
 	aggData = {}
 	# have json write this dictionary to file
-	json.dump(aggData, filename, indent=4)
+	with open(filename, 'w') as f:
+		json.dump(aggData, f, indent=4)

@@ -4,10 +4,17 @@ import json
 def read(dashboardID):
 	dashboardInfo = {}
 
-	top_dir = "../../firebaseFiles"
+	top_dir = "../firebaseFiles"
 
-	dashboardInfo["calibration"] = json.load(os.path.join(top_dir, "calibration", dashboardID) + ".json") 
-	dashboardInfo["realtime"] = json.load(os.path.join(top_dir, "realtime", dashboardID) + ".json")
-	dashboardInfo["aggregate"] = json.load(os.path.join(top_dir, "aggregate", dashboardID) + ".json")
+	calibrationFile = os.path.join(top_dir, "calibrations", dashboardID) + ".json"
+	realtimeFile = os.path.join(top_dir, "realtime", dashboardID) + ".json"
+	aggregateFile = os.path.join(top_dir, "aggregate", dashboardID) + ".json"
+
+	with open(calibrationFile, 'r') as f:
+		dashboardInfo["calibration"] = json.load(f)
+	with open(realtimeFile, 'r') as f:
+		dashboardInfo["realtime"] = json.load(f)
+	with open(aggregateFile, 'r') as f:
+		dashboardInfo["aggregate"] = json.load(f)
 
 	return dashboardInfo

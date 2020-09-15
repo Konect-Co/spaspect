@@ -12,6 +12,7 @@ from utilScripts import readDashboard
 from utilScripts import obtainStreamLink
 import cv2
 import RealTime
+import Aggregate
 import PixelMapper
 import os
 
@@ -59,7 +60,6 @@ def main(dashboardID):
 
 	# Opening the videoCApture object
 	cap = cv2.VideoCapture()
-	cap.open(streamLink)
 
 	frame_index = 0
 
@@ -68,9 +68,13 @@ def main(dashboardID):
 		
 		# TODO: Refreshing every second may not be the best approach
 		# if the streamLink is not static, then it's necessary to continuously refresh
+		if (streamLinkStatic and frame_index == 0):
+			cap.open(streamLink)
 		if (not streamLinkStatic):
-			streamLink = obtainStreamLink(calibration["streamWebpage"])
+			streamLink = obtainStreamLink.get(calibration["streamWebpage"])
+			cap.open(streamLink)
 
+		print("STREAMLINK", streamLink)
 		read, image = cap.read()
 		if (not read):
 			print("END")
@@ -80,8 +84,8 @@ def main(dashboardID):
 		output = pred.predict(image)
 
 		#generates the realtime and aggregate analytics displayed on spaspect dashboard
-		RealTime.genRealData(pm, output, os.path.join(fbFilesDir, "realtime"))
-		Aggregate.genAggData(os.path.join(fbFilesDir, "aggregate"))
+		RealTime.genRealData(pm, output, os.path.join(fbFilesDir, "realtime") + os.path.sep + dashboardID + ".json")
+		#Aggregate.genAggData(os.path.join(fbFilesDir, "aggregate") + os.path.sep + dashboardID+ ".json")
 
 		frame_index += 1
 
@@ -92,5 +96,5 @@ def main(dashboardID):
 Setting sample dashboard ID for parameter
 """
 if __name__ == "__main__":
-	dashboardID = "d3c4fd41-8892-453b-bc00-64d1f494284b"
+	dashboardID = "0443639c-bfc1-11ea-b3de-0242ac130004"
 	sys.exit(main(dashboardID))
