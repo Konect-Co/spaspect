@@ -5,7 +5,35 @@
             "unmaskedCount": 1,
             "violationsCount": 5,
             "undistancedCount": 1,
-            "visitorCount": 1
+            "visitorCount": 3
+        },
+        "2": {
+            "averageDistance": 2,
+            "unmaskedCount": 1,
+            "violationsCount": 2,
+            "undistancedCount": 2,
+            "visitorCount": 5
+        },
+        "3": {
+            "averageDistance": 1,
+            "unmaskedCount": 2,
+            "violationsCount": 4,
+            "undistancedCount": 4,
+            "visitorCount": 3
+        },
+        "4": {
+            "averageDistance": 3,
+            "unmaskedCount": 3,
+            "violationsCount": 8,
+            "undistancedCount": 3,
+            "visitorCount": 5
+        },
+        "5": {
+            "averageDistance": 2,
+            "unmaskedCount": 5,
+            "violationsCount": 5,
+            "undistancedCount": 5,
+            "visitorCount": 7
         }
     }
 }

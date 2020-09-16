@@ -166,10 +166,10 @@ function updateAggregateArgs(dashboardID) {
     var user = firebase.auth().currentUser;
     if (typeof(user) != undefined && user != null) {
         user.getIdToken(true).then(function(idToken) {
-            xhr.send(JSON.stringify({ "idtoken": idToken, "dashboard": dashboardID}));
+            xhr.send(JSON.stringify({ "idtoken": idToken, "dashboardId": dashboardID}));
         }).catch(function(error) { console.error(error); });
     } else {
-        xhr.send(JSON.stringify({ "idtoken": null, "dashboard": dashboardID }));
+        xhr.send(JSON.stringify({ "idtoken": null, "dashboardId": dashboardID }));
     }
 }
 
@@ -211,11 +211,11 @@ function submitAddSite() {
 }
 
 //TODO: Add command to update these variables depending on which is active
-var realtimeActive = $('.active.tab-pane').attr('realTime');
-var aggregateActive = $('.active.tab-pane').attr('aggregate');
 //STARTUP SCRIPT
 function startupScript() {
-    setTimeout(function(){
+    setInterval(function(){
+        var realtimeActive = $('.active.tab-pane').attr('realTime');
+        var aggregateActive = $('.active.tab-pane').attr('aggregate');
         if (realtimeActive) {
             updateRealtime();
         }

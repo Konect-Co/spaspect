@@ -1,5 +1,11 @@
 var first = true;
 
+avg_dist = [];
+unmasked = [];
+violationsCount = [];
+visitorCount = [];
+
+
 function renderAgg(data){
 	//Use data variable to draw stuff on aggregate dashboard
     var hourData = data["1"];
@@ -8,42 +14,44 @@ function renderAgg(data){
         lastUpdate = data["currentTime"];
 		var dashboard = data["dashboard"];
 		JSON.data.array.forEach(element => {
-			avg_dist = element.averageDistance;
-			unmasked = element.unmaskedCount;
-			violationsCount = element.violationsCount;
-			visitorCount = element.visitorCount;
+			avg_dist.push(element.averageDistance);
+			unmasked.push(element.unmaskedCount);
+			violationsCount.push(element.violationsCount);
+			visitorCount.push(element.visitorCount);
 		});
 			
-		});
+	};
         //following function is in drawPlotsAggregate.js
         renderAgg(dashboard);
-    }
+    
 
 	//=========================
 	//PEOPLE VS TIME LINE GRAPH
 	//=========================
-
-	var line1 = {
-  	x: [1, 2, 3, 4],
-  	y: [10, 15, 13, 17],
+	time = [1, 2, 3, 4, 5]; 
+	visitorCount = [5, 6, 7, 3, 9];
+	var ppl_time = {
+  	x: time,
+  	y: visitorCount,
   	type: "scatter"
 	};
 
-	var line2 = {
-  	x: [1, 2, 3, 4],
-  	y: [16, 5, 11, 9],
-  	type: "scatter"
-	};
-	var lineData = [line1, line2];
-	var graphOptionsLine = {filename: "basic-line", fileopt: "overwrite"};
-	
 	//TODO: Find a better usage than having a variable store this information
-	if(first){
-		Plotly.newPlot('plotAggregate', lineData, graphOptionsLine);
-		first = false;
-	}
-	else{
-		Plotly.react('plotAggregate', lineData, graphOptionsLine);
-	}
+	Plotly.newPlot('ppl_time', ppl_time);
+
+
+	//=========================
+	//DISTANCE DISTRIBUTION
+	//=========================
+	time = [1, 2, 3, 4, 5]; 
+	
+	var distance = {
+  	x: time,
+  	y: averageDistance,
+  	type: "scatter"
+	};
+
+	//TODO: Find a better usage than having a variable store this information
+	Plotly.newPlot('distance', distance);
 	
 }

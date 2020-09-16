@@ -3,7 +3,7 @@ var first = true;
 function renderRealtime(data) {
 	//TODO: Seems like this doesn't update the video successfully
 	var player = videojs('video');
-	player.src(data["streamlink"]);
+	player.src(data["streamLink"]);
 	player.ready(function() {
 		player.play();
 	});
