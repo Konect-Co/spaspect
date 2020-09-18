@@ -157,7 +157,9 @@ function updateRealtime(forceUpdate = false) {
 function updateAggregateArgs(dashboardID) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
+        //console.log(xhr.responseText);
         var data = JSON.parse(xhr.responseText);
+        //console.log(data);
         //TODO: Update with new format of data
         renderAgg(data);
     }

@@ -8,7 +8,9 @@ visitorCount = [];
 
 function renderAgg(data){
 	//Use data variable to draw stuff on aggregate dashboard
-    var hourData = data["1"];
+	//console.log("Data in drawPlotsAggregate", data);
+	var aggData = data["aggregateData"];
+    var hourData = aggData["1"];
     var distance = hourData["averageDistance"];
     if (data["authorized"] && !data["toDate"]) {
         lastUpdate = data["currentTime"];
@@ -18,18 +20,20 @@ function renderAgg(data){
 			unmasked.push(element.unmaskedCount);
 			violationsCount.push(element.violationsCount);
 			visitorCount.push(element.visitorCount);
+			console.log("This unmasked: ", unmasked);
 		});
 			
 	};
         //following function is in drawPlotsAggregate.js
-        renderAgg(dashboard);
+        //renderAgg(dashboard);
     
 
 	//=========================
 	//PEOPLE VS TIME LINE GRAPH
 	//=========================
-	time = [1, 2, 3, 4, 5]; 
+	time = [1, 2, 3, 4, 5];
 	visitorCount = [5, 6, 7, 3, 9];
+
 	var ppl_time = {
   	x: time,
   	y: visitorCount,
@@ -37,7 +41,8 @@ function renderAgg(data){
 	};
 
 	//TODO: Find a better usage than having a variable store this information
-	Plotly.newPlot('ppl_time', ppl_time);
+	var graphOptionsLine = {filename: "basic-line", fileopt: "overwrite"};
+	Plotly.newPlot('ppl_time', ppl_time, graphOptionsLine);
 
 
 	//=========================
