@@ -207,59 +207,53 @@ app.post('/aggregateData', function(req, res) {
                 //if doc exists, return the accessible environments
                 if (doc.exists) {
                     var userData = doc.data();
-                    var accessibleEnvironments = userData["accessibleEnvironments"];
+                    var accessibleEnvironments = Object.keys(userData["accessibleEnvironments"]);
 
                     var aggData = {"calibration":accessibleEnvironments};
 
-                    for (var sampleID in accessibleEnvironments){
-                        dbAggregate.doc(sampleID).get().then((aggDoc) => {
+
+                    var callbackComplete = {};
+                    for (var i = 0; i < accessibleEnvironments.length; i++) {
+                        callbackComplete[accessibleEnvironments[i]] = false;
+                    }
+
+                    accessibleEnvironments.forEach(ID => {
+                        console.log("getting id", ID);
+                        dbAggregate.doc(ID).get().then((aggDoc) => {
                             if(aggDoc.exists){
-                                var initialAggDocData = {1:{"averageDistance": 1.2, "unmaskedCount": 5,
-                                "violationsCount": 9, "undistancedCount": 5, "visitorCount": 1}};
-                                var finalAggDocData = JSON.stringify(initialAggDocData);
-                                var aggDocData = JSON.parse(finalAggDocData);
-                                aggData[sampleID] = aggDocData;
+                                console.log("...and it exists");
+                                var aggDocData = aggDoc.data();
+                                aggData[ID] = aggDocData;
                             }
+                            callbackComplete[ID] = true;
                         });
+                    });
+                    
 
-                    }
-                    console.log(aggData);
-
-                    /*
-                    Goal: Return a response in the format that we discussed
-                    Format picture: https://lh3.googleusercontent.com/-w6Mg5syZ8pY/X2Th4aJk5nI/AAAAAAAAIlE/J-GhaCzkPmoynKtcIX-VHrYfm_pVk6B_wCK8BGAsYHg/s0/AggregateJSONFormat.png
-                    ATTENTION SANTRIPT: We can change the format a bit so that calibration can 
-                        just be an array of the relevant dashboards. This way, we don't have to
-                        make any changes to value of "calibration" after line 212. All we need to 
-                        do after this commend is to run a for-each loop on accessibleEnvironments.
-                        In that for loop, for given id "sample_id123", we 1) get the doc from firebase and
-                        2) store it as the value for the key "sample_id123"
-
-                    As a quick of pseudocode (actual foreach syntax would be diff for javascript).
-
-                    for (sampleID : accessibleEnvironments) { // foreach loop
-                        dbAggregate.doc(sampleID).get().then((aggDoc) => { // 1) getting the doc from firebase
-                            if (aggDoc.exists) { // checking if the doc exists
-                                var aggDocData = aggDoc.data(); // getting the JSON object from the response
-                                aggData[sampleID] = aggDocData; // 2) storing the data in the variable
-                            }
+                    //wait for callback to be complete
+                    //TODO: If taking too long, just return error code in header
+                    while (true) {
+                        var complete = true;
+                        
+                        accessibleEnvironments.forEach(ID => {
+                            complete &= callbackComplete[ID];
+                            //TODO: Break if complete is false
+                            //  Problem is idk how to break out of foreach
+                        });
+                        
+                        if (complete) {
+                            console.log("Sending response for agg post request", aggData);
+                            res.writeHead(200);
+                            res.write(JSON.stringify(aggData));
+                            res.end();
+                            break;
                         }
+
                     }
-
-                    I hope you can review this pseudocode and iron out any issues. ty :)
-
-                    P.S. One issue that we'll prob run into is that of callbacks. We have to make sure that
-                    the callback in lines 227-232 is complete before we go ahead and do res.write(). Otherwise
-                    the data will be left incomplete, missing some keys. So we have to think a bit on how to
-                    solve this if it becomes an issue
-                    */
-
-                    res.writeHead(200);
-                    res.write(JSON.stringify(aggData));
-                    res.end();
                 }
                 //otherwise, read from demoEnvs.json and return demo dashboards
                 else {
+                    console.log("user doesn't exist");
                     res.writeHead(400);
                     res.end();
                 }
