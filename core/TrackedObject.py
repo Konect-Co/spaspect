@@ -12,7 +12,7 @@ class TrackedObject(object):
 	#all objects that are being tracked
 	objects = {}
 
-	def __init__(self, name, label, boundingBox, X3D, Y3D, Z3D, closestDistance, masked):
+	def __init__(self, name, label, boundingBox, X3D, Y3D, Z3D, distanced, masked):
 
 		#name of the tracked object
 		self.name = name
@@ -27,7 +27,7 @@ class TrackedObject(object):
 		#adding box
 		self.addBox(boundingBox, X3D, Y3D, Z3D)
 		#adding closest distance attribute
-		self.closestDistance = closestDistance
+		self.distanced = distanced
 		#adding masked attribute
 		self.masked = masked
 		#adding self to objects
@@ -183,9 +183,7 @@ class TrackedObject(object):
 					else:
 						boxKey = list(allIOUValues[maximumTracking])[0]
 						maximumTracking.addBox(
-							boundingBoxes[boxKey], X3D_values[boxKey], Y3D_values[boxKey], Z3D_values[boxKey].
-							masked[boxKey], distanced[boxKey]
-						)
+							boundingBoxes[boxKey], X3D_values[boxKey], Y3D_values[boxKey], Z3D_values[boxKey])
 
 						#deleting the row and column of the maximum IoU
 						for trackingKey in list(allIOUValues):

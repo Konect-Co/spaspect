@@ -17,14 +17,13 @@ def genAggData(CVOutput, filename):
 
 	tracked = CVOutput["tracked"]
 
-
 	#TODO: This should be looking at tracked individuals not raw boxes
 	currHour["visitorCount"] += len(CVOutput["distanced"])
 	currHour["undistancedCount"] += 2
 	currHour["unmaskedCount"] += 2
 	currHour["violationsCount"] += 2
 	currHour["averageDistance"] += 0.1
-	currHour["currTracked"]
+	currHour["currTracked"] = tracked
 
 	# have json write this dictionary to file
 	with open(filename, 'w') as f:

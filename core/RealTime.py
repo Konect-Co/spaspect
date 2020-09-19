@@ -63,24 +63,22 @@ def genMaskData(CVOutput):
 	#0=unsure, 1=wearing, 2=not wearing
 	masked = []
 
-	wearingMask = 0
-	faceBoxes_subList = []
-	boxes_subList = []
 	#face and mask detection
-	for maskOut in CVOutput["masks"]:
-		face_box = maskOut[0]
-		mask = maskOut[1]
-		faceBoxes_subList.append(face_box)
-		boxes_subList.append(box)
-		#computing IOA of face_box and box
-		IOA = cv_utils.computeIOA(face_box, box)
-		#setting the value of wearingMask based on IOA value
-		if (IOA > 0.9):
-			if (mask>0.7):
-				wearingMask = 1
-			else:
-				wearingMask = 2
-	masked.append(wearingMask)
+	for box in CVOutput["boxes"]:
+		wearingMask = 0
+		for maskOut in CVOutput["masks"]:
+			face_box = maskOut[0]
+			mask = maskOut[1]
+			#computing IOA of face_box and box
+			IOA = cv_utils.computeIOA(face_box, box)
+			#setting the value of wearingMask based on IOA value
+			if (IOA > 0.9):
+				if (mask>0.7):
+					wearingMask = 1
+				else:
+					wearingMask = 2
+				break
+		masked.append(wearingMask)
 
 	return masked
 
@@ -118,16 +116,17 @@ def genDistanceData(coordinatesData, distance_threshold=2):
 """
 Generates tracking data.
 """
-def genTrackingData(boxes, coordinatesData):
+def genTrackingData(boxes, coordinatesData, masked, distanced):
 	X3D_vals = coordinatesData["X3D_vals"]
 	Y3D_vals = coordinatesData["Y3D_vals"]
 	Z3D_vals = coordinatesData["Z3D_vals"]
 
 	print("NEW Objects", len(X3D_vals))
 
-	TrackedObject.TrackedObject.track(boxes, X3D_vals, Y3D_vals, Z3D_vals)
+	TrackedObject.TrackedObject.track(boxes, X3D_vals, Y3D_vals, Z3D_vals, masked, distanced)
 	trackedObjects = TrackedObject.TrackedObject.objects
-	return trackedObjects
+	trackedData = {id:trackedObject.toDict() for (id, trackedObject) in trackedObjects.items()}
+	return trackedData
 
 """
 Combines all the functions above to generate all realtime analytics within this one function.
@@ -145,7 +144,7 @@ def genRealData(pm, CVOutput, filename, distance_threshold=2, score_threshold=0.
 	masked = genMaskData(CVOutput)
 	realData["masked"] = masked
 
-	tracked = genTrackingData(CVOutput["boxes"], realData)
+	tracked = genTrackingData(CVOutput["boxes"], realData, masked, distanced)
 	realData["tracked"] = tracked
 
 	#TODO: Add data on tracked individuals as well

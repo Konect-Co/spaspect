@@ -60,6 +60,10 @@ def main(dashboardID):
 	if (not streamLinkStatic):
 		assert "streamWebpage" in calibration.keys()
 
+	# For debug purposes
+	static = True
+	streamLink = "../sampleVideos/TimesSquare.mp4"
+
 	# Opening the videoCApture object
 	cap = cv2.VideoCapture()
 
@@ -98,7 +102,5 @@ def main(dashboardID):
 Setting sample dashboard ID for parameter
 """
 if __name__ == "__main__":
-	dashboard = "d3c4fd41-8892-453b-bc00-64d1f494284b"
-	sys.exit(main(dashboard))
 	dashboardID = "0443639c-bfc1-11ea-b3de-0242ac130004"
 	sys.exit(main(dashboardID))
