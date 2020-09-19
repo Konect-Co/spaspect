@@ -196,20 +196,52 @@ app.post('/aggregateData', function(req, res) {
         if (!("idtoken" in bodyJSON))
             res.end();
         var idToken = bodyJSON["idtoken"];
-        var dashboardId = bodyJSON["dashboardId"];
 
         //verfiying given idToken first
         admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
             //reading uid of current user
+            let uid = decodedToken.uid;
 
             //reading user doc from Firebase
-            dbAggregate.doc(dashboardId).get().then((doc) => {
+            dbUsers.doc(uid).get().then((doc) => {
                 //if doc exists, return the accessible environments
                 if (doc.exists) {
                     var userData = doc.data();
+                    var accessibleEnvironments = userData["accessibleEnvironments"];
+
+                    var aggData = {"calibration":accessibleEnvironments};
+
+                    /*
+                    Goal: Return a response in the format that we discussed
+                    Format picture: https://lh3.googleusercontent.com/-w6Mg5syZ8pY/X2Th4aJk5nI/AAAAAAAAIlE/J-GhaCzkPmoynKtcIX-VHrYfm_pVk6B_wCK8BGAsYHg/s0/AggregateJSONFormat.png
+                    ATTENTION SANTRIPT: We can change the format a bit so that calibration can 
+                        just be an array of the relevant dashboards. This way, we don't have to
+                        make any changes to value of "calibration" after line 212. All we need to 
+                        do after this commend is to run a for-each loop on accessibleEnvironments.
+                        In that for loop, for given id "sample_id123", we 1) get the doc from firebase and
+                        2) store it as the value for the key "sample_id123"
+
+                    As a quick of pseudocode (actual foreach syntax would be diff for javascript).
+
+                    for (sampleID : accessibleEnvironments) { // foreach loop
+                        dbAggregate.doc(sampleID).get().then((aggDoc) => { // 1) getting the doc from firebase
+                            if (aggDoc.exists) { // checking if the doc exists
+                                var aggDocData = aggDoc.data(); // getting the JSON object from the response
+                                aggData[sampleID] = aggDocData; // 2) storing the data in the variable
+                            }
+                        }
+                    }
+
+                    I hope you can review this pseudocode and iron out any issues. ty :)
+
+                    P.S. One issue that we'll prob run into is that of callbacks. We have to make sure that
+                    the callback in lines 227-232 is complete before we go ahead and do res.write(). Otherwise
+                    the data will be left incomplete, missing some keys. So we have to think a bit on how to
+                    solve this if it becomes an issue
+                    */
 
                     res.writeHead(200);
-                    res.write(JSON.stringify(userData));
+                    res.write(JSON.stringify(aggData));
                     res.end();
                 }
                 //otherwise, read from demoEnvs.json and return demo dashboards
