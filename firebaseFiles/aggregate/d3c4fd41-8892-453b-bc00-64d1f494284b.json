@@ -1,11 +1,11 @@
 {
     "aggregateData": {
         "1": {
-            "averageDistance": 1,
+            "visitorCount": 1,
             "unmaskedCount": 1,
+            "averageDistance": 1,
             "violationsCount": 5,
-            "undistancedCount": 1,
-            "visitorCount": 1
+            "undistancedCount": 1
         }
     }
 }

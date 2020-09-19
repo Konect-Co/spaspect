@@ -1,0 +1,33 @@
+{
+    "streamWebpage": "https://www.earthcam.com/world/ireland/dublin/?cam=templebar",
+    "lat_vals": [
+        53.345529,
+        53.345487,
+        53.345506,
+        53.345568
+    ],
+    "name": "Dublin",
+    "pixelY_vals": [
+        258,
+        345,
+        341,
+        255
+    ],
+    "lonlat_origin": [
+        53.345543,
+        -6.264508
+    ],
+    "pixelX_vals": [
+        300,
+        655,
+        395,
+        20
+    ],
+    "lon_vals": [
+        -6.264214,
+        -6.26432,
+        -6.264312,
+        -6.264214
+    ],
+    "static": false
+}

@@ -106,11 +106,3 @@ def makeVisualizationOutput(pm, CVOutput, distance_threshold=2, score_threshold=
 		"tracked":trackedObjectsDict}
     
 	return predOutput
-
-def genRealData():
-	# masks = genMaskData()
-	# distance = genDistanceData()
-	# return realData
-
-def genAggData():
-	# return aggData

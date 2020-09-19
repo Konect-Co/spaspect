@@ -1,4 +1,14 @@
-<<<<<<< HEAD
+**/.vscode
+**/__pycache__
+node_modules
+core_cpp/build
+*.o
+a.out
+
+# firebaseFiles
+firebaseFiles/realtime/*
+firebaseFiles/aggregate/*
+
 # Logs
 logs
 *.log
@@ -63,12 +73,3 @@ node_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
-=======
-**/.vscode
-**/__pycache__
-node_modules
-core_cpp/build
-*.o
-a.out
->>>>>>> b7e06897e6401d0668174f302f702691dfc5e450

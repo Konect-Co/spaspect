@@ -1,0 +1,33 @@
+{
+    "lon_vals": [
+        33.988004,
+        33.988042,
+        33.987963,
+        33.988096
+    ],
+    "name": "Venice Beach",
+    "lat_vals": [
+        -118.474918,
+        -118.47492,
+        -118.475292,
+        -118.475297
+    ],
+    "pixelY_vals": [
+        230,
+        232,
+        154,
+        150
+    ],
+    "static": false,
+    "streamWebPage": "https://www.westland.net/beachcam/",
+    "lonlat_origin": [
+        33.988004,
+        -118.474918
+    ],
+    "pixelX_vals": [
+        300,
+        388,
+        167,
+        352
+    ]
+}

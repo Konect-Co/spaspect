@@ -1,0 +1,33 @@
+{
+    "streamWebpage": "https://worldcams.tv/croatia/croatia-beaches",
+    "lon_vals": [
+        14.719258,
+        14.719296,
+        14.719263,
+        14.719222
+    ],
+    "name": "Croatia",
+    "lat_vals": [
+        45.152477,
+        45.152472,
+        45.152488,
+        45.152478
+    ],
+    "lonlat_origin": [
+        14.719258,
+        45.152477
+    ],
+    "static": false,
+    "pixelY_vals": [
+        234,
+        260,
+        482,
+        292
+    ],
+    "pixelX_vals": [
+        125,
+        344,
+        612,
+        872
+    ]
+}
