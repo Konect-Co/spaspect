@@ -1,11 +1,13 @@
 {
-    "aggregateData": {
-        "1": {
-            "unmaskedCount": 1,
-            "undistancedCount": 1,
-            "violationsCount": 5,
-            "visitorCount": 1,
-            "averageDistance": 1
-        }
+    "1": {
+        "currTracked": [
+            "0.3967494480191103",
+            "0.4356089632506571"
+        ],
+        "visitorCount": 0,
+        "undistancedCount": 0,
+        "violationsCount": 0,
+        "unmaskedCount": 0,
+        "averageDistance": 0
     }
 }

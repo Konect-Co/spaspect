@@ -1,50 +1,63 @@
 var first = true;
 
-avg_dist = [];
-unmasked = [];
-violationsCount = [];
-visitorCount = [];
-undistancedTot = [];
-
-
 function renderAgg(data){
+	//data for current hour, all locations separately
+	var dashboardNames = [];
+	var averageDistances = [];
+	var visitorCount = [];
+	var unmaskedCount = [];
+	var undistancedCount = [];
+	var violationsCount = [];
+
+	// data for all hours separately, all locations combined
+	var totalVisitorCount = {};
+	var totalUnmaskedCount = {};
+	var totalUndistancedCount = {};
+	var totalViolationsCount = {};
+
 	//Use data variable to draw stuff on aggregate dashboard
-	console.log("Data in drawPlotsAggregate", data);
-	var calib = data["calibration"];
+	var availableDashboards = data["availableDashboards"];
 
-	Object.keys(calib).forEach(dashboardID => {
-    	//access data["calibration"][dashboardID][aggregateData][1][disance...]
-    	//console.log("Dashboards from renderAgg: ", calib[dashboardID]);
-    	var aggData = data[calib[dashboardID]]["aggregateData"];
-    	//console.log("aggData: ",aggData);
-    	var hourData = aggData[1];
-    	var averageDistance = hourData["averageDistance"];
-    	var undistanced = hourData["undistancedCount"];
-    	var violations = hourData["violationsCount"];
-    	var visitors = hourData["visitorCount"];
+	Object.keys(availableDashboards).forEach(dashboardID => {
+		var dashboardName = availableDashboards[dashboardID];
 
-    	//console.log("Undistanced: ",undistanced);
+		var aggData = data[dashboardID];
+		var hours = Object.keys(aggData).sort().reverse();
+		var currHour = hours[0];
 
-    	avg_dist.push(averageDistance);
-		undistancedTot.push(undistanced);
-		violationsCount.push(violations);
-		visitorCount.push(visitors);
-	})
+		hours.forEach(hour => {
+			var hourData = aggData[hour];
 
-    //lastUpdate = data["currentTime"];
-	//var dashboard = data["dashboard"];
-	// JSON.data.array.forEach(element => {
-	// 	avg_dist.push(element.averageDistance);
-	// 	unmasked.push(element.unmaskedCount);
-	// 	violationsCount.push(element.violationsCount);
-	// 	visitorCount.push(element.visitorCount);
-	// 	//console.log("This unmasked: ", unmasked);
-	// });
-			
+			var visitors = hourData["visitorCount"];
+			var unmasked = hourData["unmaskedCount"];
+			var undistanced = hourData["undistancedCount"];
+			var violations = hourData["violationsCount"];
 
-        //following function is in drawPlotsAggregate.js
-        //renderAgg(dashboard);
-    
+			//If this is the current hour, then we add the relevant data
+			if (hour == currHour) {
+				dashboardNames.push(dashboardName);
+				averageDistances.push(hourData["averageDistance"]);
+				visitorCount.push(visitors);
+				unmaskedCount.push(unmasked);
+				undistancedCount.push(undistanced);
+				violationsCount.push(violations);
+			}
+
+			//Initialize the total counts if not done so already
+			if (!Object.keys(totalVisitorCount).includes(hour)) {
+				totalVisitorCount[hour] = 0;
+				totalUnmaskedCount[hour] = 0;
+				totalUndistancedCount[hour] = 0;
+				totalViolationsCount[hour] = 0;
+			}
+
+			//Add counts to the data structure
+			totalVisitorCount[hour] += visitors;
+			totalUnmaskedCount[hour] += unmasked;
+			totalUndistancedCount[hour] += undistanced;
+			totalViolationsCount[hour] += violations;
+		});
+	});
 
 	//=========================
 	//PEOPLE VS TIME LINE GRAPH
@@ -53,31 +66,30 @@ function renderAgg(data){
 	visitorCount = [10, 15, 13, 17];
 
 	var ppl_time = {
-  		x: time,
-  		y: visitorCount,
-  		type: "scatter"
+  		x: Object.keys(totalVisitorCount),
+  		y: Object.values(totalVisitorCount),
+  		type: "line"
 	};
 
-	var data1 = [ppl_time];
-
-	//TODO: Find a better usage than having a variable store this information
-	//var graphOptionsLine = {filename: "basic-line", fileopt: "overwrite"};
-	
-	Plotly.newPlot('ppl_time', data1);
+	Plotly.newPlot('ppl_time', [ppl_time]);
 
 
 	//=========================
 	//DISTANCE DISTRIBUTION
 	//=========================
-	time = [1, 2, 3, 4, 5]; 
-	
 	var distance = {
-  	x: time,
-  	y: avg_dist,
+  	x: dashboardNames,
+  	y: visitorCount,
   	type: "scatter"
 	};
 
 	//TODO: Find a better usage than having a variable store this information
-	//Plotly.newPlot('distance', distance);
+	//var graphOptionsLine = {filename: "basic-line", fileopt: "overwrite"};
+
+	//Plotly.newPlot('x_loc', [distance]);
+
+		//=========================
+	//DISTANCE DISTRIBUTION
+	//=========================
 	
 }

@@ -209,7 +209,7 @@ app.post('/aggregateData', function(req, res) {
                     var userData = doc.data();
                     var accessibleEnvironments = Object.keys(userData["accessibleEnvironments"]);
 
-                    var aggData = {"calibration":accessibleEnvironments};
+                    var aggData = {"availableDashboards":userData["accessibleEnvironments"]};
 
 
                     var callbackComplete = {};
@@ -218,10 +218,8 @@ app.post('/aggregateData', function(req, res) {
                     }
 
                     accessibleEnvironments.forEach(ID => {
-                        console.log("getting id", ID);
                         dbAggregate.doc(ID).get().then((aggDoc) => {
                             if(aggDoc.exists){
-                                console.log("...and it exists");
                                 var aggDocData = aggDoc.data();
                                 aggData[ID] = aggDocData;
                             }
