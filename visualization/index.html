@@ -164,7 +164,7 @@
                 </li>
                 -->
                 <li>
-                    <select class="browser-default custom-select" id="dashboard-select" onchange="updateDashboard(true)">
+                    <select class="browser-default custom-select" id="dashboard-select" onchange="updateRealtime(true)">
                         <option value="86176f90-d02c-4a5b-94f7-c6baf24d2f7f">Demo: Venice Beach</option>
                         <option value="d3c4fd41-8892-453b-bc00-64d1f494284b">Demo: Greece</option>
                     </select>
@@ -205,15 +205,15 @@
                     <div class="card-header">
                         <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                              <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Real Time Analysis</a>
-                              <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Aggregate Analysis</a>
+                              <a class="nav-link active" id="realTime-tab" data-toggle="tab" href="#realTime" role="tab" aria-controls="realtime" aria-selected="true">Real Time Analysis</a>
+                              <a class="nav-link" id="aggregate-tab" data-toggle="tab" href="#aggregate" role="tab" aria-controls="aggregate" aria-selected="false">Aggregate Analysis</a>
                             </div>
                           </nav>
                     </div>
                     <!--Real time pannel -->
                     <div class="card-body">
                         <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="tab-pane fade show active" id="realTime" role="tabpanel" aria-labelledby="realTime-tab">
                                 <div class="row no-gutters ">
                                     <div class="col-sm-6 border border-primary border-3 p-2 col-md-offset-2 embed-responsive embed-responsive-4by3" id="videoDiv">
                                         <video id="video" class="video-js embed-responsive-item" data-setup=' { "fluid ": true} ' aria-label="live-cam" controls>
@@ -236,15 +236,15 @@
                                 </div>
                             </div>
                             <!--Aggregate Pannel-->
-                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <div class="tab-pane fade" id="aggregate" role="tabpanel" aria-labelledby="aggregate-tab">
                                 <div class="row">
-                                    <div class="col border border-primary border-3 no-gutters" id="plotAggregate"></div>
-                                    <div class="col">Second plot</div>
+                                    <div class="col border border-primary border-3 no-gutters" id="ppl_time"></div>
+                                    <div class="col" id="distance">Second plot</div>
                                     <div class="col">Third Plot</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col">Fourth Plot</div>
-                                    <div class="col">Fourth Plot</div>
+                                    <div class="col">Add Custom Plot</div>
+                                    <div class="col">Enforcement Status</div>
                                 </div>
                                 
                             </div>
@@ -314,9 +314,9 @@
               width: document.getElementById('mapDiv').offsetWidth,
               height: document.getElementById('mapDiv').offsetHeight
             });
-            Plotly.relayout('plotAggregate', {
-              width: document.getElementById('plotAggregate').offsetWidth,
-              height: document.getElementById('plotAggregate').offsetHeight
+            Plotly.relayout('ppl_time', {
+              width: document.getElementById('ppl_time').offsetWidth,
+              height: document.getElementById('ppl_time').offsetHeight
             });
 
         }
@@ -367,7 +367,7 @@
     <script type="text/javascript" src="https://unpkg.com/video.js/dist/video.js"></script>
     <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
     <script type="text/javascript" type="text/javascript" src="drawPlotsAggregate.js"></script>
-    <script type="text/javascript" type="text/javascript" src="drawPlots.js"></script>
+    <script type="text/javascript" type="text/javascript" src="drawPlotsRealtime.js"></script>
     <script type="text/javascript" src="index.js"></script>
 
 

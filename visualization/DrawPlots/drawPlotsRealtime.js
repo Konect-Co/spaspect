@@ -1,27 +1,26 @@
 var first = true;
 
-$("#login_password_field").keyup(function(event) {
-	if (event.keyCode === 13) {
-		$("#loginButton").click();
-	}
-});
-function update(data) {
-	//document.getElementById("video-src").setAttribute("src", data["streamlink"]);
+function renderRealtime(data) {
 	//TODO: Seems like this doesn't update the video successfully
 	var player = videojs('video');
-	player.src(data["streamlink"]);
+	player.src(data["streamLink"]);
 	player.ready(function() {
 		player.play();
 	});
 
 	//TODO: Check if the data actually has an output section
-	dashboard = data["output"];
+	dashboard = data["realtimeData"];
 
 	document.getElementById("statsTotal").innerHTML = dashboard['masked'].length;
 
 	var x_values = dashboard['X3D_vals'];
 	var y_values = dashboard['Y3D_vals'];
 	var z_values = dashboard['Z3D_vals'];
+	var distanced = dashboard['distanced'];
+	var lat_vals = dashboard['lat_vals'];
+	var lon_vals = dashboard['lon_vals'];
+	var masked = dashboard['masked'];
+	var tracked = dashboard['tracked'];
 
 	var color_values = [];
 	var text_values = [];
@@ -29,9 +28,9 @@ function update(data) {
 	var undistancedCount = 0;
 	var unmaskedCount = 0;
 
-	for (let i = 0; i < dashboard['masked'].length; i++) {
-		var unmasked = dashboard['masked'][i] == 2 ? true : false;
-		var undistanced = dashboard['distanced'][i] == 0 ? true : false;
+	for (let i = 0; i < masked.length; i++) {
+		var unmasked = masked[i] == 2 ? true : false;
+		var undistanced = distanced[i] == 0 ? true : false;
 
 		var color = unmasked || undistanced ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 255, 0, 1)';
 		color_values.push(color);
@@ -91,10 +90,6 @@ function update(data) {
 
 
 	//==========================
-	
-	var lat_vals = dashboard['lat_vals'];
-	var lon_vals = dashboard['lon_vals'];
-	
 	
 	var mapData = [{
 		type:'scattermapbox',

@@ -17,6 +17,8 @@ admin.initializeApp({
 const db = admin.firestore();
 const dbUsers = db.collection('users');
 const dbDashboards = db.collection('dashboards');
+const dbAggregate = db.collection('aggregate');
+const dbRealtime = db.collection('realtime');
 
 // Utils Functions
 
@@ -66,8 +68,8 @@ app.get('/index.js', function(req, res) {
     res.sendFile(__dirname + '/index.js');
 });
 
-app.get('/drawPlots.js', function(req, res) {
-    res.sendFile(__dirname + '/DrawPlots/drawPlots.js');
+app.get('/drawPlotsRealtime.js', function(req, res) {
+    res.sendFile(__dirname + '/DrawPlots/drawPlotsRealtime.js');
 });
 
 app.get('/drawPlotsAggregate.js', function(req, res) {
@@ -141,6 +143,86 @@ app.post('/dashboards', function(req, res) {
     });
 });
 
+app.post('/realtimeData', function(req, res) {
+    // Use dbRealtime to get the appropriate dashboard and return the result
+    var body = "";
+    req.on('data', function(chunk) {
+        body += chunk;
+    });
+    req.on('end', function() {
+        //Taking arguments from /dashboards POST request
+        bodyJSON = JSON.parse(body);
+        if (!("idtoken" in bodyJSON && "dashboardId" in bodyJSON))
+            res.end();
+        var idToken = bodyJSON["idtoken"];
+        var dashboardId = bodyJSON["dashboardId"];
+
+        //verfiying given idToken first
+        admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
+            //reading uid of current user
+            let uid = decodedToken.uid;
+
+            //TODO: Check whether specified user is allowed to access
+
+            //reading user doc from Firebase
+            dbRealtime.doc(dashboardId).get().then((doc) => {
+                //if doc exists, return the accessible environments
+                if (doc.exists) {
+                    var userData = doc.data();
+
+                    res.writeHead(200);
+                    res.write(JSON.stringify(userData));
+                    res.end();
+                }
+                //otherwise, read from demoEnvs.json and return demo dashboards
+                else {
+                    res.writeHead(400);
+                    res.end();
+                }
+            });
+        });
+    });
+});
+
+app.post('/aggregateData', function(req, res) {
+    // Use dbAggregate to get the appropriate dashboard and return the result
+    var body = "";
+    req.on('data', function(chunk) {
+        body += chunk;
+    });
+    req.on('end', function() {
+        //Taking arguments from /dashboards POST request
+        bodyJSON = JSON.parse(body);
+        if (!("idtoken" in bodyJSON))
+            res.end();
+        var idToken = bodyJSON["idtoken"];
+        var dashboardId = bodyJSON["dashboardId"];
+
+        //verfiying given idToken first
+        admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
+            //reading uid of current user
+
+            //reading user doc from Firebase
+            dbAggregate.doc(dashboardId).get().then((doc) => {
+                //if doc exists, return the accessible environments
+                if (doc.exists) {
+                    var userData = doc.data();
+
+                    res.writeHead(200);
+                    res.write(JSON.stringify(userData));
+                    res.end();
+                }
+                //otherwise, read from demoEnvs.json and return demo dashboards
+                else {
+                    res.writeHead(400);
+                    res.end();
+                }
+            });
+        });
+    });
+});
+
+//TODO: Replace following function with two post request implementations above
 //POST request to get info about a particular dashboard for the current user
 app.post('/environment', function(req, res) {
     //declaring function that sends response to who sent request
