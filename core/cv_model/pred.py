@@ -41,8 +41,7 @@ def predict(input_image_orig):
 	# Replace number labels with strings corresponding with object name
 	odResults["detection_classes"] = [ coco_labels[int(label)] for label in odResults["detection_classes"] ]
 	
-	output = {"boxes":odResults["detection_boxes"], "scores":odResults["detection_scores"], 
-			"classes":odResults["detection_classes"]}
+	output = {"boxes":[], "scores":[], "classes":[]}
 
 	# Run image through mask detection network and store inference results
 	output["masks"] = detectMask.genPredictions(input_image_orig)
@@ -56,6 +55,10 @@ def predict(input_image_orig):
 			break
 		if (not _class == "person"):
 			continue
+
+		output["boxes"].append(box)
+		output["scores"].append(score)
+		output["classes"].append(_class)
 
 	# Return entirety of results back to caller
 	return output
