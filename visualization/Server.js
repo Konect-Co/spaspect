@@ -211,6 +211,20 @@ app.post('/aggregateData', function(req, res) {
 
                     var aggData = {"calibration":accessibleEnvironments};
 
+                    for (var sampleID in accessibleEnvironments){
+                        dbAggregate.doc(sampleID).get().then((aggDoc) => {
+                            if(aggDoc.exists){
+                                var initialAggDocData = {1:{"averageDistance": 1.2, "unmaskedCount": 5,
+                                "violationsCount": 9, "undistancedCount": 5, "visitorCount": 1}};
+                                var finalAggDocData = JSON.stringify(initialAggDocData);
+                                var aggDocData = JSON.parse(finalAggDocData);
+                                aggData[sampleID] = aggDocData;
+                            }
+                        });
+
+                    }
+                    console.log(aggData);
+
                     /*
                     Goal: Return a response in the format that we discussed
                     Format picture: https://lh3.googleusercontent.com/-w6Mg5syZ8pY/X2Th4aJk5nI/AAAAAAAAIlE/J-GhaCzkPmoynKtcIX-VHrYfm_pVk6B_wCK8BGAsYHg/s0/AggregateJSONFormat.png
