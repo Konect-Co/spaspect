@@ -260,3 +260,7 @@ a.article:hover {
 .border-3 {
     border-width:3px !important;
 }
+
+#ppl_time {
+    height: 300px;
+}
