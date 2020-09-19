@@ -226,30 +226,24 @@ app.post('/aggregateData', function(req, res) {
                                 aggData[ID] = aggDocData;
                             }
                             callbackComplete[ID] = true;
+
+                            //wait for callback to be complete
+                            //TODO: If taking too long, just return error code in header
+                            var complete = true;
+                            
+                            accessibleEnvironments.forEach(ID => {
+                                complete &= callbackComplete[ID];
+                                //TODO: Break if complete is false
+                                //  Problem is idk how to break out of foreach
+                            });
+                            
+                            if (complete) {
+                                res.writeHead(200);
+                                res.write(JSON.stringify(aggData));
+                                res.end();
+                            }
                         });
                     });
-                    
-
-                    //wait for callback to be complete
-                    //TODO: If taking too long, just return error code in header
-                    while (true) {
-                        var complete = true;
-                        
-                        accessibleEnvironments.forEach(ID => {
-                            complete &= callbackComplete[ID];
-                            //TODO: Break if complete is false
-                            //  Problem is idk how to break out of foreach
-                        });
-                        
-                        if (complete) {
-                            console.log("Sending response for agg post request", aggData);
-                            res.writeHead(200);
-                            res.write(JSON.stringify(aggData));
-                            res.end();
-                            break;
-                        }
-
-                    }
                 }
                 //otherwise, read from demoEnvs.json and return demo dashboards
                 else {
