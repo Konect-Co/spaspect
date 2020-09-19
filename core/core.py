@@ -74,7 +74,6 @@ def main(dashboardID):
 			streamLink = obtainStreamLink.get(calibration["streamWebpage"])
 			cap.open(streamLink)
 
-		print("STREAMLINK", streamLink)
 		read, image = cap.read()
 		if (not read):
 			print("END")
@@ -84,8 +83,8 @@ def main(dashboardID):
 		output = pred.predict(image)
 
 		#generates the realtime and aggregate analytics displayed on spaspect dashboard
-		RealTime.genRealData(pm, output, os.path.join(fbFilesDir, "realtime") + os.path.sep + dashboardID + ".json")
-		#Aggregate.genAggData(os.path.join(fbFilesDir, "aggregate") + os.path.sep + dashboardID+ ".json")
+		realData = RealTime.genRealData(pm, output, os.path.join(fbFilesDir, "realtime") + os.path.sep + dashboardID + ".json")
+		aggData = Aggregate.genAggData(realData, os.path.join(fbFilesDir, "aggregate") + os.path.sep + dashboardID+ ".json")
 
 		frame_index += 1
 

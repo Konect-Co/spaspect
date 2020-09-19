@@ -2,7 +2,9 @@ import numpy as np
 import math
 import os
 import json
+
 import cv_model.utils as cv_utils
+import TrackedObject
 
 #TODO: Place these utils functions into a new file
 ###UTILS FUNCTIONS START###
@@ -113,7 +115,19 @@ def genDistanceData(coordinatesData, distance_threshold=2):
 	return distanced
 ###UTILS FUNCTIONS END###
 
+"""
+Generates tracking data.
+"""
+def genTrackingData(boxes, coordinatesData):
+	X3D_vals = coordinatesData["X3D_vals"]
+	Y3D_vals = coordinatesData["Y3D_vals"]
+	Z3D_vals = coordinatesData["Z3D_vals"]
 
+	print("NEW Objects", len(X3D_vals))
+
+	TrackedObject.TrackedObject.track(boxes, X3D_vals, Y3D_vals, Z3D_vals)
+	trackedObjects = TrackedObject.TrackedObject.objects
+	return trackedObjects
 
 """
 Combines all the functions above to generate all realtime analytics within this one function.
@@ -131,6 +145,10 @@ def genRealData(pm, CVOutput, filename, distance_threshold=2, score_threshold=0.
 	masked = genMaskData(CVOutput)
 	realData["masked"] = masked
 
+	tracked = genTrackingData(CVOutput["boxes"], realData)
+	realData["tracked"] = tracked
+
 	#TODO: Add data on tracked individuals as well
 	with open(filename, 'w') as f:
 		json.dump(realData, f, indent=4)
+	return realData

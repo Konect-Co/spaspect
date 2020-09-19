@@ -1,4 +1,3 @@
-import utils
 import cv_model.utils as cv_utils
 import time
 import random
@@ -13,7 +12,7 @@ class TrackedObject(object):
 	#all objects that are being tracked
 	objects = {}
 
-	def __init__(self, name, label, boundingBox, X3D, Y3D, Z3D):
+	def __init__(self, name, label, boundingBox, X3D, Y3D, Z3D, closestDistance, masked):
 
 		#name of the tracked object
 		self.name = name
@@ -27,6 +26,10 @@ class TrackedObject(object):
 		self.lastUpdate = type(self).currTime
 		#adding box
 		self.addBox(boundingBox, X3D, Y3D, Z3D)
+		#adding closest distance attribute
+		self.closestDistance = closestDistance
+		#adding masked attribute
+		self.masked = masked
 		#adding self to objects
 		assert name not in type(self).objects.keys()
 		type(self).objects[name] = self
@@ -37,6 +40,8 @@ class TrackedObject(object):
 			"label":self.label,
 			"velocity":self.velocity,
 			"history":self.history,
+			"masked":self.masked,
+			"distanced":self.distanced,
 			"lastUpdate":self.lastUpdate
 		}
 
@@ -49,11 +54,18 @@ class TrackedObject(object):
 	def getVelocity(self):
 		return self.velocity
 
+	def getMasked(self):
+		return self.masked
+
+	def getDistanced(self):
+		return self.distanced
+
 	def getHistory(self):
 		return self.history
 
 	def getLastUpdate(self):
 		return self.lastUpdate
+
 	def getHistoryKeys(self):
 		return list(self.history.keys())
 
@@ -80,7 +92,7 @@ class TrackedObject(object):
 			return
 
 	@classmethod
-	def track(cls, boundingBoxes, X3D_values, Y3D_values, Z3D_values):
+	def track(cls, boundingBoxes, X3D_values, Y3D_values, Z3D_values, masked, distanced):
 			#this method is the essence of the tracking algorithm
 			#it goes through the boundingBoxes in the new detection
 			#and updates the tracked objects' positions through the add function
@@ -161,7 +173,8 @@ class TrackedObject(object):
 					else:
 						boxKey = list(allIOUValues[maximumTracking])[0]
 						maximumTracking.addBox(
-							boundingBoxes[boxKey], X3D_values[boxKey], Y3D_values[boxKey], Z3D_values[boxKey]
+							boundingBoxes[boxKey], X3D_values[boxKey], Y3D_values[boxKey], Z3D_values[boxKey].
+							masked[boxKey], distanced[boxKey]
 						)
 
 						#deleting the row and column of the maximum IoU
@@ -176,7 +189,9 @@ class TrackedObject(object):
 				label = "person"
 				boundingBox = boundingBoxes[newBoxIndex]
 				#print("PAUSE")
-				newObject = TrackedObject(name1,label,boundingBox, X3D_values, Y3D_values, Z3D_values)
+				newObject = TrackedObject(name1,label,boundingBox, X3D_values[newBoxIndex], 
+										  Y3D_values[newBoxIndex], Z3D_values[newBoxIndex],
+										  masked[newBoxIndex], distanced[newBoxIndex])
 			cls.prune()
 			return
 			
@@ -214,6 +229,12 @@ class TrackedObject(object):
 		velocity = [xVelocity, yVelocity]
 		self.velocity = velocity
 		return
+
+	def addMasked(self, masked):
+		self.masked = masked
+
+	def addDistanced(self, distanced):
+		self.distanced = distanced
 
 	def computePrediction(self):
 		if len(self.history.keys()) != 0:
