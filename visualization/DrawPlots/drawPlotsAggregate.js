@@ -59,37 +59,52 @@ function renderAgg(data){
 		});
 	});
 
+
 	//=========================
 	//PEOPLE VS TIME LINE GRAPH
 	//=========================
-	time = [1, 2, 3, 4, 5];
-	visitorCount = [10, 15, 13, 17];
-
-	var ppl_time = {
+	var ppl_time_trace = {
   		x: Object.keys(totalVisitorCount),
   		y: Object.values(totalVisitorCount),
   		type: "line"
 	};
-
-	Plotly.newPlot('ppl_time', [ppl_time]);
-
-
-	//=========================
-	//DISTANCE DISTRIBUTION
-	//=========================
-	var distance = {
-  	x: dashboardNames,
-  	y: visitorCount,
-  	type: "scatter"
+	var ppl_time_layout = { 
+		title: '<b>People vs time</b>',
+		font: {size: 12},
+		plot_bgcolor:"#FDFDFD",
+		paper_bgcolor:"#F0F0F0",
+		xaxis: {
+			title: {text: 'time (hour)'}
+		},
+		yaxis: {
+			title: {text: '# people'}
+		}
 	};
+	Plotly.newPlot('ppl_time', [ppl_time_trace], ppl_time_layout, {responsive: true});
 
-	//TODO: Find a better usage than having a variable store this information
-	//var graphOptionsLine = {filename: "basic-line", fileopt: "overwrite"};
 
-	//Plotly.newPlot('x_loc', [distance]);
-
-		//=========================
-	//DISTANCE DISTRIBUTION
 	//=========================
+	//CROSS LOCATION (X-LOC) DISTRIBUTION
+	//=========================
+	var x_loc_trace = {
+		x: dashboardNames,
+		y: visitorCount,
+		type: "bar"
+	};
+	var x_loc_layout = {
+		title: '<b>Cross Location Visitation</b>',
+		font: {size: 12},
+		plot_bgcolor:"#FDFDFD",
+		paper_bgcolor:"#F0F0F0",
+		xaxis: {
+			title: {text: 'location'}
+		},
+		yaxis: {
+			title: {text: '# people'}
+		}
+	};
+	Plotly.newPlot('x_loc', [x_loc_trace], x_loc_layout, {responsive: true});
+
+	
 	
 }

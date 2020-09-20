@@ -261,6 +261,11 @@ a.article:hover {
     border-width:3px !important;
 }
 
-#ppl_time {
-    height: 300px;
+#ppl_time, #x_loc {
+    height: 400px;
+    max-width: 400px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
