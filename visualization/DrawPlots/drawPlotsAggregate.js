@@ -66,10 +66,35 @@ function renderAgg(data){
 	var ppl_time_trace = {
   		x: Object.keys(totalVisitorCount),
   		y: Object.values(totalVisitorCount),
-  		type: "line"
+  		type: "line",
+  		name: "people"
 	};
+
+	var undistanced_time_trace = {
+		x: Object.keys(totalUndistancedCount),
+		y: Object.values(totalUndistancedCount),
+		type: "line",
+		name: "undistanced"
+	};
+
+	var unmasked_time_trace = {
+		x: Object.keys(totalUnmaskedCount),
+		y: Object.values(totalUnmaskedCount),
+		type: "line",
+		name: "unmasked"
+	};
+
+	var violations_time_trace = {
+		x: Object.keys(totalViolationsCount),
+		y: Object.values(totalViolationsCount),
+		type: "line",
+		name: "violations"
+	};
+
+	var linegraph_data = [ppl_time_trace, undistanced_time_trace, unmasked_time_trace, violations_time_trace];
+
 	var ppl_time_layout = { 
-		title: '<b>People vs time</b>',
+		title: '<b>Analytics vs time</b>',
 		font: {size: 12},
 		plot_bgcolor:"#FDFDFD",
 		paper_bgcolor:"#F0F0F0",
@@ -77,10 +102,10 @@ function renderAgg(data){
 			title: {text: 'time (hour)'}
 		},
 		yaxis: {
-			title: {text: '# people'}
+			title: {text: 'analytics'}
 		}
 	};
-	Plotly.newPlot('ppl_time', [ppl_time_trace], ppl_time_layout, {responsive: true});
+	Plotly.newPlot('ppl_time', linegraph_data, ppl_time_layout, {responsive: true});
 
 
 	//=========================
