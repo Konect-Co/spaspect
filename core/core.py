@@ -90,8 +90,8 @@ def main(dashboardID):
 
 
 		#generates the realtime and aggregate analytics displayed on spaspect dashboard
-		realData = RealTime.genRealData(pm, output, os.path.join(fbFilesDir, "realtime") + os.path.sep + dashboardID + ".json")
-		aggData = Aggregate.genAggData(realData, os.path.join(fbFilesDir, "aggregate") + os.path.sep + dashboardID+ ".json")
+		realData = RealTime.genRealData(pm, output, streamLink, os.path.join(fbFilesDir, "realtime") + os.path.sep + dashboardID + ".json")
+		#aggData = Aggregate.genAggData(realData, os.path.join(fbFilesDir, "aggregate") + os.path.sep + dashboardID+ ".json")
 
 		frame_index += 1
 

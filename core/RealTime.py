@@ -134,9 +134,11 @@ Combines all the functions above to generate all realtime analytics within this 
 @params pm, CVOutput, filename(json file where all realtime analytics will be placed), distance_threshold, score_threshold
 @return all realtime analytics
 """
-def genRealData(pm, CVOutput, filename, distance_threshold=2, score_threshold=0.60):
+def genRealData(pm, CVOutput, streamLink, filename, distance_threshold=2, score_threshold=0.60):
 	# starting point for realtime data
 	realData = genCoordinates(pm, CVOutput)
+
+	realData["streamLink"] = streamLink
 
 	distanced = genDistanceData(realData)
 	realData["distanced"] = distanced	
