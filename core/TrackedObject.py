@@ -123,17 +123,10 @@ class TrackedObject(object):
 					
 					IOUValues[box_i] = IOU
 
-
-				#print("IOU: ", IOUValues)
-			    #print("IOU: ", allIOUValues)
-
 			    #sorts IOUs and places them in IOUValues
 			    #2D dictionary formed
 				IOUValues = {k : v for k, v in sorted(IOUValues.items(), reverse=True, key = lambda kv:kv[1])}
 				allIOUValues[trackedEntity] = IOUValues
-                
-				#print("Items: ",allIOUValues.items())
-				#fprint("Name: ",trackedEntity.getName())
 
 			"""
 			Now, we have a 2D dictionary with the row corresponding to each existing tracked object
@@ -196,7 +189,6 @@ class TrackedObject(object):
 				name1 = str(random.random())
 				label = "person"
 				boundingBox = boundingBoxes[newBoxIndex]
-				#print("PAUSE")
 				newObject = TrackedObject(name1,label,boundingBox, X3D_values[newBoxIndex], 
 										  Y3D_values[newBoxIndex], Z3D_values[newBoxIndex],
 										  masked[newBoxIndex], distanced[newBoxIndex])
@@ -209,7 +201,7 @@ class TrackedObject(object):
 		if len(self.history.keys()) != 0:
 			assert self.lastUpdate != type(self).currTime
 		#defining history and lastupdate which goes in the toDict() function
-		self.history[str(type(self).currTime)] = {"bounding_box": bounding_box.tolist(), "X3D": X_3D, "Y3D": Y_3D, "Z3D": Z_3D}
+		self.history[str(type(self).currTime)] = {"bounding_box": bounding_box, "X3D": X_3D, "Y3D": Y_3D, "Z3D": Z_3D}
 		self.lastUpdate = type(self).currTime
 		self.updateVelocity()
 		return

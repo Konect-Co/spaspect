@@ -17,6 +17,7 @@ Finds all realtime coordinates
 @return map of X Y Z 3D coordinates and longitude/latitude coordinates
 """
 def genCoordinates(pm, CVOutput, score_threshold=0.60):
+	boxes = []
 	X3D_vals = []
 	Y3D_vals = []
 	Z3D_vals = []
@@ -40,14 +41,14 @@ def genCoordinates(pm, CVOutput, score_threshold=0.60):
 		lonlat = pm.pixel_to_lonlat(midpoint)[0]
 		coord3D = pm.lonlat_to_3D(lonlat)
 
-
+		boxes.append(box)
 		lat_vals.append(lonlat[0])
 		lon_vals.append(lonlat[1])
 		X3D_vals.append(coord3D[0])
 		Y3D_vals.append(coord3D[1])
 		Z3D_vals.append(coord3D[2])
 
-	allCoordinates={"X3D_vals":X3D_vals, "Y3D_vals": Y3D_vals, "Z3D_vals": Z3D_vals, "lat_vals":lat_vals, "lon_vals": lon_vals}
+	allCoordinates={"boxes":boxes, "X3D_vals":X3D_vals, "Y3D_vals": Y3D_vals, "Z3D_vals": Z3D_vals, "lat_vals":lat_vals, "lon_vals": lon_vals}
 	return allCoordinates
 
 
@@ -116,7 +117,8 @@ def genDistanceData(coordinatesData, distance_threshold=2):
 """
 Generates tracking data.
 """
-def genTrackingData(boxes, coordinatesData, masked, distanced):
+def genTrackingData(coordinatesData, masked, distanced):
+	boxes = coordinatesData["boxes"]
 	X3D_vals = coordinatesData["X3D_vals"]
 	Y3D_vals = coordinatesData["Y3D_vals"]
 	Z3D_vals = coordinatesData["Z3D_vals"]
@@ -134,7 +136,7 @@ Combines all the functions above to generate all realtime analytics within this 
 @params pm, CVOutput, filename(json file where all realtime analytics will be placed), distance_threshold, score_threshold
 @return all realtime analytics
 """
-def genRealData(pm, CVOutput, streamLink, filename, distance_threshold=2, score_threshold=0.60):
+def genRealData(pm, CVOutput, streamLink, filename, distance_threshold=2):
 	# starting point for realtime data
 	realData = genCoordinates(pm, CVOutput)
 
@@ -146,7 +148,7 @@ def genRealData(pm, CVOutput, streamLink, filename, distance_threshold=2, score_
 	masked = genMaskData(CVOutput)
 	realData["masked"] = masked
 
-	tracked = genTrackingData(CVOutput["boxes"], realData, masked, distanced)
+	tracked = genTrackingData(realData, masked, distanced)
 	realData["tracked"] = tracked
 
 	#TODO: Add data on tracked individuals as well

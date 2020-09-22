@@ -20,7 +20,7 @@ coco_labels = [
 ]
 
 #loading tensorflow model
-loaded = tf.saved_model.load("./cv_model/models/mobilenet_model")
+loaded = tf.saved_model.load("./cv_model/models/mobilenetModel")
 infer = loaded.signatures["serving_default"]
 
 # This function returns CV model output in a raw format, as returned 
@@ -51,12 +51,12 @@ def predict(input_image_orig):
 		_class = odResults["detection_classes"][i]
 		box = odResults["detection_boxes"][i]
 
-		if (score < 0.7):
+		if (score < 0.2):
 			break
 		if (not _class == "person"):
 			continue
 
-		output["boxes"].append(box)
+		output["boxes"].append(box.tolist())
 		output["scores"].append(score)
 		output["classes"].append(_class)
 

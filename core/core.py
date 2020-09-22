@@ -102,5 +102,10 @@ def main(dashboardID):
 Setting sample dashboard ID for parameter
 """
 if __name__ == "__main__":
-	dashboardID = "0443639c-bfc1-11ea-b3de-0242ac130004"
+	#TIMES SQUARE
+	#dashboardID = "0443639c-bfc1-11ea-b3de-0242ac130004"
+	#DUBLIN
+	dashboardID = "1ff9e8ae-bfc1-11ea-b3de-0242ac130004"
+	#SOUTHLAKE
+	#dashboardID = "9f5a8845-4c78-4da3-b76e-bbc8c76eacc0"
 	sys.exit(main(dashboardID))

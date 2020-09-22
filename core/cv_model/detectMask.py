@@ -7,7 +7,6 @@ import os
 
 #setting args and getting image, the face detector model, and mask detector model
 args = {
-	"image":"/home/ravit/Pictures/person.jpg",
 	"face":"cv_model/models/face_detector",
 	"model":"cv_model/models/mask_detector.model",
 	"confidence":0.5,
