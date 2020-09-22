@@ -4,6 +4,15 @@
     width: 400px;
 }
 
+#mapDiv #statsDiv {
+    height: 100%;
+    
+}
+
+#detailsButton {
+    width: 50%;
+}
+
 .btn {
 /*Removed background colors*/
     padding: 15px 20px;

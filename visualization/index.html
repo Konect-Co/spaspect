@@ -223,27 +223,44 @@
                                 <div class="row no-gutters">
                                     <div class="col ml-2 mr-2 mt-2 mb-2 bg-light" id="mapDiv"></div>
                                     <div class="col-sm-6 ml-2 mr-2 mt-2 mb-2 bg-light" id="statsDiv">
-                                        <div id="stats-header">
-                                            <h2><b style="color:#429a50">Statistics</b></h2>
-                                        </div>
-                                        <div id="stats">
-                                            <h3>Total count:  <span id="statsTotal"></span></h3>
-                                            <h3>Undistanced count:  <span id="statsUndistanced"></span></h3>
-                                            <h3>Unmasked count:  <span id="statsUnmasked"></span></h3>
+                                        <div class="jumbotron">
+                                            <div class="card" style="width: 50%;">
+                                                <div class="card-header" id="stats-header">
+                                                    <h2 class="card-title">Statistics</h2>
+                                                </div>
+                                                <div class="card-body" id="stats">
+                                                    <h5>Total count:  <span id="statsTotal"></span></h5>
+                                                    <h5>Undistanced count:  <span id="statsUndistanced"></span></h5>
+                                                    <h5>Unmasked count:  <span id="statsUnmasked"></span></h5>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!--Aggregate Pannel-->
                             <div class="tab-pane fade" id="aggregate" role="tabpanel" aria-labelledby="aggregate-tab">
-                                <div class="row">
-                                    <div class="col" id="ppl_time"></div>
-                                    <div class="col" id="x_loc"></div>
-                                    <div class="col" id="next_plot??"></div>
+                                <div class="row justify-content-center">
+                                    <div class="col-6" id="ppl_time"></div>
+                                    <div class="col-6" id="x_loc"></div>
+                                   <!-- <div class="col" id="next_plot??"></div> -->
                                 </div>
-                                <div class="row">
-                                    <div class="col" id="custom"></div>
-                                    <div class="col" id="enforcement_status"></div>
+                                <div class="row justify-content-center">
+                                    <div class="col-3" id="custom">
+                                        <button class="btn btn-sq-lg">
+                                            <span class="fa fa-5x fa-plus"></span>
+                                            <h2>Add Custom Display</h2>
+                                        </button>
+                                    </div>
+                                    <div class="col-3 id="enforcement_status">
+                                        <div class="jumbotron">
+                                            <h2 class="display-5">Enforcement Status</h2>
+                                            <hr class="my-4">
+                                            <a class="btn btn-outline-info btn-sm" id="detailsButton" role="button">
+                                                View Details
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                             </div>
