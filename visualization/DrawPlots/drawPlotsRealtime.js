@@ -1,135 +1,184 @@
-var first = true;
+var firstRealtimeRender = true;
+var streamLink = null;
+
+var x_valuesCURR = null;
+var y_valuesCURR = null;
+var z_valuesCURR = null;
+var maskedCURR = null;
+var distancedCURR = null;
+
+var lat_valsCURR = null;
+var lon_valsCURR = null;
+
+var trackedCURR = null;
+
+Plotly.setPlotConfig({
+	mapboxAccessToken: "pk.eyJ1Ijoic3Jhdml0MSIsImEiOiJja2JzY3NpcHgwMGJnMnZzYTY5ZWsyeDR6In0.CIOWohypCmf_oCzed32xRA"
+});
+
+var realtimePlotFunction = Plotly.newPlot;
+
+function arrayEquality(a, b) {
+	return Array.isArray(a) && Array.isArray(b) && 
+	a.length == b.length && a.every((value, index) => value==b[index])
+}
+
+var player = videojs('video');
+var refreshLink = true;
+player.on('error', function() {
+	refreshLink = true;
+	console.log("Player error");
+})
 
 function renderRealtime(dashboard) {
 	//TODO: Seems like this doesn't update the video successfully
-	var player = videojs('video');
-	player.src(dashboard["streamLink"]);
-	player.ready(function() {
-		player.play();
-	});
+	if (refreshLink) {
+		streamLink = dashboard["streamLink"];
+		player.src(streamLink);
+		player.ready(function() {
+			player.play();
+		});
+		refreshLink = false;
+	}
 
-	document.getElementById("statsTotal").innerHTML = dashboard['masked'].length;
+	//==========================
 
 	var x_values = dashboard['X3D_vals'];
 	var y_values = dashboard['Y3D_vals'];
 	var z_values = dashboard['Z3D_vals'];
-	var distanced = dashboard['distanced'];
-	var lat_vals = dashboard['lat_vals'];
-	var lon_vals = dashboard['lon_vals'];
 	var masked = dashboard['masked'];
-	var tracked = dashboard['tracked'];
+	var distanced = dashboard['distanced'];
 
-	var color_values = [];
-	var text_values = [];
+	var unchanged3D = (arrayEquality(x_values, x_valuesCURR) && arrayEquality(y_values, y_valuesCURR) && arrayEquality(z_values, z_valuesCURR) && arrayEquality(masked, maskedCURR) && arrayEquality(distanced, distancedCURR));
 
-	var undistancedCount = 0;
-	var unmaskedCount = 0;
+	if (!unchanged3D) {
+		var color_values = [];
+		var text_values = [];
 
-	for (let i = 0; i < masked.length; i++) {
-		var unmasked = masked[i] == 2 ? true : false;
-		var undistanced = distanced[i] == 0 ? true : false;
+		var undistancedCount = 0;
+		var unmaskedCount = 0;
 
-		var color = unmasked || undistanced ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 255, 0, 1)';
-		color_values.push(color);
+		for (let i = 0; i < masked.length; i++) {
+			var unmasked = masked[i] == 2 ? true : false;
+			var undistanced = distanced[i] == 0 ? true : false;
 
-		var distanced_txt = undistanced ? "undistanced" : "distanced";
-		var unmasked_txt = unmasked ? "unmasked" : "not unmasked";
+			var color = unmasked || undistanced ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 255, 0, 1)';
+			color_values.push(color);
 
-		var full_txt = distanced_txt + " and " + unmasked_txt;
-		text_values.push(full_txt);
+			var distanced_txt = undistanced ? "undistanced" : "distanced";
+			var unmasked_txt = unmasked ? "unmasked" : "not unmasked";
 
-		if (undistanced)
-			undistancedCount++;
-		if (unmasked)
-			unmaskedCount++;
+			var full_txt = distanced_txt + " and " + unmasked_txt;
+			text_values.push(full_txt);
+
+			if (undistanced)
+				undistancedCount++;
+			if (unmasked)
+				unmaskedCount++;
+		}
+		
+		var trace = {
+			x: x_values,
+			y: y_values,
+			z: z_values,
+			name: 'people',
+			mode: 'markers',
+			marker: {
+				color: color_values,
+				size: 8,
+				line: {
+					width: 0.5
+				},
+				opacity: 0.8
+			},
+			type: 'scatter3d',
+			text: text_values
+		};
+
+		
+		//TODO: Add a separate trace for the history of each person
+		//	Fill the values of the trace with the appropriate line and
+		//	color for each person by reading from the data argument.
+		//  Add this trace to scatterData variable below
+
+		var scatterData = [trace]//, mapDataTrace];
+		var scatterLayout = {margin: {l: 0, r: 0, b: 0, t: 0}};
+
+		document.getElementById("statsTotal").innerHTML = dashboard['masked'].length;
+		document.getElementById("statsUndistanced").innerHTML = undistancedCount;
+		document.getElementById("statsUnmasked").innerHTML = unmaskedCount;
+
+		x_valuesCURR = x_values;
+		y_valuesCURR = y_values;
+		z_valuesCURR = z_values;
+		maskedCURR = masked;
+		distancedCURR = distanced;
 	}
 
-	document.getElementById("statsUndistanced").innerHTML = undistancedCount;
-	document.getElementById("statsUnmasked").innerHTML = unmaskedCount;
-
 
 	//==========================
-	
-	var trace = {
-		x: x_values,
-		y: y_values,
-		z: z_values,
-		name: 'people',
-		mode: 'markers',
-		marker: {
-			color: color_values,
-			size: 8,
-			line: {
-				width: 0.5
-			},
-			opacity: 0.8
-		},
-		type: 'scatter3d',
-		text: text_values
-	};
-	
 
 	
-	//TODO: Add a separate trace for the history of each person
-	//	Fill the values of the trace with the appropriate line and
-	//	color for each person by reading from the data argument.
-	//  Add this trace to scatterData variable below
-
-	var scatterData = [trace]//, mapDataTrace];
-	var scatterLayout = {
-		margin: {
-			l: 0,
-			r: 0,
-			b: 0,
-			t: 0
-		}
-	};
-
-
 	//==========================
-	
-	var mapData = [{
-		type:'scattermapbox',
-		lat:lat_vals,
-		lon:lon_vals,
-		mode:'marker',
-		marker: {
-			size:8
-		}
-	}]
 
-	var mapLayout = {
-		autosize: true,
-		hovermode:'closest',
-		mapbox: {
-			bearing:0,
-			center: {
-    			lat:lat_vals[0],
-    			lon:lon_vals[0]
+	var lat_vals = dashboard['lat_vals'];
+	var lon_vals = dashboard['lon_vals'];
+
+	var unchangedMap = lat_vals==lat_valsCURR && lon_vals==lon_valsCURR;
+
+	if (!unchangedMap) {
+		var mapData = [{
+			type:'scattermapbox',
+			lat:lat_vals,
+			lon:lon_vals,
+			mode:'marker',
+			marker: {
+				size:8
+			}
+		}]
+
+		var mapLayout = {
+			autosize: true,
+			hovermode:'closest',
+			mapbox: {
+				bearing:0,
+				center: {
+	    			lat:lat_vals[0],
+	    			lon:lon_vals[0]
+				},
+				pitch:0,
+				zoom:19
 			},
-			pitch:0,
-			zoom:19
-		},
-		margin: {
-			l: 0,
-			r: 0,
-			b: 0,
-			t: 0
-		}
-	};
+			margin: {
+				l: 0,
+				r: 0,
+				b: 0,
+				t: 0
+			}
+		};
 
-	Plotly.setPlotConfig({
-		mapboxAccessToken: "pk.eyJ1Ijoic3Jhdml0MSIsImEiOiJja2JzY3NpcHgwMGJnMnZzYTY5ZWsyeDR6In0.CIOWohypCmf_oCzed32xRA"
-	})
+		lat_valsCURR = lat_vals;
+		lon_valsCURR = lon_vals;
+	}
 
-	if (first) {
+
+	if (!unchanged3D)
+		realtimePlotFunction('plotDiv', scatterData, scatterLayout);
+	if (!unchangedMap)
+		realtimePlotFunction('mapDiv', mapData, mapLayout)
+	if (realtimePlotFunction != Plotly.react) {
+		realtimePlotFunction = Plotly.react;
+	}
+	/*
+	if (firstRealtimeRender) {
 		Plotly.newPlot('plotDiv', scatterData, scatterLayout);
 		Plotly.newPlot('mapDiv', mapData, mapLayout);
-		first = false;
+		firstRealtimeRender = false;
 	} else {
 		Plotly.react('plotDiv', scatterData, scatterLayout);
 		Plotly.react('mapDiv', mapData, mapLayout);
 	}
+	*/
 }
 
 /*

@@ -216,14 +216,8 @@ function submitAddSite() {
 //STARTUP SCRIPT
 function startupScript() {
     setInterval(function(){
-        var realtimeActive = $('.active.tab-pane').attr('realTime');
-        var aggregateActive = $('.active.tab-pane').attr('aggregate');
-        if (realtimeActive) {
             updateRealtime();
-        }
-        if (aggregateActive) {
             updateAggregate();
-        }
     }, 1000);
 }
 

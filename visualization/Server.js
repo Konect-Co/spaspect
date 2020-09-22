@@ -1,4 +1,6 @@
 var fs = require("fs");
+var path = require("path");
+
 var express = require("express");
 var app = express();
 var admin = require('firebase-admin');
@@ -19,6 +21,8 @@ const dbUsers = db.collection('users');
 const dbDashboards = db.collection('dashboards');
 const dbAggregate = db.collection('aggregate');
 const dbRealtime = db.collection('realtime');
+
+const firebaseFilesDir = path.join(path.dirname(__dirname), "firebaseFiles");
 
 // Utils Functions
 
@@ -113,12 +117,15 @@ app.post('/dashboards', function(req, res) {
         admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
             //reading uid of current user
             let uid = decodedToken.uid;
+            var fileName = path.join(firebaseFilesDir, "users", uid) + ".json";
 
             //reading user doc from Firebase
-            dbUsers.doc(uid).get().then((doc) => {
+            //dbUsers.doc(uid).get().then((doc) => {
+            fs.readFile(fileName, 'utf8', (err, data) => {
                 //if doc exists, return the accessible environments
-                if (doc.exists) {
-                    var userData = doc.data();
+                if (!err) {
+                    //var userData = doc.data();
+                    var userData = JSON.parse(data);
                     var accessibleEnvironments = userData["accessibleEnvironments"];
 
                     res.writeHead(200);
@@ -157,6 +164,12 @@ app.post('/realtimeData', function(req, res) {
         var idToken = bodyJSON["idtoken"];
         var dashboardId = bodyJSON["dashboardId"];
 
+        if (!idToken) {
+            res.writeHead(400);
+            res.end();
+            return;
+        }
+
         //verfiying given idToken first
         admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
             //reading uid of current user
@@ -164,11 +177,13 @@ app.post('/realtimeData', function(req, res) {
 
             //TODO: Check whether specified user is allowed to access
 
+            var fileName = path.join(firebaseFilesDir, "realtime", dashboardId) + ".json";
+
             //reading user doc from Firebase
-            dbRealtime.doc(dashboardId).get().then((doc) => {
+            fs.readFile(fileName, 'utf8', (err, data) => {
                 //if doc exists, return the accessible environments
-                if (doc.exists) {
-                    var userData = doc.data();
+                if (!err) {
+                    var userData = JSON.parse(data);
 
                     res.writeHead(200);
                     res.write(JSON.stringify(userData));
@@ -202,15 +217,16 @@ app.post('/aggregateData', function(req, res) {
             //reading uid of current user
             let uid = decodedToken.uid;
 
+            var fileName = path.join(firebaseFilesDir, "users", uid) + ".json";
+
             //reading user doc from Firebase
-            dbUsers.doc(uid).get().then((doc) => {
+            fs.readFile(fileName, 'utf8', (err, data) => {
                 //if doc exists, return the accessible environments
-                if (doc.exists) {
-                    var userData = doc.data();
+                if (!err) {
+                    var userData = JSON.parse(data);
                     var accessibleEnvironments = Object.keys(userData["accessibleEnvironments"]);
 
                     var aggData = {"availableDashboards":userData["accessibleEnvironments"]};
-
 
                     var callbackComplete = {};
                     for (var i = 0; i < accessibleEnvironments.length; i++) {
@@ -218,9 +234,10 @@ app.post('/aggregateData', function(req, res) {
                     }
 
                     accessibleEnvironments.forEach(ID => {
-                        dbAggregate.doc(ID).get().then((aggDoc) => {
-                            if(aggDoc.exists){
-                                var aggDocData = aggDoc.data();
+                        var aggFileName = path.join(firebaseFilesDir, "aggregate", ID) + ".json";
+                        fs.readFile(aggFileName, 'utf8', (err, aggFileData) => {
+                            if(!err){
+                                var aggDocData = JSON.parse(aggFileData);
                                 aggData[ID] = aggDocData;
                             }
                             callbackComplete[ID] = true;
@@ -251,110 +268,6 @@ app.post('/aggregateData', function(req, res) {
                 }
             });
         });
-    });
-});
-
-//TODO: Replace following function with two post request implementations above
-//POST request to get info about a particular dashboard for the current user
-app.post('/environment', function(req, res) {
-    //declaring function that sends response to who sent request
-    function sendResponse(response, dashboard, lastUpdate) {
-        response["authorized"] = true;
-        console.log("Request for dashboard with id", dashboard);
-        var dashboardPromise = dbDashboards.doc(dashboard).get();
-        dashboardPromise.catch(() => {
-            console.log("Error in obtaining dashboard doc");
-        });
-        dashboardPromise.then((doc) => {
-            if (doc.exists) {
-                var docTime = doc._updateTime._seconds + doc._updateTime._nanoseconds * 1e-9;
-                response["currentTime"] = docTime;
-
-                if (docTime > lastUpdate) {
-                    response["toDate"] = false;
-                    response["dashboard"] = doc.data();
-                } else {
-                    response["toDate"] = true;
-                    console.log("Request unupdated for dashboard with id", dashboard);
-                }
-                res.write(JSON.stringify(response));
-                res.end();
-            } else {
-                response["authorized"] = false;
-                res.writeHead(404);
-                res.write(JSON.stringify(response));
-                res.end();
-            }
-        });
-    }
-
-    //Taking in the body of the request
-    var body = "";
-    req.on('data', function(chunk) {
-        body += chunk;
-    });
-    req.on('end', function() {
-        //getting variable arguments from POST request
-        bodyJSON = JSON.parse(body);
-        var idToken = bodyJSON["idtoken"];
-        var dashboard = bodyJSON["dashboard"];
-        var lastUpdate = bodyJSON["lastUpdate"];
-
-        //response that will be sent back from request
-        var response = { "authorized": false, "toDate": false, "currentTime": null, "dashboard": null };
-
-        /*if there is no user, check whether the requested dashboard is a demo dashboard. If it is,
-        then it can be sent back*/
-        if (idToken==null) {
-            isDemoDashboard(dashboard, ()=>{
-                sendResponse(response, dashboard, lastUpdate);
-            });
-            return;
-        }
-
-        /*if there is in fact a specified idToken, we first verify the user 
-        and check whether the requested dashboard is accessible*/ 
-        admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
-            //getting idToken from current user
-            let uid = decodedToken.uid;
-            //getting doc associated with the user
-            var docPromise = dbUsers.doc(uid).get();
-            docPromise.then((doc) => {
-                //getting userData from firebase if it exists or else initializing the user's doc
-                var userData;
-                if (doc.exists) {
-                    userData = doc.data();
-                } else {
-                    console.log("Initializing account of id", uid);
-                    dbUsers.doc(uid).set(userData);
-                    userData = JSON.parse(fs.readFileSync("./demoEnvs.json"));
-                }
-
-                //getting accessible environments for the particular user
-                var accessibleEnvironments = userData["accessibleEnvironments"];
-
-                //establishing whether the user is authorized to view the 
-                var authorized = false;
-                Object.keys(accessibleEnvironments).forEach(function(key) {
-                    if (dashboard == key) {
-                        authorized = true;
-                        //TODO: How can we break out of this?
-                    }
-                });
-
-                if (authorized) {
-                    //if the user is authorized, send response containing the dashboard
-                    sendResponse(response, dashboard, lastUpdate);
-                } else {
-                    //send response that post request is not authorized
-                    response["authorized"] = false;
-                    console.log("Dashboard", dashboard, "NOT AUTHORIZED for user", uid);
-                    res.writeHead(403);
-                    res.write(JSON.stringify(response));
-                    res.end();
-                }
-            });
-        }).catch(function(error) {});
     });
 });
 

@@ -205,25 +205,24 @@
                     <div class="card-header">
                         <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                              <a class="nav-link active" id="realTime-tab" data-toggle="tab" href="#realTime" role="tab" aria-controls="realtime" aria-selected="true">Real Time Analysis</a>
+                              <a class="nav-link active" id="realTime-tab" data-toggle="tab" href="#realTime" role="tab" aria-controls="realTime" aria-selected="true">Real Time Analysis</a>
                               <a class="nav-link" id="aggregate-tab" data-toggle="tab" href="#aggregate" role="tab" aria-controls="aggregate" aria-selected="false">Aggregate Analysis</a>
                             </div>
                           </nav>
                     </div>
-                    <!--Real time pannel -->
                     <div class="card-body">
                         <div class="tab-content" id="nav-tabContent">
+                            <!--Real time pannel -->
                             <div class="tab-pane fade show active" id="realTime" role="tabpanel" aria-labelledby="realTime-tab">
-                                <div class="row no-gutters ">
-                                    <div class="col-sm-6 border border-primary border-3 p-2 col-md-offset-2 embed-responsive embed-responsive-4by3" id="videoDiv">
-                                        <video id="video" class="video-js embed-responsive-item" data-setup=' { "fluid ": true} ' aria-label="live-cam" controls>
-                                            <source id="video-src" src="https://590804fbbbc47.streamlock.net:444/westland/westland.stream/playlist.m3u8">
-                                        </video>
+                                <div class="row no-gutters">
+                                    <div class="col ml-2 mr-2 mt-2 mb-2 embed-responsive embed-responsive-4by3 bg-light" id="videoDiv">
+                                        <video id="video" class="video-js embed-responsive-item" data-setup=' { "fluid ": true} ' aria-label="live-cam" controls></video>
                                     </div>
-                                    <div class="col-sm-6 border border-primary border-3 no-gutters" id="plotDiv"></div>
-                                    
-                                    <div class="col-sm-6 border border-primary border-3 no-gutters" id="mapDiv"></div>
-                                    <div class="col-sm-6 border border-primary border-3 order-last no-gutters" id="statsDiv">
+                                    <div class="col-sm-6 ml-2 mr-2 mt-2 mb-2 bg-light" id="plotDiv"></div>
+                                </div>
+                                <div class="row no-gutters">
+                                    <div class="col ml-2 mr-2 mt-2 mb-2 bg-light" id="mapDiv"></div>
+                                    <div class="col-sm-6 ml-2 mr-2 mt-2 mb-2 bg-light" id="statsDiv">
                                         <div id="stats-header">
                                             <h2><b style="color:#429a50">Statistics</b></h2>
                                         </div>
