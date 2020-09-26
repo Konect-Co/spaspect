@@ -180,8 +180,8 @@
 
         <!-- Page Content  -->
         <div id="content">
-            <div class="container-fluid" >
-                <nav class="navbar navbar-expand-lg navbar-light" id="topNav">                    
+            <div class="container-fluid " >
+                <nav class="navbar navbar-expand-lg navbar-light navbar-sticky-top" id="topNav">                    
                         <ul class="navbar-nav col-md-2 col-lg-1">
                             <li>
                                 <button type="button" style= "background:#7386D5" id="sidebarCollapse" class="btn btn-outline-light">
@@ -222,22 +222,59 @@
                                 </div>
                                 <div class="row no-gutters">
                                     <div class="col ml-2 mr-2 mt-2 mb-2 bg-light" id="mapDiv"></div>
-                                    <div class="col-sm-6 ml-2 mr-2 mt-2 mb-2 bg-light" id="statsDiv">
-                                        <div class="jumbotron">
-                                            <div class="card" style="width: 50%;">
-                                                <div class="card-header" id="stats-header">
-                                                    <h2 class="card-title">Statistics</h2>
+                                    
+                                    <div class="col-sm-6 ml-2 mr-2 mt-2 mb-2 bg-light">
+
+                                        <div class="container" id="statsDiv">
+
+                                            <div class="jumbotron-fluid">
+                                                <div class="row">
+                                                    <div class="col text-center pt-5">
+                                                        <h2 class="display-4">Statistics</h2>
+                                                        <hr class="my-4">                                                    
+                                                    </div>
                                                 </div>
-                                                <div class="card-body" id="stats">
-                                                    <h5>Total count:  <span id="statsTotal"></span></h5>
-                                                    <h5>Undistanced count:  <span id="statsUndistanced"></span></h5>
-                                                    <h5>Unmasked count:  <span id="statsUnmasked"></span></h5>
+
+                                                
+    
+                                                <div class="row justify-content-around" id="statsCards">
+                                                    
+                                                    <div class="row">
+                                                        <div class="col ">
+                                                            <div class="counter">
+                                                                <h5>Total count:  <span id="statsTotal"></span></h5>                                                            
+                                                            </div>
+                                                        </div>
+                                                    </div>
+        
+                                                    <div class="row">
+                                                        <div class="col-md-auto">
+                                                            <div class="counter">
+                                                                <h5>Undistanced count: <span id="statsUndistanced"></span></h5>                                                            
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <div class="counter">                            
+                                                                <h5>Unmasked count:                                                                     
+                                                                    <span id="statsUnmasked"></span>
+                                                                </h5>                                                            
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
                                                 </div>
                                             </div>
+
+
                                         </div>
+                                            
                                     </div>
                                 </div>
                             </div>
+
                             <!--Aggregate Pannel-->
                             <div class="tab-pane fade" id="aggregate" role="tabpanel" aria-labelledby="aggregate-tab">
                                 <div class="row justify-content-center">
@@ -256,7 +293,7 @@
                                         <div class="jumbotron">
                                             <h2 class="display-5">Enforcement Status</h2>
                                             <hr class="my-4">
-                                            <a class="btn btn-outline-info btn-sm" id="detailsButton" role="button">
+                                            <a class="btn btn-info btn-sm" id="detailsButton" role="button">
                                                 View Details
                                             </a>
                                         </div>
