@@ -1,14 +1,10 @@
-import numpy as np
 import math
-import os
 import json
 
 import cv_model.utils as cv_utils
 import TrackedObject
 
-#TODO: Place these utils functions into a new file
 ###UTILS FUNCTIONS START###
-
 
 """
 Finds all realtime coordinates

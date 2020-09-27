@@ -7,16 +7,18 @@
 #     |_|            |_|               
 
 
-import sys
+from cv_model import pred
+
 from utilScripts import readDashboard
 from utilScripts import obtainStreamLink
-import cv2
-import RealTime
-import Aggregate
-import PixelMapper
-import os
+from utilScripts import RealTime
+from utilScripts import Aggregate
+from utilScripts import PixelMapper
 
-from cv_model import pred
+import sys
+import cv2
+import os
+import time
 
 #file where realtime and aggregate will be
 fbFilesDir = os.path.join(os.path.dirname(os.getcwd()), "firebaseFiles")
@@ -41,6 +43,7 @@ def main(dashboardID):
 
 	lat = calibration["lat_vals"]
 	lon = calibration["lon_vals"]
+
 	#getting longitude and latitude coordinates from lat and lon
 	lonlat_array = [[lat[i], lon[i]] for i in range(len(lat))]
 	
@@ -49,9 +52,9 @@ def main(dashboardID):
 
 	# Obtaining streamLink (statically or dynamically) from calibration
 	# either "streamLink" or "streamWebpage" should be present in calibration
-
 	streamLinkStatic = calibration["static"]
 	streamLink = None
+	
 	#getting streamlink from calibration json file
 	#sets the value of streamLinkStatic
 	if ("streamLink" in calibration.keys()):
@@ -61,20 +64,24 @@ def main(dashboardID):
 		assert "streamWebpage" in calibration.keys()
 
 	# For debug purposes
-	static = True
-	streamLink = "../sampleVideos/TimesSquare.mp4"
+	streamLinkStatic = True
+	streamLink = "https://video2archives.earthcam.com/archives/_definst_/MP4:network/9974/2020/09/22/1500.mp4/playlist.m3u8"
+	
 
 	# Opening the videoCApture object
 	cap = cv2.VideoCapture()
 
 	frame_index = 0
 
+	startTime = time.time()
+
+	fps = 50
 	while True:
-		print("FRAME", frame_index, "##############")
-		
+		frame_index += 1
+
 		# TODO: Refreshing every second may not be the best approach
 		# if the streamLink is not static, then it's necessary to continuously refresh
-		if (streamLinkStatic and frame_index == 0):
+		if (streamLinkStatic and frame_index == 1):
 			cap.open(streamLink)
 		if (not streamLinkStatic):
 			streamLink = obtainStreamLink.get(calibration["streamWebpage"])
@@ -85,6 +92,11 @@ def main(dashboardID):
 			print("END")
 			break
 
+		if (frame_index%(fps*1) != 0):
+			continue
+
+		print("FRAME", frame_index, "##############")
+
 		# generating prediction from image
 		output = pred.predict(image)
 
@@ -93,7 +105,9 @@ def main(dashboardID):
 		realData = RealTime.genRealData(pm, output, streamLink, os.path.join(fbFilesDir, "realtime") + os.path.sep + dashboardID + ".json")
 		#aggData = Aggregate.genAggData(realData, os.path.join(fbFilesDir, "aggregate") + os.path.sep + dashboardID+ ".json")
 
-		frame_index += 1
+		delayTime = (frame_index*1.0/fps)-(time.time()-startTime)
+		if (delayTime>0):
+			time.sleep(delayTime)
 
 	return 0
 
