@@ -212,6 +212,12 @@ app.post('/aggregateData', function(req, res) {
             res.end();
         var idToken = bodyJSON["idtoken"];
 
+        //TODO: Currently, aggregate only works for signed in user
+        if (!idToken) {
+            res.writeHead(400);
+            res.end();
+            return;
+        }
         //verfiying given idToken first
         admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
             //reading uid of current user
@@ -262,7 +268,6 @@ app.post('/aggregateData', function(req, res) {
                 }
                 //otherwise, read from demoEnvs.json and return demo dashboards
                 else {
-                    console.log("user doesn't exist");
                     res.writeHead(400);
                     res.end();
                 }
