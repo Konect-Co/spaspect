@@ -62,7 +62,6 @@ def main(dashboardID):
 
 	# For debug purposes
 	static = True
-	streamLink = "../sampleVideos/TimesSquare.mp4"
 
 	# Opening the videoCApture object
 	cap = cv2.VideoCapture()
