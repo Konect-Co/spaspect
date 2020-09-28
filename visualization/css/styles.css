@@ -1,12 +1,27 @@
+/*Stats div cards*/
+.counter{
+    background-color:#dfdee7;
+    padding: 30px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+
+
+
 /*TODO: FIND PROPER PLACEMENT*/
 #plotAggregate {
     height: auto;
     width: 400px;
 }
 
-#mapDiv #statsDiv {
+#mapDiv{
     height: 100%;
-    
+}
+
+#statsCards {
+    padding-top: 10%;
+
 }
 
 #detailsButton {

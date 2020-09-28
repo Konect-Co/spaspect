@@ -93,6 +93,83 @@
             </div>
         </div>
     </div>
+
+
+
+    <!--Custom Plot Modal-->
+    <div class="modal fade" id="customPlotModal" tabindex="-1" role="dialog" aria-labelledby="customPlotModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="customPlotModalTitle">Add Custom Plot</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">                    
+                    <form>
+                        <!--LOCATION-->
+                        <div class="form-row">
+                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Location</label>
+                            <select class="custom-select my-1 mr-sm-2" id="selectLocation">
+                                <option value="86176f90-d02c-4a5b-94f7-c6baf24d2f7f">Demo: Venice Beach</option>
+                                <option value="d3c4fd41-8892-453b-bc00-64d1f494284b">Demo: Greece</option>
+                            </select>
+                        </div>
+                        <!--TIME-->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="my-1 mr-2" for="startTime">Start Time</label>
+                                <input type="time" class="form-control mr-1" id="startTime">
+                            </div>
+                            <div class="form-group">
+                                <label class="my-1 mr-2" for="endTime">End Time</label>
+                                <input type="time" class="form-control" id="EndTime">
+                            </div>                          
+                        </div>
+                        <!--METRICS-->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="my-1 mr-2"><h5>Metrics</h5></label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                    <label class="form-check-label my-1 mr-2">Masked</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                    <label class="form-check-label my-1 mr-2">Unmasked</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                    <label class="form-check-label my-1 mr-2">Undistanced</label>
+                                </div>
+                            </div>                          
+                        </div>
+
+
+
+ 
+                                              
+                
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" id="customPlotButton"> Add Custom Plot</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
     
     <!--Signup Modal-->
     <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModalTitle" aria-hidden="true">
@@ -180,8 +257,8 @@
 
         <!-- Page Content  -->
         <div id="content">
-            <div class="container-fluid" >
-                <nav class="navbar navbar-expand-lg navbar-light" id="topNav">                    
+            <div class="container-fluid " >
+                <nav class="navbar navbar-expand-lg navbar-light navbar-sticky-top" id="topNav">                    
                         <ul class="navbar-nav col-md-2 col-lg-1">
                             <li>
                                 <button type="button" style= "background:#7386D5" id="sidebarCollapse" class="btn btn-outline-light">
@@ -222,22 +299,59 @@
                                 </div>
                                 <div class="row no-gutters">
                                     <div class="col ml-2 mr-2 mt-2 mb-2 bg-light" id="mapDiv"></div>
-                                    <div class="col-sm-6 ml-2 mr-2 mt-2 mb-2 bg-light" id="statsDiv">
-                                        <div class="jumbotron">
-                                            <div class="card" style="width: 50%;">
-                                                <div class="card-header" id="stats-header">
-                                                    <h2 class="card-title">Statistics</h2>
+                                    
+                                    <div class="col-sm-6 ml-2 mr-2 mt-2 mb-2 bg-light">
+
+                                        <div class="container" id="statsDiv">
+
+                                            <div class="jumbotron-fluid">
+                                                <div class="row">
+                                                    <div class="col text-center pt-5">
+                                                        <h2 class="display-4">Statistics</h2>
+                                                        <hr class="my-4">                                                    
+                                                    </div>
                                                 </div>
-                                                <div class="card-body" id="stats">
-                                                    <h5>Total count:  <span id="statsTotal"></span></h5>
-                                                    <h5>Undistanced count:  <span id="statsUndistanced"></span></h5>
-                                                    <h5>Unmasked count:  <span id="statsUnmasked"></span></h5>
+
+                                                
+    
+                                                <div class="row justify-content-around" id="statsCards">
+                                                    
+                                                    <div class="row">
+                                                        <div class="col ">
+                                                            <div class="counter">
+                                                                <h5>Total count:  <span id="statsTotal"></span></h5>                                                            
+                                                            </div>
+                                                        </div>
+                                                    </div>
+        
+                                                    <div class="row">
+                                                        <div class="col-md-auto">
+                                                            <div class="counter">
+                                                                <h5>Undistanced count: <span id="statsUndistanced"></span></h5>                                                            
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <div class="counter">                            
+                                                                <h5>Unmasked count:                                                                     
+                                                                    <span id="statsUnmasked"></span>
+                                                                </h5>                                                            
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
                                                 </div>
                                             </div>
+
+
                                         </div>
+                                            
                                     </div>
                                 </div>
                             </div>
+
                             <!--Aggregate Pannel-->
                             <div class="tab-pane fade" id="aggregate" role="tabpanel" aria-labelledby="aggregate-tab">
                                 <div class="row justify-content-center">
@@ -247,7 +361,7 @@
                                 </div>
                                 <div class="row justify-content-center">
                                     <div class="col-3" id="custom">
-                                        <button class="btn btn-sq-lg">
+                                        <button class="btn btn-sq-lg" type="button" data-toggle="modal" data-target="#customPlotModal">
                                             <span class="fa fa-5x fa-plus"></span>
                                             <h2>Add Custom Display</h2>
                                         </button>
@@ -256,7 +370,7 @@
                                         <div class="jumbotron">
                                             <h2 class="display-5">Enforcement Status</h2>
                                             <hr class="my-4">
-                                            <a class="btn btn-outline-info btn-sm" id="detailsButton" role="button">
+                                            <a class="btn btn-info btn-sm" id="detailsButton" role="button">
                                                 View Details
                                             </a>
                                         </div>
