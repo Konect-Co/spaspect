@@ -2,7 +2,7 @@ import math
 import json
 
 import cv_model.utils as cv_utils
-import TrackedObject
+from utilScripts import TrackedObject
 
 ###UTILS FUNCTIONS START###
 
@@ -132,7 +132,7 @@ Combines all the functions above to generate all realtime analytics within this 
 @params pm, CVOutput, filename(json file where all realtime analytics will be placed), distance_threshold, score_threshold
 @return all realtime analytics
 """
-def genRealData(pm, CVOutput, streamLink, filename, distance_threshold=2):
+def genRealData(pm, CVOutput, streamLink, filename, distance_threshold=2, write=True):
 	# starting point for realtime data
 	realData = genCoordinates(pm, CVOutput)
 
@@ -147,7 +147,8 @@ def genRealData(pm, CVOutput, streamLink, filename, distance_threshold=2):
 	tracked = genTrackingData(realData, masked, distanced)
 	realData["tracked"] = tracked
 
-	#TODO: Add data on tracked individuals as well
-	with open(filename, 'w') as f:
-		json.dump(realData, f, indent=4)
+	if (write):
+		#TODO: Add data on tracked individuals as well
+		with open(filename, 'w') as f:
+			json.dump(realData, f, indent=4)
 	return realData
