@@ -64,6 +64,7 @@ def main(dashboardID):
 		assert "streamWebpage" in calibration.keys()
 
 	# For debug purposes
+
 	streamLinkStatic = True
 	streamLink = "https://video2archives.earthcam.com/archives/_definst_/MP4:network/9974/2020/09/22/1500.mp4/playlist.m3u8"
 	
