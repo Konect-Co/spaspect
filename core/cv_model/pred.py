@@ -51,7 +51,7 @@ def predict(input_image_orig):
 		_class = odResults["detection_classes"][i]
 		box = odResults["detection_boxes"][i]
 
-		if (score < 0.2):
+		if (score < 0.05):
 			break
 		if (not _class == "person"):
 			continue
