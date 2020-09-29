@@ -1,5 +1,98 @@
 var first = true;
 
+function renderCustomPlot(plotDivID, aggData, options) {
+	// data for all hours separately
+	var totalVisitorCount = {};
+	var totalUnmaskedCount = {};
+	var totalUndistancedCount = {};
+	var totalViolationsCount = {};
+
+	var hours = Object.keys(aggData).sort().reverse();
+	var currHour = hours[0];
+
+	hours.forEach(hour => {
+		var hourData = aggData[hour];
+
+		var visitors = hourData["visitorCount"];
+		var unmasked = hourData["unmaskedCount"];
+		var undistanced = hourData["undistancedCount"];
+		var violations = hourData["violationsCount"];
+
+		//Initialize the total counts if not done so already
+		if (!Object.keys(totalVisitorCount).includes(hour)) {
+			totalVisitorCount[hour] = 0;
+			totalUnmaskedCount[hour] = 0;
+			totalUndistancedCount[hour] = 0;
+			totalViolationsCount[hour] = 0;
+		}
+
+		//Add counts to the data structure
+		totalVisitorCount[hour] += visitors;
+		totalUnmaskedCount[hour] += unmasked;
+		totalUndistancedCount[hour] += undistanced;
+		totalViolationsCount[hour] += violations;
+	});
+
+
+	//=========================
+	//PEOPLE VS TIME LINE GRAPH
+	//=========================
+	var linegraph_data = [];
+
+	var ppl_time_trace = {
+  		x: Object.keys(totalVisitorCount),
+  		y: Object.values(totalVisitorCount),
+  		type: "line",
+  		name: "people"
+	};
+	linegraph_data.push(ppl_time_trace);
+
+	if (options["undistanced-option"] == true) {
+	
+		var undistanced_time_trace = {
+			x: Object.keys(totalUndistancedCount),
+			y: Object.values(totalUndistancedCount),
+			type: "line",
+			name: "undistanced"
+		};
+		linegraph_data.push(undistanced_time_trace);
+	}
+
+	if (options["unmasked-option"] == true) {
+		var unmasked_time_trace = {
+			x: Object.keys(totalUnmaskedCount),
+			y: Object.values(totalUnmaskedCount),
+			type: "line",
+			name: "unmasked"
+		};
+		linegraph_data.push(unmasked_time_trace);
+	}
+
+	if (options["violations-option"] == true) {
+		var violations_time_trace = {
+			x: Object.keys(totalViolationsCount),
+			y: Object.values(totalViolationsCount),
+			type: "line",
+			name: "violations"
+		};
+		linegraph_data.push(violations_time_trace);
+	}
+
+	var ppl_time_layout = { 
+		title: '<b>Analytics vs time</b>',
+		font: {size: 12},
+		plot_bgcolor:"#FDFDFD",
+		paper_bgcolor:"#F0F0F0",
+		xaxis: {
+			title: {text: 'time (hour)'}
+		},
+		yaxis: {
+			title: {text: 'analytics'}
+		}
+	};
+	Plotly.newPlot(plotDivID, linegraph_data, ppl_time_layout, {responsive: true});
+}
+
 function renderAgg(data){
 	//data for current hour, all locations separately
 	var dashboardNames = [];

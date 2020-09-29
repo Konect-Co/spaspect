@@ -97,20 +97,23 @@ function initializeDashboard() {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         var accessibleEnvironments = JSON.parse(xhr.responseText);
-        var sel = document.getElementById('dashboard-select');
+        var ids = ["dashboard-select", "selectLocation"];
+        ids.forEach(id => {
+            var sel = document.getElementById(id);
 
-        //first clearing the child nodes
-        while (sel.hasChildNodes())
-            sel.removeChild(sel.firstChild);
+            //first clearing the child nodes
+            while (sel.hasChildNodes())
+                sel.removeChild(sel.firstChild);
 
-        Object.keys(accessibleEnvironments).forEach(function(key) {
-            //TODO: use name specified in dashboard configuration rather than the one in accessibleEnvironments
-            var txt = accessibleEnvironments[key];
-            var opt = document.createElement('option');
-            opt.appendChild(document.createTextNode(txt));
-            opt.value = key;
+            Object.keys(accessibleEnvironments).forEach(function(key) {
+                //TODO: use name specified in dashboard configuration rather than the one in accessibleEnvironments
+                var txt = accessibleEnvironments[key];
+                var opt = document.createElement('option');
+                opt.appendChild(document.createTextNode(txt));
+                opt.value = key;
 
-            sel.appendChild(opt);
+                sel.appendChild(opt);
+            });
         });
     }
     xhr.open("POST", "/dashboards", true);
@@ -183,7 +186,7 @@ function updateAggregate(forceUpdate = false) {
         var dashboardID = selectObj.options[selectObj.selectedIndex].value;
         //console.log("Currently selected dashboard", dashboardID);
         updateAggregateArgs(dashboardID);
-    }   
+    }
 }
 
 firebase.auth().onAuthStateChanged(function(user) {
@@ -204,16 +207,26 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 function getCustomDisplay() {
-    var formElements = ["startTime", "endTime", "masked-option", "unmasked-option", "undistanced-option", "selectLocation"];
+    var formElements = ["startTime", "endTime", "violations-option", "unmasked-option", "undistanced-option", "selectLocation"];
     var data = {};
     formElements.forEach(element => {
-        data[element] = document.getElementById(element).value;
+        if (element == "violations-option" || element == "unmasked-option" || element == "undistanced-option") {
+            data[element] = document.getElementById(element).checked;
+        } else {
+            data[element] = document.getElementById(element).value;
+        }
     });
 
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        //var response = JSON.parse(xhr.responseText);
-        console.log("Custom display response text", xhr.responseText);
+        var aggData = JSON.parse(xhr.responseText);
+        var plotID = Date.now().toString(10);
+
+        var newDiv = document.createElement("div");
+        newDiv.id = plotID;
+        document.getElementById("aggPlots1").appendChild(newDiv);
+
+        renderCustomPlot(plotID, aggData, data);
         //TODO: Use this data to make the custom plot
     }
     xhr.open("POST", "/customAggregate", true);

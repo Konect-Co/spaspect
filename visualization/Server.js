@@ -286,11 +286,10 @@ app.post('/customAggregate', function(req, res) {
         var startTime = aggregateForm["startTime"];
         var endTime = aggregateForm["endTime"];
         var dashboard = aggregateForm["dashboard"];
-        var displayMasked = aggregateForm["masked-option"];
         var dashboardID = aggregateForm["selectLocation"];
 
         //Reading the dashboard data
-        var fileName = path.join(firebaseFilesDir, "dashboards", dashboardID) + ".json";
+        var fileName = path.join(firebaseFilesDir, "aggregate", dashboardID) + ".json";
         fs.readFile(fileName, 'utf8', (err, data) => {
             if (!err) {
                 //TODO: Prune data for between startTime and endTime
