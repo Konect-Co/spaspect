@@ -204,13 +204,20 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 function getCustomDisplay() {
+    var formElements = ["startTime", "endTime", "masked-option", "unmasked-option", "undistanced-option", "selectLocation"];
+    var data = {};
+    formElements.forEach(element => {
+        data[element] = document.getElementById(element).value;
+    });
+
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         //var response = JSON.parse(xhr.responseText);
-        console.log("Custom display response text");
+        console.log("Custom display response text", xhr.responseText);
+        //TODO: Use this data to make the custom plot
     }
     xhr.open("POST", "/customAggregate", true);
-    xhr.send();
+    xhr.send(JSON.stringify(data));
 }
 
 //TODO: We should delete this soon, as it's not providing much value

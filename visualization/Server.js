@@ -277,30 +277,30 @@ app.post('/aggregateData', function(req, res) {
 });
 
 app.post('/customAggregate', function(req, res) {
-    var response = {"success":false, "error":null};
-
-    var form = new formidable.IncomingForm();
-    form.parse(req);
-
-    var formData = {};
-
-    form.on("error", (err) => {
-        res.writeHead(400);
-        response["error"] = err;
-        res.write(JSON.stringify(response));
-        res.end();
-        console.log("Error in receiving newSite form", err);
-        return;
+    var body = "";
+    req.on('data', function(chunk) {
+        body += chunk;
     });
+    req.on('end', function() {
+        var aggregateForm  = JSON.parse(body);
+        var startTime = aggregateForm["startTime"];
+        var endTime = aggregateForm["endTime"];
+        var dashboard = aggregateForm["dashboard"];
+        var displayMasked = aggregateForm["masked-option"];
+        var dashboardID = aggregateForm["selectLocation"];
 
-    form.on('field', (fieldName, fieldValue) => {
-        formData[fieldName] = fieldValue;
-    });
-
-    form.on('end', function (name, file) {
-        console.log("FORM DATA", formData);
-        res.write("");
-        res.end();
+        //Reading the dashboard data
+        var fileName = path.join(firebaseFilesDir, "dashboards", dashboardID) + ".json";
+        fs.readFile(fileName, 'utf8', (err, data) => {
+            if (!err) {
+                //TODO: Prune data for between startTime and endTime
+                res.writeHead(200);
+                res.write(data);
+            } else {
+                res.writeHead(400);
+            }
+            res.end();
+        });
     });
 });
 
