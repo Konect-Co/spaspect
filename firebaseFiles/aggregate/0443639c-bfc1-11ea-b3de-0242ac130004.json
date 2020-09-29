@@ -24,12 +24,19 @@
     "3": {
         "currTracked": [
             "0.5",
-            "0.4"
+            "0.4",
+            "0.715433504558889",
+            "0.13344684524784456",
+            "0.9782486262610183",
+            "0.21515791557359376",
+            "0.5412960103594359",
+            "0.21437905152195313"
         ],
-        "visitorCount": 5,
-        "undistancedCount": 4,
-        "violationsCount": 3,
+        "visitorCount": 11,
+        "undistancedCount": 10,
+        "violationsCount": 9,
         "unmaskedCount": 2,
-        "averageDistance": 4
+        "averageDistance": 4,
+        "enforcementStatus": "low"
     }
 }

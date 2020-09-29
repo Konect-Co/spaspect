@@ -65,9 +65,8 @@ def main(dashboardID):
 
 	# For debug purposes
 
-	streamLinkStatic = True
-	streamLink = "https://video2archives.earthcam.com/archives/_definst_/MP4:network/9974/2020/09/22/1500.mp4/playlist.m3u8"
-	
+	#streamLinkStatic = True
+	#streamLink = "https://video2archives.earthcam.com/archives/_definst_/MP4:network/9974/2020/09/22/1500.mp4/playlist.m3u8"
 
 	# Opening the videoCApture object
 	cap = cv2.VideoCapture()
@@ -76,7 +75,9 @@ def main(dashboardID):
 
 	startTime = time.time()
 
-	fps = 50
+	video = False
+	if (video):
+		fps = 50
 	while True:
 		frame_index += 1
 
@@ -90,11 +91,12 @@ def main(dashboardID):
 
 		read, image = cap.read()
 		if (not read):
-			print("END")
-			break
-
-		if (frame_index%(fps*1) != 0):
+			print("Frame", frame_index, "not read.")
 			continue
+
+		if (video):
+			if (frame_index%(fps*1) != 0):
+				continue
 
 		print("FRAME", frame_index, "##############")
 
@@ -104,11 +106,12 @@ def main(dashboardID):
 
 		#generates the realtime and aggregate analytics displayed on spaspect dashboard
 		realData = RealTime.genRealData(pm, output, streamLink, os.path.join(fbFilesDir, "realtime") + os.path.sep + dashboardID + ".json")
-		#aggData = Aggregate.genAggData(realData, os.path.join(fbFilesDir, "aggregate") + os.path.sep + dashboardID+ ".json")
+		aggData = Aggregate.genAggData(realData, os.path.join(fbFilesDir, "aggregate") + os.path.sep + dashboardID + ".json")
 
-		delayTime = (frame_index*1.0/fps)-(time.time()-startTime)
-		if (delayTime>0):
-			time.sleep(delayTime)
+		if (video):
+			delayTime = (frame_index*1.0/fps)-(time.time()-startTime)
+			if (delayTime>0):
+				time.sleep(delayTime)
 
 	return 0
 

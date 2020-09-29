@@ -41,6 +41,18 @@ def genAggData(CVOutput, filename):
 
 			#TODO: Handle currHour["averageDistance"]
 
+	# setting the value of enforcementStatus to reflect proportion of violations
+	enforcementStaus = "high"
+	totalVisitors = currHour["visitorCount"]
+	totalViolations = currHour["violationsCount"]
+	proportion = (totalViolations*1.0)/totalVisitors
+	if (proportion > 0.7):
+		enforcementStaus = "low"
+	elif (proportion > 0.3):
+		enforcementStaus = "medium"
+	currHour["enforcementStatus"] = enforcementStaus
+
+
 	currHour["currTracked"] = currTracked
 
 	# have json write this dictionary to file
