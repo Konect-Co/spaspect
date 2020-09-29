@@ -107,11 +107,11 @@
                     </button>
                 </div>
                 <div class="modal-body">                    
-                    <form>
+                    <form id="customDisplayForm">
                         <!--LOCATION-->
                         <div class="form-row">
                             <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Location</label>
-                            <select class="custom-select my-1 mr-sm-2" id="selectLocation">
+                            <select class="custom-select my-1 mr-sm-2" name="selectLocation" id="selectLocation">
                                 <option value="86176f90-d02c-4a5b-94f7-c6baf24d2f7f">Demo: Venice Beach</option>
                                 <option value="d3c4fd41-8892-453b-bc00-64d1f494284b">Demo: Greece</option>
                             </select>
@@ -120,11 +120,11 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="my-1 mr-2" for="startTime">Start Time</label>
-                                <input type="time" class="form-control mr-1" id="startTime">
+                                <input type="time" class="form-control mr-1" name="startTime" id="startTime">
                             </div>
                             <div class="form-group">
                                 <label class="my-1 mr-2" for="endTime">End Time</label>
-                                <input type="time" class="form-control" id="EndTime">
+                                <input type="time" class="form-control" name="endTime" id="EndTime">
                             </div>                          
                         </div>
                         <!--METRICS-->
@@ -137,27 +137,22 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
+                                    <input class="form-check-input" name="masked-option" type="checkbox">
                                     <label class="form-check-label my-1 mr-2">Masked</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
+                                    <input class="form-check-input" name="unmasked-option" type="checkbox">
                                     <label class="form-check-label my-1 mr-2">Unmasked</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
+                                    <input class="form-check-input" name="undistanced-option" type="checkbox">
                                     <label class="form-check-label my-1 mr-2">Undistanced</label>
                                 </div>
                             </div>                          
-                        </div>
-
-
-
- 
-                                              
+                        </div>      
                 
                         <div class="modal-footer">
-                            <button class="btn btn-primary" id="customPlotButton"> Add Custom Plot</button>
+                            <button class="btn btn-primary" id="customPlotButton" onclick="getCustomDisplay()"> Add Custom Plot</button>
                         </div>
                     </form>
                 </div>

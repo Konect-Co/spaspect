@@ -276,6 +276,34 @@ app.post('/aggregateData', function(req, res) {
     });
 });
 
+app.post('/customAggregate', function(req, res) {
+    var response = {"success":false, "error":null};
+
+    var form = new formidable.IncomingForm();
+    form.parse(req);
+
+    var formData = {};
+
+    form.on("error", (err) => {
+        res.writeHead(400);
+        response["error"] = err;
+        res.write(JSON.stringify(response));
+        res.end();
+        console.log("Error in receiving newSite form", err);
+        return;
+    });
+
+    form.on('field', (fieldName, fieldValue) => {
+        formData[fieldName] = fieldValue;
+    });
+
+    form.on('end', function (name, file) {
+        console.log("FORM DATA", formData);
+        res.write("");
+        res.end();
+    });
+});
+
 /*//POST request to add a new site
 app.post('/newSite', function(req, res) {
 	var response = {"success":false, "error":null};

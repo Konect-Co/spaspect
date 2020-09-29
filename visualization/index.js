@@ -203,6 +203,16 @@ firebase.auth().onAuthStateChanged(function(user) {
     }
 });
 
+function getCustomDisplay() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        //var response = JSON.parse(xhr.responseText);
+        console.log("Custom display response text");
+    }
+    xhr.open("POST", "/customAggregate", true);
+    xhr.send();
+}
+
 //TODO: We should delete this soon, as it's not providing much value
 function submitAddSite() {
     firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
@@ -221,6 +231,6 @@ function startupScript() {
     }, 1000);
 }
 
-startupScript();
+//startupScript();
 
 //TODO: PLACE CORRECTLY
