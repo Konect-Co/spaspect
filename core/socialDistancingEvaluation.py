@@ -12,11 +12,22 @@ import time
 import random
 import math
 
-dashboardID = "0443639c-bfc1-11ea-b3de-0242ac130004"
-
+"""
+location = "Dublin"
+streamWebpage = "https://www.earthcam.com/world/ireland/dublin/?cam=templebar"
+dashboardID = "1ff9e8ae-bfc1-11ea-b3de-0242ac130004"
 # Getting all dashboard data in dictionary format
 dashboardInfo = readDashboard.read(dashboardID)
+#calibration information from firebase files
+calibration = dashboardInfo["calibration"]
+"""
 
+
+location = "Times Square"
+streamWebpage = "https://www.earthcam.com/usa/newyork/timessquare/?cam=tsstreet"
+dashboardID = "0443639c-bfc1-11ea-b3de-0242ac130004"
+# Getting all dashboard data in dictionary format
+dashboardInfo = readDashboard.read(dashboardID)
 #calibration information from firebase files
 calibration = dashboardInfo["calibration"]
 
@@ -34,14 +45,11 @@ lonlat_array = [[lat[i], lon[i]] for i in range(len(lat))]
 # Obtaining pixelMapper object from calibration information
 pm = PixelMapper.PixelMapper(pixel_array, lonlat_array, calibration["lonlat_origin"])
 
-location = "TimesSquare"
-streamWebpage = "https://www.earthcam.com/usa/newyork/timessquare/?cam=tsstreet"
 cap = cv2.VideoCapture()
 
 def getCVOutput(streamLink):
 	cap.open(streamLink)
 	read, image = cap.read()
-	print(read, image)
 	if not read:
 		return None
 	
@@ -88,6 +96,11 @@ with open(os.path.join(os.getcwd(), "csvFiles", location) + ".csv", 'w', newline
 		streamLink = obtainStreamLink.get(streamWebpage)
 		CVOutput = getCVOutput(streamLink)
 
+		if (CVOutput is None):
+			continue		
+
+		print("FRAME", counter, "MINUTE", counter/4)
+
 		real_time = RealTime.genRealData(pm, CVOutput, streamLink, None, write=False)
 
 		num_people = getNumPeople(real_time)
@@ -95,6 +108,7 @@ with open(os.path.join(os.getcwd(), "csvFiles", location) + ".csv", 'w', newline
 
 		writer.writerow([currTime, num_people, average_distance])
 	
+		time.sleep(15-(time.time()-currTime))
 		counter += 1
-		if (counter == 5):
+		if (counter == 4*60):
 			break
