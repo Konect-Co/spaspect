@@ -1,0 +1,33 @@
+{
+    "pixelX_vals": [
+        0,
+        271,
+        342,
+        679
+    ],
+    "pixelY_vals": [
+        606,
+        421,
+        403,
+        675
+    ],
+    "name": "Wrigley Field",
+    "lonlat_origin": [
+        -87.6565,
+        41.9475
+    ],
+    "static": false,
+    "lon_vals": [
+        -87.656489,
+        -87.656879,
+        -87.657307,
+        -87.656354
+    ],
+    "streamWebpage": "https://www.earthcam.com/usa/illinois/chicago/wrigleyfield/?cam=wrigleyfield_hd",
+    "lat_vals": [
+        41.947295,
+        41.947781,
+        41.948529,
+        41.947285
+    ]
+}

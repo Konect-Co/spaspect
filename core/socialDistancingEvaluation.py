@@ -12,38 +12,82 @@ import time
 import random
 import math
 
+locations = []
+
 """
-location = "Dublin"
-streamWebpage = "https://www.earthcam.com/world/ireland/dublin/?cam=templebar"
 dashboardID = "1ff9e8ae-bfc1-11ea-b3de-0242ac130004"
-# Getting all dashboard data in dictionary format
 dashboardInfo = readDashboard.read(dashboardID)
-#calibration information from firebase files
 calibration = dashboardInfo["calibration"]
-"""
-
-
-location = "Times Square"
-streamWebpage = "https://www.earthcam.com/usa/newyork/timessquare/?cam=tsstreet"
-dashboardID = "0443639c-bfc1-11ea-b3de-0242ac130004"
-# Getting all dashboard data in dictionary format
-dashboardInfo = readDashboard.read(dashboardID)
-#calibration information from firebase files
-calibration = dashboardInfo["calibration"]
-
 pixelX = calibration["pixelX_vals"]
 pixelY = calibration["pixelY_vals"]
 #getting pixel coordinates from pixelX and pixelY
 pixel_array = [[pixelX[i], pixelY[i]] for i in range(len(pixelX))]
-
 lat = calibration["lat_vals"]
 lon = calibration["lon_vals"]
-
 #getting longitude and latitude coordinates from lat and lon
 lonlat_array = [[lat[i], lon[i]] for i in range(len(lat))]
-
 # Obtaining pixelMapper object from calibration information
 pm = PixelMapper.PixelMapper(pixel_array, lonlat_array, calibration["lonlat_origin"])
+locations.append({
+"location": calibration["name"],
+"streamWebpage": calibration["streamWebpage"],
+"dashboardID": dashboardID,
+# Getting all dashboard data in dictionary format
+"dashboardInfo": dashboardInfo,
+#calibration information from firebase files
+"calibration": dashboardInfo["calibration"],
+"pm": pm
+})
+
+dashboardID = "0443639c-bfc1-11ea-b3de-0242ac130004"
+dashboardInfo = readDashboard.read(dashboardID)
+calibration = dashboardInfo["calibration"]
+pixelX = calibration["pixelX_vals"]
+pixelY = calibration["pixelY_vals"]
+#getting pixel coordinates from pixelX and pixelY
+pixel_array = [[pixelX[i], pixelY[i]] for i in range(len(pixelX))]
+lat = calibration["lat_vals"]
+lon = calibration["lon_vals"]
+#getting longitude and latitude coordinates from lat and lon
+lonlat_array = [[lat[i], lon[i]] for i in range(len(lat))]
+# Obtaining pixelMapper object from calibration information
+pm = PixelMapper.PixelMapper(pixel_array, lonlat_array, calibration["lonlat_origin"])
+locations.append({
+"location": calibration["name"],
+"streamWebpage": calibration["streamWebpage"],
+"dashboardID": dashboardID,
+# Getting all dashboard data in dictionary format
+"dashboardInfo": dashboardInfo,
+#calibration information from firebase files
+"calibration": dashboardInfo["calibration"],
+"pm": pm
+})
+
+"""
+
+dashboardID = "12853b51-f36b-407f-b08d-cc53b92b0393"
+dashboardInfo = readDashboard.read(dashboardID)
+calibration = dashboardInfo["calibration"]
+pixelX = calibration["pixelX_vals"]
+pixelY = calibration["pixelY_vals"]
+#getting pixel coordinates from pixelX and pixelY
+pixel_array = [[pixelX[i], pixelY[i]] for i in range(len(pixelX))]
+lat = calibration["lat_vals"]
+lon = calibration["lon_vals"]
+#getting longitude and latitude coordinates from lat and lon
+lonlat_array = [[lat[i], lon[i]] for i in range(len(lat))]
+# Obtaining pixelMapper object from calibration information
+pm = PixelMapper.PixelMapper(pixel_array, lonlat_array, calibration["lonlat_origin"])
+locations.append({
+"location": calibration["name"],
+"streamWebpage": calibration["streamWebpage"],
+"dashboardID": dashboardID,
+# Getting all dashboard data in dictionary format
+"dashboardInfo": dashboardInfo,
+#calibration information from firebase files
+"calibration": dashboardInfo["calibration"],
+"pm": pm
+})
 
 cap = cv2.VideoCapture()
 
@@ -87,26 +131,28 @@ def getAverageDistance(real_time, streamLink):
 	return str(distances)
 
 counter = 0
-with open(os.path.join(os.getcwd(), "csvFiles", location) + ".csv", 'w', newline="") as f:
-	writer = csv.writer(f, delimiter=",")
-	writer.writerow(["time", "num_people", "distance_dist"])
-	while True:
-		currTime = time.time()
 
-		streamLink = obtainStreamLink.get(streamWebpage)
-		CVOutput = getCVOutput(streamLink)
+while True:
+	currTime = time.time()
+	for location in locations:
+		with open(os.path.join(os.getcwd(), "csvFiles", location["location"]) + ".csv", 'w', newline="") as f:
+			writer = csv.writer(f, delimiter=",")
+			writer.writerow(["time", "num_people", "distance_dist"])
+		
+			streamLink = obtainStreamLink.get(location["streamWebpage"])
+			CVOutput = getCVOutput(streamLink)
 
-		if (CVOutput is None):
-			continue		
+			if (CVOutput is None):
+				continue
 
-		print("FRAME", counter, "MINUTE", counter/4)
+			print("FRAME", counter, "LOCATION", location["location"], "MINUTE", counter/4)
 
-		real_time = RealTime.genRealData(pm, CVOutput, streamLink, None, write=False)
+			real_time = RealTime.genRealData(location["pm"], CVOutput, streamLink, None, write=False)
 
-		num_people = getNumPeople(real_time)
-		average_distance = getAverageDistance(real_time, streamLink)
+			num_people = getNumPeople(real_time)
+			average_distance = getAverageDistance(real_time, streamLink)
 
-		writer.writerow([currTime, num_people, average_distance])
+			writer.writerow([currTime, num_people, average_distance])
 	
 		time.sleep(15-(time.time()-currTime))
 		counter += 1
