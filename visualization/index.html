@@ -248,10 +248,10 @@
         <!-- Page Content  -->
         <div id="content">
             <div class="container-fluid " >
-                <nav class="navbar navbar-expand-lg navbar-light navbar-sticky-top" id="topNav">                    
+                <nav class="navbar navbar-expand-lg navbar-light navbar-sticky-top" style="background-color: #E9ECEF;" id="topNav">                    
                         <ul class="navbar-nav col-md-2 col-lg-1">
                             <li>
-                                <button type="button" style= "background:#7386D5" id="sidebarCollapse" class="btn btn-outline-light">
+                                <button type="button" style= "background:#ADB5BD" id="sidebarCollapse" class="btn btn-outline-light">
                                     <i class="fa fa-bars"></i>
                                     <span></span>
                                 </button>
@@ -269,7 +269,7 @@
             
             <div class="container-fluid px-4">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header" style="background-color: #F8F9FA;">
                         <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                               <a class="nav-link active" id="realTime-tab" data-toggle="tab" href="#realTime" role="tab" aria-controls="realTime" aria-selected="true">Real Time Analysis</a>
@@ -344,27 +344,35 @@
 
                             <!--Aggregate Pannel-->
                             <div class="tab-pane fade" id="aggregate" role="tabpanel" aria-labelledby="aggregate-tab">
+                                <div class="container jumbotron">
+                                    <div class="row">
+                                        <div class="col" id="enforcement_status">                                            
+                                            <div class="card-group">
+                                                <div class="card card-body" style="background-color: #CED4DA;">
+                                                    <center>
+                                                        <h2 class="display-5">Enforcement Status</h2>                                                    
+                                                        <a class="btn btn-sm mt-4" id="detailsButton" role="button" style="background-color: #ADB5BD;">View Details</a>
+                                                    </center>                                               
+                                                </div>
+                                                <div class="card card-body" style="background-color: #CED4DA; width: max-content;">
+                                                    <button class="btn btn-sq-lg mt-4" type="button" data-toggle="modal" data-target="#customPlotModal">
+                                                        <p class="fa fa-lg fa-plus" style="font-size: xx-large;"> Custom Display</p>
+                                                        
+                                                    </button>
+                                                </div>
+                                            </div>                                     
+                                           
+                                        </div>
+                                    </div>
+                                </div>                               
+
+
                                 <div id="aggPlots1" class="row justify-content-center">
                                     <div class="col-6" id="ppl_time"></div>
                                     <div class="col-6" id="x_loc"></div>
                                 </div>
-                                <div class="row justify-content-center">
-                                    <div class="col-3" id="custom">
-                                        <button class="btn btn-sq-lg" type="button" data-toggle="modal" data-target="#customPlotModal">
-                                            <span class="fa fa-5x fa-plus"></span>
-                                            <h2>Add Custom Display</h2>
-                                        </button>
-                                    </div>
-                                    <div class="col-3 id="enforcement_status">
-                                        <div class="jumbotron">
-                                            <h2 class="display-5">Enforcement Status</h2>
-                                            <hr class="my-4">
-                                            <a class="btn btn-info btn-sm" id="detailsButton" role="button">
-                                                View Details
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+
+                            </div>
                                 
                             </div>
                         </div>
