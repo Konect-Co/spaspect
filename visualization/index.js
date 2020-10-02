@@ -251,6 +251,6 @@ function startupScript() {
     }, 1000);
 }
 
-//startupScript();
+startupScript();
 
 //TODO: PLACE CORRECTLY
