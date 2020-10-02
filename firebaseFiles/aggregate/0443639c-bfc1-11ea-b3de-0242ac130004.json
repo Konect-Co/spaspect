@@ -37,6 +37,10 @@
         "violationsCount": 9,
         "unmaskedCount": 2,
         "averageDistance": 4,
-        "enforcementStatus": "low"
+        "enforcementStatus": {
+            "status":"low",
+            "socialDistancingEnforcement":"low",
+            "faceCoveringEnforcement":"normal"
+        }
     }
 }
