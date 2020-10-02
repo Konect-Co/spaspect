@@ -4,7 +4,7 @@
 //TODO: Use plotly to graph
 //https://plotly.com/nodejs/bubble-charts/
 
-Plotly.d3.csv('csvFiles/sample.csv', function(err, rows){
+Plotly.d3.csv('csvFiles/CrossLocationData.csv', function(err, rows){
 
     function unpack(rows, key) {
         return rows.map(function(row) { return row[key]; });
@@ -17,7 +17,7 @@ Plotly.d3.csv('csvFiles/sample.csv', function(err, rows){
         color = [,"rgb(255,65,54)","rgb(133,20,75)","rgb(255,133,27)","lightgrey"],
         citySize = [],
         hoverText = [],
-        scale = 1e7;
+        scale = 1;
 
     for ( var i = 0 ; i < cityDist.length; i++) {
         var currentSize = scale / cityDist[i];
