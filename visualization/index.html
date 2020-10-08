@@ -160,6 +160,26 @@
             </div>
         </div>
     </div>
+
+
+    <!--VIEW ENFORCEMENT DETAILS MODAL-->
+
+    <div class="modal fade" id="enforcementDetailsModal" tabindex="-1" role="dialog" aria-labelledby="enforcementDetailsModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="enforcementDetailsModalTitle">Enforcement Status Details</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>        
+
+
     
     <!--Signup Modal-->
     <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModalTitle" aria-hidden="true">
@@ -351,7 +371,7 @@
                                                 <div class="card card-body" style="background-color: #CED4DA;">
                                                     <center>
                                                         <h2 class="display-5">Enforcement Status</h2>                                                    
-                                                        <a class="btn btn-sm mt-4" id="detailsButton" role="button" style="background-color: #ADB5BD;">View Details</a>
+                                                        <a class="btn btn-sm mt-4" id="detailsButton" role="button" data-toggle="modal" data-target="#enforcementDetailsModal" style="background-color: #ADB5BD;">View Details</a>
                                                     </center>                                               
                                                 </div>
                                                 <div class="card card-body" style="background-color: #CED4DA; width: max-content;">
