@@ -41,16 +41,38 @@ def genAggData(CVOutput, filename):
 
 			#TODO: Handle currHour["averageDistance"]
 
-	# setting the value of enforcementStatus to reflect proportion of violations
-	enforcementStaus = "high"
+	# setting the value of overall enforcementStatus to reflect proportion of violations
+	totalEnforcementStaus = "good"
 	totalVisitors = currHour["visitorCount"]
 	totalViolations = currHour["violationsCount"]
-	proportion = (totalViolations*1.0)/totalVisitors
-	if (proportion > 0.7):
-		enforcementStaus = "low"
-	elif (proportion > 0.3):
-		enforcementStaus = "medium"
-	currHour["enforcementStatus"] = enforcementStaus
+	totalStatusProportion = (totalViolations*1.0)/totalVisitors
+	if (totalStatusProportion > 0.7):
+		totalEnforcementStaus = "critical"
+	elif (totalStatusProportion > 0.3):
+		totalEnforcementStaus = "medium"
+	
+	allStatus = currHour["enforcementStatus"]
+	allStatus["status"] = totalEnforcementStaus
+
+	# setting the value of social distancing enforcementStatus to reflect proportion of violations
+	SDEnforcementStaus = "good"
+	SDproportion = (currHour["undistancedCount"]*1.0) / totalVisitors
+	if(SDproportion > 0.7):
+		SDEnforcementStaus = "critical"
+	elif(SDproportion > 0.3):
+		SDEnforcementStaus = "medium"
+
+	allStatus["socialDistancingEnforcement"] = SDEnforcementStaus
+
+	# setting the value of face covering enforcementStatus to reflect proportion of violations
+	FCEnforcementStaus = "good"
+	FCproportion = (currHour["undistancedCount"]*1.0) / totalVisitors
+	if(FCproportion > 0.7):
+		FCEnforcementStaus = "critical"
+	elif(FCproportion > 0.3):
+		FCEnforcementStaus = "normal"
+
+	allStatus["faceCoveringEnforcement"] = FCEnforcementStaus
 
 
 	currHour["currTracked"] = currTracked

@@ -206,6 +206,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     }
 });
 
+//GET CUSTOM DISPLAY
 function getCustomDisplay() {
     var formElements = ["startTime", "endTime", "violations-option", "unmasked-option", "undistanced-option", "selectLocation"];
     var data = {};
@@ -233,6 +234,24 @@ function getCustomDisplay() {
     xhr.send(JSON.stringify(data));
 }
 
+//Enforcement Details
+function enforcementDetails() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        var aggData = JSON.parse(xhr.responseText);
+        var col = aggData['0443639c-bfc1-11ea-b3de-0242ac130004'];
+        var status = col[3].enforcementStatus.status;
+        var sde = col[3].enforcementStatus.socialDistancingEnforcement;
+        var fce= col[3].enforcementStatus.faceCoveringEnforcement;
+
+        $('enforcementDetailsModal').html(
+            "<p>" + status + "</p><br>" + 
+            "<p>" + sde + "</p><br>" +
+            "<p>" + fce + "</p>"
+            );    
+    }
+}
+
 //TODO: We should delete this soon, as it's not providing much value
 function submitAddSite() {
     firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
@@ -246,8 +265,8 @@ function submitAddSite() {
 //STARTUP SCRIPT
 function startupScript() {
     setInterval(function(){
-            updateRealtime();
-            updateAggregate();
+ //           updateRealtime();
+ //           updateAggregate();
     }, 1000);
 }
 
