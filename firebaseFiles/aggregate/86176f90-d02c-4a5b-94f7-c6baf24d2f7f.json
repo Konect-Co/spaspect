@@ -8,7 +8,12 @@
         "undistancedCount": 5,
         "violationsCount": 6,
         "unmaskedCount": 5,
-        "averageDistance": 1
+        "averageDistance": 1,
+        "enforcementStatus": {
+            "status":"low",
+            "socialDistancingEnforcement":"low",
+            "faceCoveringEnforcement":"normal"
+        }
     },
     "2": {
         "currTracked": [
@@ -19,7 +24,12 @@
         "undistancedCount": 5,
         "violationsCount": 6,
         "unmaskedCount": 5,
-        "averageDistance": 1
+        "averageDistance": 1,
+        "enforcementStatus": {
+            "status":"low",
+            "socialDistancingEnforcement":"low",
+            "faceCoveringEnforcement":"normal"
+        }
     },
     "3": {
         "currTracked": [
@@ -30,6 +40,11 @@
         "undistancedCount": 4,
         "violationsCount": 3,
         "unmaskedCount": 2,
-        "averageDistance": 4
+        "averageDistance": 4,
+        "enforcementStatus": {
+            "status":"low",
+            "socialDistancingEnforcement":"low",
+            "faceCoveringEnforcement":"normal"
+        }
     }
 }
