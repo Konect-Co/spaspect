@@ -40,17 +40,30 @@
             "0.9782486262610183",
             "0.21515791557359376",
             "0.5412960103594359",
-            "0.21437905152195313"
+            "0.21437905152195313",
+            "0.9762658911000994",
+            "0.98507454733511",
+            "0.1369810645229561",
+            "0.6915439369590957",
+            "0.18330499931266964",
+            "0.5418471472783262",
+            "0.6786105632761963",
+            "0.37140569069746976",
+            "0.05858271054174735",
+            "0.730387878278449",
+            "0.17795146021557362",
+            "0.7416021862587412",
+            "0.4869367357571017"
         ],
-        "visitorCount": 11,
-        "undistancedCount": 10,
-        "violationsCount": 9,
+        "visitorCount": 24,
+        "undistancedCount": 23,
+        "violationsCount": 22,
         "unmaskedCount": 2,
         "averageDistance": 4,
         "enforcementStatus": {
-            "status":"low",
-            "socialDistancingEnforcement":"low",
-            "faceCoveringEnforcement":"normal"
+            "status": "critical",
+            "socialDistancingEnforcement": "critical",
+            "faceCoveringEnforcement": "critical"
         }
     }
 }
