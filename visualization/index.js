@@ -244,11 +244,11 @@ function enforcementDetails() {
         var sde = col[3].enforcementStatus.socialDistancingEnforcement;
         var fce= col[3].enforcementStatus.faceCoveringEnforcement;
 
-        $('enforcementDetailsModal').html(
-            "<p>" + status + "</p><br>" + 
-            "<p>" + sde + "</p><br>" +
-            "<p>" + fce + "</p>"
-            );    
+        document.getElementById("status").value = status;
+        document.getElementById("sde").value = sde;
+        document.getElementById("fce").value = fce;
+
+        
     }
 }
 
@@ -265,8 +265,8 @@ function submitAddSite() {
 //STARTUP SCRIPT
 function startupScript() {
     setInterval(function(){
- //           updateRealtime();
- //           updateAggregate();
+            updateRealtime();
+            updateAggregate();
     }, 1000);
 }
 
