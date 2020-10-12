@@ -161,9 +161,21 @@ function updateAggregateArgs(dashboardID) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         //console.log(xhr.responseText);
-        var data = JSON.parse(xhr.responseText);
+        //var data = JSON.parse(xhr.responseText);
         //console.log(data);
         //TODO: Update with new format of data
+
+        //Enforcement Details
+        var aggData = JSON.parse(xhr.responseText);
+        var col = aggData['0443639c-bfc1-11ea-b3de-0242ac130004'];
+        var status = col[3].enforcementStatus.status;
+        var sde = col[3].enforcementStatus.socialDistancingEnforcement;
+        var fce= col[3].enforcementStatus.faceCoveringEnforcement;
+
+        document.getElementById("status").value = status;
+        document.getElementById("sde").value = sde;
+        document.getElementById("fce").value = fce;
+
         renderAgg(data);
     }
     //TODO: Replace this with new POST request
@@ -234,23 +246,7 @@ function getCustomDisplay() {
     xhr.send(JSON.stringify(data));
 }
 
-//Enforcement Details
-function enforcementDetails() {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        var aggData = JSON.parse(xhr.responseText);
-        var col = aggData['0443639c-bfc1-11ea-b3de-0242ac130004'];
-        var status = col[3].enforcementStatus.status;
-        var sde = col[3].enforcementStatus.socialDistancingEnforcement;
-        var fce= col[3].enforcementStatus.faceCoveringEnforcement;
 
-        document.getElementById("status").value = status;
-        document.getElementById("sde").value = sde;
-        document.getElementById("fce").value = fce;
-
-        
-    }
-}
 
 //TODO: We should delete this soon, as it's not providing much value
 function submitAddSite() {
