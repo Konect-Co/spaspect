@@ -176,7 +176,7 @@ function updateAggregateArgs(dashboardID) {
         document.getElementById("sde").value = sde;
         document.getElementById("fce").value = fce;
 
-        renderAgg(data);
+        renderAgg(aggData);
     }
     //TODO: Replace this with new POST request
     xhr.open("POST", "/aggregateData", true);
