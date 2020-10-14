@@ -172,9 +172,9 @@ function updateAggregateArgs(dashboardID) {
         var sde = col[3].enforcementStatus.socialDistancingEnforcement;
         var fce= col[3].enforcementStatus.faceCoveringEnforcement;
 
-        document.getElementById("status").value = status;
-        document.getElementById("sde").value = sde;
-        document.getElementById("fce").value = fce;
+        document.getElementById("status").innerHTML = status;
+        document.getElementById("sde").innerHTML = sde;
+        document.getElementById("fce").innerHTML = fce;
 
         renderAgg(aggData);
     }
@@ -261,8 +261,8 @@ function submitAddSite() {
 //STARTUP SCRIPT
 function startupScript() {
     setInterval(function(){
-            updateRealtime();
-            updateAggregate();
+            //updateRealtime();
+            //updateAggregate();
     }, 1000);
 }
 
