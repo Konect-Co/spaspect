@@ -14,7 +14,7 @@
     "fs": "^0.0.1-security",
     "googleapis": "^52.1.0",
     "plotly": "^1.0.6",
-    "plotly.js": "^1.54.7",
+    "plotly.js": "^3.4.0",
     "uuid": "^8.2.0",
     "walk": "^2.3.14"
   },
